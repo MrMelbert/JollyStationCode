@@ -37,3 +37,9 @@
 	contains = list(
 		/obj/item/mana_battery/mana_crystal/small,
 	)
+
+/datum/supply_pack/goody/combat_gloves
+	name = "Combat Gloves Single-Pack"
+	desc = "Contains one set of advanced military-grade combat gloves. Totally not under a massive mark-up for black gloves with insulating fiber, honest!"
+	cost = PAYCHECK_COMMAND * 8
+	contains = list(/obj/item/clothing/gloves/combat)
