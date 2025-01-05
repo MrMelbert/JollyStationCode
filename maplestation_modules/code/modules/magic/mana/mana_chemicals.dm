@@ -74,3 +74,11 @@
 	ph = 8
 	color = "#4c1528"
 	mana_adjust = -0.5
+
+/datum/reagent/volite_powder
+	name = "Volite Powder"
+	description = "Pure Volite crystals which has been grinded up into a powder."
+	taste_description = "lots of little sparks"
+	ph = 8
+	color = "#22dcb5"
+	var/mana_adjust = 1
