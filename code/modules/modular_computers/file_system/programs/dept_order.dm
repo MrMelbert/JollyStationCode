@@ -124,6 +124,8 @@
 		return FALSE
 	if(to_check.goody)
 		return FALSE
+	if(to_check.no_departmental_orders) // NON-MODULE CHANGE : non-departmental order crates
+		return FALSE
 	return TRUE
 
 /// Looks through all possible departments and finds one this ID card "corresponds" to.

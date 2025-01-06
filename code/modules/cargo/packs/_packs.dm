@@ -41,6 +41,8 @@
 	var/goody = FALSE
 	/// Can coupons target this pack? If so, how rarely?
 	var/discountable = SUPPLY_PACK_NOT_DISCOUNTABLE
+	/// NON-MODULE CHANGE : Does this override departmental orders to be unavailable from them?
+	var/no_departmental_orders = FALSE
 
 /datum/supply_pack/New()
 	id = type
