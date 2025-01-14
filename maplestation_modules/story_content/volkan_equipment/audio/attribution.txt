@@ -1,1 +1,5 @@
-bot_startup.ogg is a snippet from https://freesound.org/people/wtermini/sounds/546450/
+1) bot_startup.ogg is a snippet from https://freesound.org/people/wtermini/sounds/546450/
+
+2) All vroomba sounds were created by Constellado with Beepbox.co (yes. really.)
+This has the instruments all set up for it if you want to use it to add more vroomba noises:
+https://www.beepbox.co/#9n21sbk0l00e00t43a7g00j07r1i0o43T0v0u00f10u2qw02d03w5h0E0T1v0u01f0qw03d03A0F0BfQ0000PffffE0T3v0u03f0qw00d03SUUM0A060n0U07M0E0b4hp140000

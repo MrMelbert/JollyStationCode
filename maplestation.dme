@@ -6571,6 +6571,7 @@
 #include "maplestation_modules\story_content\story_posters\code\contraband.dm"
 #include "maplestation_modules\story_content\stranger_equipment\code\strangerclothing.dm"
 #include "maplestation_modules\story_content\volkan_equipment\code\sunitems.dm"
+#include "maplestation_modules\story_content\volkan_equipment\code\volkancomponents.dm"
 #include "maplestation_modules\story_content\volkan_equipment\code\volkanitems.dm"
 #include "maplestation_modules\story_content\volkan_equipment\code\volkanpets.dm"
 #include "maplestation_modules\story_content\volkan_equipment\code\volkanpets_ai.dm"
