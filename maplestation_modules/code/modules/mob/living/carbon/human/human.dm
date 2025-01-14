@@ -52,3 +52,7 @@
 	outfit_copy.implants = list()
 	for(var/obj/item/implant/I in implants)
 		outfit_copy.implants |= I.type
+
+// species mobs
+/mob/living/carbon/human/species/werewolf
+	race = /datum/species/werewolf
