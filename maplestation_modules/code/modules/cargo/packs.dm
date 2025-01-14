@@ -313,3 +313,24 @@
 		/obj/item/seeds/starfruit = 2,
 		/obj/item/book/manual/starfruit = 1,
 	)
+
+/datum/supply_pack/security/specialty_c38_ammo
+	name = "Specialty OPS .38 Ammo"
+	desc = "A pack of specialty ammo produced by OPS Industries, a partner high-end equipment workshop. Contains two speedloaders of .38 HV-DS and .38 Maginull rounds. \
+		Cannot be department ordered."
+	cost = PAYCHECK_COMMAND * 50
+	no_departmental_orders = TRUE // intentionally harder to get and requires spending
+	crate_type = /obj/structure/closet/crate/secure/ops_industries
+	contains = list(
+		/obj/item/ammo_box/c38/dual_stage,
+		/obj/item/ammo_box/c38/dual_stage,
+		/obj/item/ammo_box/c38/maginull,
+		/obj/item/ammo_box/c38/maginull,
+	)
+
+/obj/structure/closet/crate/secure/ops_industries
+	name = "OPS Industries crate"
+	desc = "A secure crate with the logo of OPS Industries."
+	icon = 'maplestation_modules/icons/obj/storage/crates.dmi'
+	icon_state = "opscrate"
+	base_icon_state = "opscrate"
