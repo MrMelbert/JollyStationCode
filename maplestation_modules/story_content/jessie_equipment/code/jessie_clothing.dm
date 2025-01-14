@@ -38,6 +38,11 @@
 	if(projectors_enabled && !isinhands)
 		. += emissive_appearance(worn_icon, "[icon_state]_e", offset_spokesman = loc, alpha = src.alpha)
 
+/datum/loadout_item/under/jumpsuit/jessie_turtleneck
+	name = "Holointegrated Turtleneck"
+	item_path = /obj/item/clothing/under/rank/rnd/research_director/jessie_turtleneck
+	additional_displayed_text = list("Character Item")
+
 /obj/item/clothing/gloves/black/jessie_gloves
 	name = "mixed gloves"
 	desc = "A pair of uneven black gloves. Left glove has been cut into nothing more than a strip of fabric with a holoprojector built into it."
@@ -64,7 +69,7 @@
 	. = ..()
 	icon_state = "[base_icon_state][projectors_enabled ? "" : "_noholo"]"
 	worn_icon_state = icon_state
-	
+
 /obj/item/clothing/gloves/black/jessie_gloves/update_overlays()
 	. = ..()
 	if(projectors_enabled)
@@ -74,6 +79,11 @@
 	. = ..()
 	if(projectors_enabled && !isinhands)
 		. += emissive_appearance(worn_icon, "[icon_state]_e", offset_spokesman = loc, alpha = src.alpha)
+
+/datum/loadout_item/gloves/jessie_gloves
+	name = "Mixed Gloves"
+	item_path = /obj/item/clothing/gloves/black/jessie_gloves
+	additional_displayed_text = list("Character Item")
 
 // Retexture of RD's jacket
 /obj/item/clothing/suit/toggle/labcoat/research_director/jessie_cape
@@ -91,3 +101,8 @@
 		set_armor(/datum/armor/none)
 	else
 		set_armor(initial(armor_type))
+
+/datum/loadout_item/suit/jessie_cape
+	name = "Researcher's Shoulder Cape"
+	item_path = /obj/item/clothing/suit/toggle/labcoat/research_director/jessie_cape
+	additional_displayed_text = list("Character Item")

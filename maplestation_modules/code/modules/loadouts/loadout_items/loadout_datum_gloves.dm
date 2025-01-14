@@ -74,18 +74,3 @@
 	name = "Heirloom Bone Bracers"
 	item_path = /obj/item/clothing/gloves/armorless_bracer
 	additional_displayed_text = list("Cosmetic")
-
-/datum/loadout_item/gloves/mragloves
-	name = "Malheur Research Association gloves"
-	item_path = /obj/item/clothing/gloves/mragloves
-	additional_displayed_text = list("Character Item")
-
-/datum/loadout_item/gloves/jessie_gloves
-	name = "Mixed Gloves"
-	item_path = /obj/item/clothing/gloves/black/jessie_gloves
-	additional_displayed_text = list("Character Item")
-
-/datum/loadout_item/gloves/vince
-	name = "Buckled Black Gloves"
-	item_path = /obj/item/clothing/gloves/vince
-	additional_displayed_text = list("Character Item")

@@ -146,6 +146,10 @@
 	. = ..()
 	REMOVE_TRAIT(user, TRAIT_RADIMMUNE, TRAIT_GENERIC)
 
+/datum/loadout_item/pocket_items/rad_umbrella
+	name = "Umbrella (Radiation Shielded)"
+	item_path = /obj/item/umbrella/volkan
+	additional_displayed_text = list("Character Item")
 
 //---------------------cool boxes!-----------------------
 

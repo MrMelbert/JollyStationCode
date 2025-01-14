@@ -74,10 +74,6 @@
 	name = "Eyepatch"
 	item_path = /obj/item/clothing/glasses/eyepatch
 
-/datum/loadout_item/glasses/casualsunglasses
-	name = "Casual Sunglasses"
-	item_path = /obj/item/clothing/glasses/sunglasses/casual
-
 /datum/loadout_item/glasses/osi
 	name = "OSI Sunglasses"
 	item_path = /obj/item/clothing/glasses/osi

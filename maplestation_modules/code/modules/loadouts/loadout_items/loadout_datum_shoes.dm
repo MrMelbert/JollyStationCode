@@ -93,18 +93,6 @@
 	name = "Sandals"
 	item_path = /obj/item/clothing/shoes/sandal
 
-/datum/loadout_item/shoes/blacksandals
-	name = "Black Sandals"
-	item_path = /obj/item/clothing/shoes/sandal/black
-
-/datum/loadout_item/shoes/trainers
-	name = "Workout Trainers"
-	item_path = /obj/item/clothing/shoes/trainers
-
-/datum/loadout_item/shoes/sneaker
-	name = "Casual Sneakers"
-	item_path = /obj/item/clothing/shoes/trainers/casual
-
 /datum/loadout_item/shoes/heels
 	name = "High Heels"
 	item_path = /obj/item/clothing/shoes/heels
@@ -112,26 +100,3 @@
 /datum/loadout_item/shoes/fancy_heels
 	name = "Fancy High Heels"
 	item_path = /obj/item/clothing/shoes/heels/fancy
-
-/datum/loadout_item/shoes/mrashoes
-	name = "Malheur Research Association boots"
-	item_path = /obj/item/clothing/shoes/mrashoes
-	additional_displayed_text = list("Character Item")
-
-/datum/loadout_item/shoes/reshiaboot
-	name = "Short Brown Boots"
-	item_path = /obj/item/clothing/shoes/reshiaboot
-
-/datum/loadout_item/shoes/grey
-	name = "Designer Boots"
-	item_path = /obj/item/clothing/shoes/greyboots
-
-/datum/loadout_item/shoes/lini
-	name = "Berbier Boots"
-	item_path = /obj/item/clothing/shoes/liniboots
-	additional_displayed_text = list("Character Item")
-
-/datum/loadout_item/shoes/vince
-	name = "Slick Syringe Heels"
-	item_path = /obj/item/clothing/shoes/vince
-	additional_displayed_text = list("Character Item")

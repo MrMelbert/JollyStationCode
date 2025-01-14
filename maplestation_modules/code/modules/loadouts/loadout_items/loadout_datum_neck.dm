@@ -38,16 +38,6 @@
 	name = "Stethoscope"
 	item_path = /obj/item/clothing/neck/stethoscope
 
-/datum/loadout_item/neck/casual_cloak
-	name = "Fuzzy Cloak"
-	item_path = /obj/item/clothing/neck/cloak/casual
-	additional_displayed_text = list("Character Item")
-
-/datum/loadout_item/neck/cremona_necklace
-	name = "Puligard Holy Necklace"
-	item_path = /obj/item/clothing/neck/cremona
-	additional_displayed_text = list("Character Item")
-
 /datum/loadout_item/neck/rainbow_tie
 	name = "Bowtie (Rainbow)"
 	item_path = /obj/item/clothing/neck/bowtie/rainbow

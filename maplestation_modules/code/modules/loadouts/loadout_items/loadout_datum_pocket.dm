@@ -215,11 +215,6 @@
 	name = "Plush (Snake)"
 	item_path = /obj/item/toy/plush/snakeplushie
 
-/datum/loadout_item/pocket_items/plush/albertcat
-	name = "Plush (Albus)"
-	item_path = /obj/item/toy/plush/albertcat
-	additional_displayed_text = list("Character Item")
-
 /datum/loadout_item/pocket_items/card_binder
 	name = "Card Binder"
 	item_path = /obj/item/storage/card_binder
@@ -319,8 +314,3 @@
 /datum/loadout_item/pocket_items/black_parasol
 	name = "Umbrella (Black Parasol)"
 	item_path = /obj/item/umbrella/parasol
-
-/datum/loadout_item/pocket_items/rad_umbrella
-	name = "Umbrella (Radiation Shielded)"
-	item_path = /obj/item/umbrella/volkan
-	additional_displayed_text = list("Character Item")

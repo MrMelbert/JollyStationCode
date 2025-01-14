@@ -210,11 +210,6 @@
 	item_path = /obj/item/clothing/head/wig/natural
 	additional_displayed_text = list("Hair Color")
 
-/datum/loadout_item/head/reshiacap
-	name = "Cap (Delinquent, Black)"
-	item_path = /obj/item/clothing/head/hats/reshiacap
-	additional_displayed_text = list("Character Item")
-
 /datum/loadout_item/head/cowboy
 	name = "Cowboy Hat (Brown)"
 	item_path = /obj/item/clothing/head/cowboy/brown
@@ -258,13 +253,3 @@
 /datum/loadout_item/head/garland/lily
 	name = "Lily Crown"
 	item_path = /obj/item/clothing/head/costume/garland/lily
-
-/datum/loadout_item/head/belli
-	name = "Modified Nun Veil"
-	item_path = /obj/item/clothing/head/costume/hat/belli
-	additional_displayed_text = list("Character Item")
-
-/datum/loadout_item/head/vince
-	name = "Violet Nurse Cap"
-	item_path = /obj/item/clothing/head/costume/vince
-	additional_displayed_text = list("Character Item")

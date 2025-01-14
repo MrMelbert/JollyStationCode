@@ -100,3 +100,7 @@
 	inhand_icon_state = null
 	body_parts_covered = HEAD
 	flags_inv = HIDEHAIR|HIDEEARS|HIDEFACE|HIDEMASK
+
+/datum/loadout_item/suit/acolyte
+	name = "Acolyte Robes"
+	item_path = /obj/item/clothing/suit/hooded/acolyte

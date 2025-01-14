@@ -36,12 +36,14 @@
 				/obj/item/clothing/shoes/heels = 3,
 			),
 		),
+#ifdef MAPLESTATION_STORY_CONTENT
 		list(
 			"name" = "Special",
 			"products" = list(
 				/obj/item/clothing/suit/hooded/acolyte = 20,
 			),
 		),
+#endif
 	)
 	added_premium = list(
 		/obj/item/clothing/shoes/heels/fancy = 2,

@@ -6,6 +6,11 @@
 	worn_icon = 'maplestation_modules/story_content/reshia_equipment/icons/reshclothes_worn.dmi'
 	icon_state = "delinquent"
 
+/datum/loadout_item/head/reshiacap
+	name = "Cap (Delinquent, Black)"
+	item_path = /obj/item/clothing/head/hats/reshiacap
+	additional_displayed_text = list("Character Item")
+
 // --- coat ---
 /obj/item/clothing/under/jumpsuit/reshiacoat
 	name = "black uniform coat"
@@ -14,6 +19,11 @@
 	worn_icon = 'maplestation_modules/story_content/reshia_equipment/icons/reshclothes_worn.dmi'
 	icon_state = "blackuniform"
 
+/datum/loadout_item/under/formal/reshiacoat
+	name = "Black Uniform Coat"
+	item_path = /obj/item/clothing/under/jumpsuit/reshiacoat
+	additional_displayed_text = list("Character Item")
+
 // --- shoes ---
 /obj/item/clothing/shoes/reshiaboot
 	name = "short brown boots"
@@ -21,3 +31,7 @@
 	icon = 'maplestation_modules/story_content/reshia_equipment/icons/reshclothes_item.dmi'
 	worn_icon = 'maplestation_modules/story_content/reshia_equipment/icons/reshclothes_worn.dmi'
 	icon_state = "shortboot"
+
+/datum/loadout_item/shoes/reshiaboot
+	name = "Short Brown Boots"
+	item_path = /obj/item/clothing/shoes/reshiaboot

@@ -118,18 +118,6 @@
 	name = "Blue PJs"
 	item_path = /obj/item/clothing/under/misc/pj/blue
 
-/datum/loadout_item/under/jumpsuit/hoodie
-	name = "Workout Hoodie"
-	item_path = /obj/item/clothing/under/jumpsuit/casualhoodie
-
-/datum/loadout_item/under/jumpsuit/casualdress
-	name = "Casual Dress"
-	item_path = /obj/item/clothing/under/jumpsuit/blueskirt
-
-/datum/loadout_item/under/jumpsuit/albertshirt
-	name = "Deep Red Shirt"
-	item_path = /obj/item/clothing/under/jumpsuit/albertshirt
-
 /datum/loadout_item/under/jumpsuit/spacer_uniform
 	name = "Spacer's Uniform"
 	item_path = /obj/item/clothing/under/spacer_turtleneck/plain
@@ -334,21 +322,6 @@
 	name = "White Suitskirt"
 	item_path = /obj/item/clothing/under/suit/white/skirt
 
-/datum/loadout_item/under/formal/nndress
-	name = "Blue Dress"
-	item_path = /obj/item/clothing/under/dress/nndress
-	additional_displayed_text = list("Character Item")
-
-/datum/loadout_item/under/formal/ritzuniform
-	name = "Malheur Research Association uniform"
-	item_path = /obj/item/clothing/under/rank/rnd/mrauniform
-	additional_displayed_text = list("Character Item")
-
-/datum/loadout_item/under/formal/reshiacoat
-	name = "Black Uniform Coat"
-	item_path = /obj/item/clothing/under/jumpsuit/reshiacoat
-	additional_displayed_text = list("Character Item")
-
 /datum/loadout_item/under/formal/arbitersuit
 	name = "Arbiter's Suit"
 	item_path = /obj/item/clothing/under/arbitersuit
@@ -357,55 +330,6 @@
 	name = "Blue Waistcoat"
 	item_path = /obj/item/clothing/under/chesedsuit
 
-/datum/loadout_item/under/formal/kimono
-	name = "Black Kimono"
-	item_path = /obj/item/clothing/under/kimono
-
-/datum/loadout_item/under/formal/kimono2
-	name = "Red Kimono"
-	item_path = /obj/item/clothing/under/kimono/red
-
-/datum/loadout_item/under/formal/kimono3
-	name = "Purple Kimono"
-	item_path = /obj/item/clothing/under/kimono/purple
-
-/datum/loadout_item/under/formal/yukata
-	name = "Black Yukata"
-	item_path = /obj/item/clothing/under/yukata
-
-/datum/loadout_item/under/formal/yukata2
-	name = "Green Yukata"
-	item_path = /obj/item/clothing/under/yukata/green
-
-/datum/loadout_item/under/formal/yukata3
-	name = "Blue Yukata"
-	item_path = /obj/item/clothing/under/yukata/blue
-
-/datum/loadout_item/under/formal/grey
-	name = "Designer Outfit"
-	item_path = /obj/item/clothing/under/jumpsuit/greyshirt
-	additional_displayed_text = list("Character Item")
-
 /datum/loadout_item/under/formal/countess
 	name = "Countess Dress"
 	item_path = /obj/item/clothing/under/dress/countess
-
-/datum/loadout_item/under/jumpsuit/pilot
-	name = "Berbier Uniform"
-	item_path = /obj/item/clothing/under/jumpsuit/lini
-	additional_displayed_text = list("Character Item")
-
-/datum/loadout_item/under/jumpsuit/jessie_turtleneck
-	name = "Holointegrated Turtleneck"
-	item_path = /obj/item/clothing/under/rank/rnd/research_director/jessie_turtleneck
-	additional_displayed_text = list("Character Item")
-
-/datum/loadout_item/under/jumpsuit/belli
-	name = "Modified Nun Uniform"
-	item_path = /obj/item/clothing/under/jumpsuit/belli
-	additional_displayed_text = list("Character Item")
-
-/datum/loadout_item/under/jumpsuit/vince
-	name = "Violet Nurse Uniform"
-	item_path = /obj/item/clothing/under/dress/vince
-	additional_displayed_text = list("Character Item")

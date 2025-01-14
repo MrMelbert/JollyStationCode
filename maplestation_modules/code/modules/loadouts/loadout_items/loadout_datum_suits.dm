@@ -165,12 +165,3 @@
 /datum/loadout_item/suit/chesed_jacket
 	name = "Well-Kept Jacket"
 	item_path = /obj/item/clothing/suit/toggle/chesedjacket
-
-/datum/loadout_item/suit/jessie_cape
-	name = "Researcher's Shoulder Cape"
-	item_path = /obj/item/clothing/suit/toggle/labcoat/research_director/jessie_cape
-	additional_displayed_text = list("Character Item")
-
-/datum/loadout_item/suit/acolyte
-	name = "Acolyte Robes"
-	item_path = /obj/item/clothing/suit/hooded/acolyte
