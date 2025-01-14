@@ -23,6 +23,7 @@
 		/datum/component/anti_magic, \
 		antimagic_flags = MAGIC_RESISTANCE_MIND, \
 		inventory_flags = ITEM_SLOT_HEAD, \
+		anti_magic_tier = ANTIMAGIC_TIER_STRONG, \
 		charges = 6, \
 		drain_antimagic = CALLBACK(src, PROC_REF(drain_antimagic)), \
 		expiration = CALLBACK(src, PROC_REF(warp_up)) \

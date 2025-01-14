@@ -766,7 +766,7 @@
 	var/msg = tgui_input_text(telepath, title = "Telepathy")
 	if(isnull(msg))
 		return
-	if(recipient.can_block_magic(MAGIC_RESISTANCE_MIND, charge_cost = 0))
+	if(recipient.can_block_magic(MAGIC_RESISTANCE_MIND, charge_cost = 0) & ANTIMAGIC_TIER_STRONG)
 		to_chat(telepath, span_warning("As you reach into [recipient]'s mind, you are stopped by a mental blockage. It seems you've been foiled."))
 		return
 	log_directed_talk(telepath, recipient, msg, LOG_SAY, "slime telepathy")

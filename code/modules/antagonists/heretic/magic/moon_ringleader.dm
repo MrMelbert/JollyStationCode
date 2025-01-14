@@ -8,12 +8,13 @@
 	button_icon_state = "moon_ringleader"
 	sound = 'sound/effects/moon_parade.ogg'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 1 MINUTES
 
 	invocation = "R''S 'E"
 	invocation_type = INVOCATION_SHOUT
 	spell_requirements = NONE
+	antimagic_flags = ALL
 
 	aoe_radius = 5
 	/// Effect for when the spell triggers
@@ -33,7 +34,7 @@
 			continue
 		if(IS_HERETIC_OR_MONSTER(nearby_mob))
 			continue
-		if(nearby_mob.can_block_magic(antimagic_flags))
+		if(nearby_mob.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 			continue
 
 		stuff += nearby_mob

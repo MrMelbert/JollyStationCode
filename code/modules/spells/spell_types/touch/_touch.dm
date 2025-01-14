@@ -219,7 +219,7 @@
 	SEND_SIGNAL(src, COMSIG_SPELL_TOUCH_HAND_HIT, victim, caster, hand)
 
 	var/mob/mob_victim = victim
-	if(istype(mob_victim) && mob_victim.can_block_magic(antimagic_flags))
+	if(istype(mob_victim) && (mob_victim.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE))
 		on_antimagic_triggered(hand, victim, caster)
 
 	else if(!cast_on_hand_hit(hand, victim, caster))

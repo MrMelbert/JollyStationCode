@@ -7,13 +7,14 @@
 	button_icon_state = "mansus_grasp"
 	sound = 'sound/items/welder.ogg'
 
-	school = SCHOOL_EVOCATION
+	school = SCHOOL_FORBIDDEN
 	cooldown_time = 10 SECONDS
 
 	invocation = "R'CH T'H TR'TH!"
 	invocation_type = INVOCATION_SHOUT
 	// Mimes can cast it. Chaplains can cast it. Anyone can cast it, so long as they have a hand.
 	spell_requirements = SPELL_CASTABLE_WITHOUT_INVOCATION
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	hand_path = /obj/item/melee/touch_attack/mansus_fist
 
@@ -37,12 +38,21 @@
 		return FALSE
 
 	var/mob/living/living_hit = victim
-	living_hit.apply_damage(10, BRUTE, wound_bonus = CANT_WOUND)
-	if(iscarbon(victim))
-		var/mob/living/carbon/carbon_hit = victim
-		carbon_hit.adjust_timed_status_effect(4 SECONDS, /datum/status_effect/speech/slurring/heretic)
-		carbon_hit.AdjustKnockdown(5 SECONDS)
-		carbon_hit.adjustStaminaLoss(80)
+	var/magic_tier = living_hit.can_block_magic(antimagic_flags, charge_cost = 0)
+	var/antimagic_mod = 1
+	if(magic_tier & ANTIMAGIC_TIER_STRONG)
+		living_hit.adjust_staggered(5 SECONDS)
+		antimagic_mod = 0.33
+	else if(magic_tier & ANTIMAGIC_TIER_WEAK)
+		living_hit.adjust_staggered(2 SECONDS)
+		living_hit.AdjustKnockdown(2 SECONDS)
+		antimagic_mod = 0.66
+	else
+		living_hit.apply_damage(10, BRUTE, wound_bonus = CANT_WOUND)
+		living_hit.AdjustKnockdown(5 SECONDS)
+
+	living_hit.adjust_timed_status_effect(4 SECONDS * antimagic_mod, /datum/status_effect/speech/slurring/heretic)
+	living_hit.adjustStaminaLoss(80 * antimagic_mod)
 
 	return TRUE
 
@@ -93,7 +103,7 @@
 	if(QDELETED(source) || !IS_HERETIC(user))
 		return SHAME
 
-	if(user.can_block_magic(source.antimagic_flags))
+	if(user.can_block_magic(source.antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 		return SHAME
 
 	var/escape_our_torment = 0

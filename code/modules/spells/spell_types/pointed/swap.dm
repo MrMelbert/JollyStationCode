@@ -61,7 +61,7 @@
 
 /datum/action/cooldown/spell/pointed/swap/cast(mob/living/carbon/cast_on)
 	. = ..()
-	if(cast_on.can_block_magic(antimagic_flags))
+	if(cast_on.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 		to_chat(owner, span_warning("The spell had no effect!"))
 		to_chat(cast_on, span_warning("You feel space bending, but it rapidly dissipates."))
 		return FALSE

@@ -22,7 +22,10 @@
 
 /obj/item/gun/ballistic/bow/divine/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/anti_magic, MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY)
+	AddComponent(/datum/component/anti_magic, \
+		antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY, \
+		anti_magic_tier = ANTIMAGIC_TIER_IMMUNE, \
+	)
 	AddComponent(/datum/component/effect_remover, \
 		success_feedback = "You disrupt the magic of %THEEFFECT with %THEWEAPON.", \
 		success_forcesay = "BOW-GONE FOUL MAGIKS!!", \

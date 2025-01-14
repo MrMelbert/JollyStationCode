@@ -7,12 +7,13 @@
 	button_icon_state = "star_blast"
 
 	sound = 'sound/magic/cosmic_energy.ogg'
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 20 SECONDS
 
 	invocation = "R'T'T' ST'R!"
 	invocation_type = INVOCATION_SHOUT
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	active_msg = "You prepare to cast your star blast!"
 	deactive_msg = "You stop swirling cosmic energies from the palm of your hand... for now."

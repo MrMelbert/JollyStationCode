@@ -10,12 +10,12 @@
 	button_icon_state = "star_touch"
 
 	sound = 'sound/items/welder.ogg'
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 15 SECONDS
 	invocation = "ST'R 'N'RG'!"
 	invocation_type = INVOCATION_SHOUT
 	spell_requirements = NONE
-	antimagic_flags = MAGIC_RESISTANCE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	hand_path = /obj/item/melee/touch_attack/star_touch
 	/// Stores the weakref for the Star Gazer after ascending

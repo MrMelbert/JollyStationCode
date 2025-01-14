@@ -102,7 +102,7 @@
 
 	target.visible_message(span_warning("[target] suddenly rises slightly into the air, [target_their] skin turning an ashy gray."))
 
-	if(target.can_block_magic(MAGIC_RESISTANCE_HOLY))
+	if(target.can_block_magic(MAGIC_RESISTANCE_HOLY) & ANTIMAGIC_TIER_WEAK)
 		to_chat(src, span_revenminor("Something's wrong! [target] seems to be resisting the siphoning, leaving you vulnerable!"))
 		target.visible_message(
 			span_warning("[target] slumps onto the ground."),

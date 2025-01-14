@@ -223,7 +223,7 @@
 			c.console = src
 
 /obj/machinery/abductor/console/proc/AddSnapshot(mob/living/carbon/human/target)
-	if(target.can_block_magic(MAGIC_RESISTANCE_MIND, charge_cost = 0))
+	if(target.can_block_magic(MAGIC_RESISTANCE_MIND, charge_cost = 0) & ANTIMAGIC_TIER_STRONG)
 		say("Unable to get a proper scan of subject! Something is shielding [target]'s mind!")
 		return
 	var/datum/icon_snapshot/entry = new

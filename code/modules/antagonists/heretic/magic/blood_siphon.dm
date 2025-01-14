@@ -8,12 +8,13 @@
 	button_icon_state = "blood_siphon"
 	ranged_mousepointer = 'icons/effects/mouse_pointers/throw_target.dmi'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 15 SECONDS
 
 	invocation = "FL'MS O'ET'RN'ITY."
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	cast_range = 6
 
@@ -26,7 +27,7 @@
 /datum/action/cooldown/spell/pointed/blood_siphon/cast(mob/living/cast_on)
 	. = ..()
 	playsound(owner, 'sound/magic/demon_attack1.ogg', 75, TRUE)
-	if(cast_on.can_block_magic())
+	if(cast_on.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 		owner.balloon_alert(owner, "spell blocked!")
 		cast_on.visible_message(
 			span_danger("The spell bounces off of [cast_on]!"),

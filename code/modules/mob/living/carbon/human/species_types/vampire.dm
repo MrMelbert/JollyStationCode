@@ -178,7 +178,7 @@
 				to_chat(H, span_warning("[victim] doesn't have valid blood!")) // NON-MODULE CHANGE
 				return
 			COOLDOWN_START(V, drain_cooldown, 3 SECONDS)
-			if(victim.can_block_magic(MAGIC_RESISTANCE_HOLY, charge_cost = 0))
+			if(victim.can_block_magic(MAGIC_RESISTANCE_HOLY, charge_cost = 0) & ANTIMAGIC_TIER_WEAK)
 				victim.show_message(span_warning("[H] tries to bite you, but stops before touching you!"))
 				to_chat(H, span_warning("[victim] is blessed! You stop just in time to avoid catching fire."))
 				return

@@ -8,13 +8,13 @@
 	button_icon_state = "mansus_link"
 	ranged_mousepointer = 'icons/effects/mouse_pointers/throw_target.dmi'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 20 SECONDS
 
 	invocation = "PI'RC' TH' M'ND."
 	invocation_type = INVOCATION_SHOUT
 	spell_requirements = NONE
-	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_MIND
+	antimagic_flags = ALL
 
 	cast_range = 7
 

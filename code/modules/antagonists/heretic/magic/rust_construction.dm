@@ -7,13 +7,14 @@
 	ranged_mousepointer = 'icons/effects/mouse_pointers/throw_target.dmi'
 	check_flags = AB_CHECK_INCAPACITATED|AB_CHECK_CONSCIOUS|AB_CHECK_HANDS_BLOCKED
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 5 SECONDS
 
 	invocation = "Someone raises a wall of rust."
 	invocation_self_message = "You raise a wall of rust."
 	invocation_type = INVOCATION_EMOTE
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	cast_range = 4
 	aim_assist = FALSE

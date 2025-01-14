@@ -9,7 +9,7 @@
 	button_icon_state = "adrenal"
 	// sound = 'sound/magic/whistlereset.ogg'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 6 SECONDS
 	cooldown_reduction_per_rank = -6 SECONDS // we're not a wizard spell but we use the levelling mechanic
 	spell_max_level = 10 // we can get up to / over a minute duration cd time

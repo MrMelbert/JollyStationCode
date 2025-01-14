@@ -8,12 +8,13 @@
 	button_icon_state = "cosmic_domain"
 
 	sound = 'sound/magic/cosmic_expansion.ogg'
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 45 SECONDS
 
 	invocation = "C'SM'S 'XP'ND"
 	invocation_type = INVOCATION_SHOUT
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	summon_amount = 9
 	summon_radius = 1

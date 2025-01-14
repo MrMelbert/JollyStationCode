@@ -86,7 +86,7 @@
 	if(viable_for_final_effect)
 		if(finished && linked_songtuner_rite && linked_song)
 			for(var/mob/living/carbon/human/listener in linked_song.hearing_mobs)
-				if(listener == parent || listener.can_block_magic(MAGIC_RESISTANCE_HOLY, charge_cost = 1))
+				if(listener == parent || listener.can_block_magic(MAGIC_RESISTANCE_MIND, charge_cost = 1))
 					continue
 
 				linked_songtuner_rite.finish_effect(listener, parent)
@@ -105,7 +105,7 @@
 /datum/component/smooth_tunes/process(seconds_per_tick = SSOBJ_DT)
 	if(linked_songtuner_rite && linked_song)
 		for(var/mob/living/carbon/human/listener in linked_song.hearing_mobs)
-			if(listener == parent || listener.can_block_magic(MAGIC_RESISTANCE_HOLY, charge_cost = 0))
+			if(listener == parent || listener.can_block_magic(MAGIC_RESISTANCE_MIND, charge_cost = 0))
 				continue
 
 			linked_songtuner_rite.song_effect(listener, parent)

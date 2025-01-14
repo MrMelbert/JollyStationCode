@@ -42,7 +42,7 @@
 		return
 	if(IS_HERETIC(viewer))
 		return
-	if(viewer.can_block_magic(MAGIC_RESISTANCE))
+	if(viewer.can_block_magic(MAGIC_RESISTANCE|MAGIC_RESISTANCE_MIND) & ANTIMAGIC_TIER_STRONG)
 		return
 	to_chat(viewer, span_notice(text_to_display))
 	viewer.gain_trauma(applied_trauma, TRAUMA_RESILIENCE_SURGERY)
@@ -50,7 +50,7 @@
 	to_chat(viewer, span_hypnophrase("As you gaze upon the painting, your mind rends to its truth!"))
 
 /obj/structure/sign/painting/eldritch/wirecutter_act(mob/living/user, obj/item/I)
-	if(!user.can_block_magic(MAGIC_RESISTANCE))
+	if(!(user.can_block_magic(MAGIC_RESISTANCE|MAGIC_RESISTANCE_MIND) & ANTIMAGIC_TIER_STRONG))
 		user.add_mood_event("ripped_eldritch_painting", /datum/mood_event/eldritch_painting)
 		to_chat(user, span_hypnophrase("Laughter echoes through your mind...."))
 	qdel(src)

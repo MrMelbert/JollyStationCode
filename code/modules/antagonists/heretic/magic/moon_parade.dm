@@ -8,12 +8,13 @@
 	ranged_mousepointer = 'icons/effects/mouse_pointers/moon_target.dmi'
 
 	sound = 'sound/magic/cosmic_energy.ogg'
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 30 SECONDS
 
 	invocation = "L'N'R P'RAD"
 	invocation_type = INVOCATION_SHOUT
 	spell_requirements = NONE
+	antimagic_flags = ALL
 
 	active_msg = "You prepare to make them join the parade!"
 	deactive_msg = "You stop the music and halt the parade... for now."
@@ -64,7 +65,7 @@
 		return PROJECTILE_PIERCE_PHASE
 
 	// Anti-magic destroys the projectile for consistency and counterplay
-	if(victim.can_block_magic(MAGIC_RESISTANCE))
+	if(victim.can_block_magic(ALL) & ANTIMAGIC_TIER_IMMUNE)
 		visible_message(span_warning("The parade hits [victim] and a sudden wave of clarity comes over you!"))
 		return PROJECTILE_DELETE_WITHOUT_HITTING
 

@@ -96,7 +96,7 @@
 			fail_invoke()
 			return FALSE
 
-		if(convertee.can_block_magic())
+		if(convertee.can_block_magic(MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY) & ANTIMAGIC_TIER_IMMUNE)
 			fail_invoke()
 			return FALSE
 

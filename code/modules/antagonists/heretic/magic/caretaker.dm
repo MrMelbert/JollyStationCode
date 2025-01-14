@@ -10,11 +10,12 @@
 	button_icon_state = "ninja_cloak"
 	sound = 'sound/effects/curse2.ogg'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 1 MINUTES
 
 	invocation_type = INVOCATION_NONE
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 /datum/action/cooldown/spell/caretaker/Remove(mob/living/remove_from)
 	if(remove_from.has_status_effect(/datum/status_effect/caretaker_refuge))

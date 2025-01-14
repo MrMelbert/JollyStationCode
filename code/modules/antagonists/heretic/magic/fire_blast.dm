@@ -9,12 +9,13 @@
 	button_icon_state = "flames"
 	sound = 'sound/magic/fireball.ogg'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 45 SECONDS
 
 	invocation = "V'LC'N!"
 	invocation_type = INVOCATION_SHOUT
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 	channel_time = 5 SECONDS
 	target_radius = 5
 	max_beam_bounces = 4
@@ -35,7 +36,7 @@
 
 	// If they block the magic, the chain wont necessarily stop,
 	// but likely will (due to them not catching on fire)
-	if(to_beam.can_block_magic(antimagic_flags))
+	if(to_beam.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 		to_beam.visible_message(
 			span_warning("[to_beam] absorbs the spell, remaining unharmed!"),
 			span_userdanger("You absorb the spell, remaining unharmed!"),

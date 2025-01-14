@@ -7,12 +7,13 @@
 	button_icon = 'icons/mob/actions/actions_ecult.dmi'
 	button_icon_state = "fire_ring"
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 70 SECONDS
 
 	invocation = "FL'MS"
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	/// The radius of the fire ring
 	var/fire_radius = 1
@@ -68,12 +69,13 @@
 	button_icon_state = "fire_ring"
 	sound = 'sound/items/welder.ogg'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 30 SECONDS
 
 	invocation = "C'SC'DE"
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	/// The radius the flames will go around the caster.
 	var/flame_radius = 4
@@ -107,12 +109,13 @@
 	button_icon_state = "flames"
 	ranged_mousepointer = 'icons/effects/mouse_pointers/throw_target.dmi'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 300
 
 	invocation = "F'RE"
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	/// The length of the flame line spit out.
 	var/flame_line_length = 15
@@ -145,7 +148,7 @@
 			break
 
 		for(var/mob/living/L in T.contents)
-			if(L.can_block_magic())
+			if(L.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 				L.visible_message(span_danger("The spell bounces off of [L]!"), span_danger("The spell bounces off of you!"))
 				continue
 			if(L in hit_list || L == source)

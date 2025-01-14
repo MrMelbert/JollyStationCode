@@ -9,8 +9,9 @@
 	ranged_mousepointer = 'icons/effects/mouse_pointers/moon_target.dmi'
 
 	sound = 'sound/magic/blind.ogg'
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 20 SECONDS
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	invocation = "Mo'N S'M'LE"
 	invocation_type = INVOCATION_SHOUT
@@ -29,7 +30,7 @@
 	. = ..()
 	/// The duration of these effects are based on sanity, mainly for flavor but also to make it a weaker alpha strike
 	var/moon_smile_duration = (150 - cast_on.mob_mood.sanity) / 10
-	if(cast_on.can_block_magic(antimagic_flags))
+	if(cast_on.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 		to_chat(cast_on, span_notice("The moon turns, its smile no longer set on you."))
 		to_chat(owner, span_warning("The moon does not smile upon them."))
 		return FALSE

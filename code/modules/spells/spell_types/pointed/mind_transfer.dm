@@ -105,7 +105,7 @@
 		to_swap.mind_initialize()
 
 	var/datum/mind/mind_to_swap = to_swap.mind
-	if(to_swap.can_block_magic(antimagic_flags) \
+	if((to_swap.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE) \
 		|| mind_to_swap.has_antag_datum(/datum/antagonist/wizard) \
 		|| mind_to_swap.has_antag_datum(/datum/antagonist/cult) \
 		|| mind_to_swap.has_antag_datum(/datum/antagonist/changeling) \

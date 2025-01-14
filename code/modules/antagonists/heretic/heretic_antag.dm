@@ -276,7 +276,7 @@
 	SIGNAL_HANDLER
 
 	// Heretic spells are of the forbidden school, otherwise we don't care
-	if(spell.school != SCHOOL_FORBIDDEN)
+	if(spell.school != SCHOOL_ELDRITCH)
 		return
 
 	// If we've got the trait, we don't care

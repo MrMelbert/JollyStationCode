@@ -77,7 +77,7 @@
 		var/mob/mob_victim = victim
 		if(mob_victim.mind in immune_minds)
 			return
-		if(mob_victim.can_block_magic(antimagic_flags))
+		if(mob_victim.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_STRONG)
 			flare()
 			return
 	if(charges <= 0)

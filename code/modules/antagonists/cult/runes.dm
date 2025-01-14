@@ -271,7 +271,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 			to_chat(invoker, span_warning("You need at least two invokers to convert [convertee]!"))
 		return FALSE
 
-	if(convertee.can_block_magic(MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY, charge_cost = 0)) //No charge_cost because it can be spammed
+	if(convertee.can_block_magic(ALL, charge_cost = 0) & ANTIMAGIC_TIER_IMMUNE) //No charge_cost because it can be spammed
 		for(var/invoker in invokers)
 			to_chat(invoker, span_warning("Something is shielding [convertee]'s mind!"))
 		return FALSE
@@ -898,7 +898,7 @@ GLOBAL_VAR_INIT(narsie_summon_count, 0)
 	set_light(6, 1, color)
 	for(var/mob/living/target in viewers(T))
 		if(!IS_CULTIST(target) && !HAS_TRAIT(target, TRAIT_NOBLOOD)) // NON-MODULE CHANGE
-			if(target.can_block_magic(charge_cost = 0))
+			if(target.can_block_magic(MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY, charge_cost = 0) & ANTIMAGIC_TIER_STRONG)
 				continue
 			to_chat(target, span_cultlarge("Your blood boils in your veins!"))
 	animate(src, color = "#FCB56D", time = 4)
@@ -923,7 +923,7 @@ GLOBAL_VAR_INIT(narsie_summon_count, 0)
 	set_light(6, 1, color)
 	for(var/mob/living/target in viewers(T))
 		if(!IS_CULTIST(target) && !HAS_TRAIT(target, TRAIT_NOBLOOD)) // NON-MODULE CHANGE
-			if(target.can_block_magic(charge_cost = 0))
+			if(target.can_block_magic(MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY, charge_cost = 0) & ANTIMAGIC_TIER_STRONG)
 				continue
 			target.take_overall_damage(tick_damage*multiplier, tick_damage*multiplier)
 

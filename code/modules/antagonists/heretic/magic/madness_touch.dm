@@ -7,11 +7,11 @@
 	button_icon = 'icons/mob/actions/actions_ecult.dmi'
 	button_icon_state = "mad_touch"
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 15 SECONDS
 	invocation_type = INVOCATION_NONE
 	spell_requirements = NONE
-	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_MIND
+	antimagic_flags = ALL
 
 /datum/action/cooldown/spell/touch/mad_touch/is_valid_target(atom/cast_on)
 	if(!ishuman(cast_on))

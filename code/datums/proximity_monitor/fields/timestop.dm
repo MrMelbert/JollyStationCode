@@ -105,7 +105,7 @@
 		return FALSE
 	if(ismob(A))
 		var/mob/M = A
-		if(M.can_block_magic(antimagic_flags))
+		if(M.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 			immune[A] = TRUE
 			return
 	var/frozen = TRUE

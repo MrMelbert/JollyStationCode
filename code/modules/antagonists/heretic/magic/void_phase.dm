@@ -9,12 +9,13 @@
 	button_icon_state = "voidblink"
 	ranged_mousepointer = 'icons/effects/mouse_pointers/throw_target.dmi'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 30 SECONDS
 
 	invocation = "RE'L'TY PH'S'E."
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	cast_range = 9
 	/// The minimum range to cast the phase.
@@ -54,7 +55,7 @@
 	for(var/mob/living/living_mob in range(damage_radius, target_turf))
 		if(IS_HERETIC_OR_MONSTER(living_mob) || living_mob == owner)
 			continue
-		if(living_mob.can_block_magic(antimagic_flags))
+		if(living_mob.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 			continue
 		living_mob.apply_damage(40, BRUTE, wound_bonus = CANT_WOUND)
 

@@ -7,11 +7,12 @@
 	button_icon = 'icons/mob/actions/actions_ecult.dmi'
 	button_icon_state = "worm_ascend"
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 
 	invocation = "REALITY UNCOIL!"
 	invocation_type = INVOCATION_SHOUT
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	convert_damage = FALSE // Functionally meaningless on Armsy, we track how many segments it had instead
 	possible_shapes = list(/mob/living/basic/heretic_summon/armsy)

@@ -7,12 +7,13 @@
 	button_icon_state = "cleave"
 	ranged_mousepointer = 'icons/effects/mouse_pointers/throw_target.dmi'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 45 SECONDS
 
 	invocation = "CL'VE!"
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	cast_range = 4
 
@@ -29,7 +30,7 @@
 	for(var/mob/living/carbon/human/victim in range(cleave_radius, cast_on))
 		if(victim == owner || IS_HERETIC_OR_MONSTER(victim))
 			continue
-		if(victim.can_block_magic(antimagic_flags))
+		if(victim.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 			victim.visible_message(
 				span_danger("[victim]'s flashes in a firey glow, but repels the blaze!"),
 				span_danger("Your body begins to flash a firey glow, but you are protected!!")

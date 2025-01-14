@@ -55,7 +55,7 @@
 	user.mob_light(range = 3, color = LIGHT_COLOR_LIGHT_CYAN, duration = 0.3 SECONDS)
 
 	var/applied_effects = FALSE
-	if(living_target.can_block_magic())
+	if(living_target.can_block_magic(MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY) & ANTIMAGIC_TIER_IMMUNE)
 		applied_effects = TRUE
 	else
 		if(living_target.getStaminaLoss() >= 70)

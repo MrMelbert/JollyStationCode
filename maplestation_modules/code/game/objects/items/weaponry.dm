@@ -149,7 +149,10 @@
 	custom_materials = null
 
 /obj/item/knife/combat/nullknife/Initialize(mapload)
-	AddComponent(/datum/component/anti_magic, MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY)
+	AddComponent(/datum/component/anti_magic, \
+		antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY, \
+		anti_magic_tier = ANTIMAGIC_TIER_WEAK, \
+	)
 	AddElement(/datum/element/bane, target_type = /mob/living/basic/revenant, damage_multiplier = 0, added_damage = 25, requires_combat_mode = FALSE)
 	return ..()
 

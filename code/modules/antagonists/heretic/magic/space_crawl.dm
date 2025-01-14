@@ -12,7 +12,7 @@
 	button_icon = 'icons/mob/actions/actions_ecult.dmi'
 	button_icon_state = "space_crawl"
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 
 	invocation_type = INVOCATION_NONE
 	spell_requirements = NONE

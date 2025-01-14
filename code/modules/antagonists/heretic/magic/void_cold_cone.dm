@@ -8,12 +8,13 @@
 	overlay_icon_state = "bg_heretic_border"
 	button_icon_state = "icebeam"
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 30 SECONDS
 
 	invocation = "FR'ZE!"
 	invocation_type = INVOCATION_SHOUT
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	// In room temperature, the ice won't last very long
 	// ...but in space / freezing rooms, it will stick around

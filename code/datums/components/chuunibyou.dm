@@ -38,6 +38,7 @@
 
 			SCHOOL_NECROMANCY = "I am the Lord of the Dead, the Master of Bones, the Ruler of Shadows. I command the legions of the damned to rise from their graves and serve me!",
 			SCHOOL_FORBIDDEN = "I renounce the laws of this world and embrace the chaos of the old gods! Let the forbidden power flow through me and destroy everything in its path!",
+			SCHOOL_ELDRITCH = "I am the harbinger of the end times, the herald of the apocalypse, the bringer of eternal darkness. Bow before me, mortals, and despair!",
 			SCHOOL_SANGUINE = "I cover my eye with an eyepatch to seal my true power, but now I will unleash it upon you. I feast on the life force of my prey and grow stronger with every drop!",
 		)
 

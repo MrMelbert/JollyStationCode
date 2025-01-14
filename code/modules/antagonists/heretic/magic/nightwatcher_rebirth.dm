@@ -8,8 +8,9 @@
 	button_icon = 'icons/mob/actions/actions_ecult.dmi'
 	button_icon_state = "smoke"
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 1 MINUTES
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	invocation = "GL'RY T' TH' N'GHT'W'TCH'ER"
 	invocation_type = INVOCATION_WHISPER

@@ -6,12 +6,13 @@
 	button_icon = 'icons/mob/actions/actions_ecult.dmi'
 	button_icon_state = "burglarsfinesse"
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 40 SECONDS
 
 	invocation = "Y'O'K!"
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	cast_range = 4
 
@@ -20,13 +21,13 @@
 
 /datum/action/cooldown/spell/pointed/burglar_finesse/cast(mob/living/carbon/human/cast_on)
 	. = ..()
-	if(cast_on.can_block_magic(antimagic_flags))
+	if(cast_on.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 		to_chat(cast_on, span_danger("You feel a light tug, but are otherwise fine, you were protected by holiness!"))
 		to_chat(owner, span_danger("[cast_on] is protected by holy forces!"))
 		return FALSE
 
 	var/obj/storage_item = locate(/obj/item/storage/backpack) in cast_on.contents
-	
+
 	if(isnull(storage_item))
 		return FALSE
 

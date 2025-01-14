@@ -476,7 +476,7 @@
 		loc.balloon_alert(user, "ritual failed, too far!")
 		return FALSE
 
-	if(to_curse.can_block_magic(MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY, charge_cost = 0))
+	if(to_curse.can_block_magic(MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY, charge_cost = 0) & ANTIMAGIC_TIER_IMMUNE)
 		to_chat(to_curse, span_warning("You feel a ghastly chill, but the feeling passes shortly."))
 		return TRUE
 

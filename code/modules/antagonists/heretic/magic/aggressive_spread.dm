@@ -7,12 +7,13 @@
 	button_icon_state = "corrode"
 	sound = 'sound/items/welder.ogg'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 30 SECONDS
 
 	invocation = "A'GRSV SPR'D"
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	aoe_radius = 3
 

@@ -9,12 +9,13 @@
 	button_icon_state = "furious_steel"
 	sound = 'sound/weapons/guillotine.ogg'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 60 SECONDS
 	invocation = "F'LSH'NG S'LV'R!"
 	invocation_type = INVOCATION_SHOUT
 
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	active_msg = "You summon forth three blades of furious silver."
 	deactive_msg = "You conceal the blades of furious silver."
@@ -123,7 +124,7 @@
 			if(monster?.master == caster.mind)
 				return PROJECTILE_PIERCE_PHASE
 
-		if(victim.can_block_magic(MAGIC_RESISTANCE))
+		if(victim.can_block_magic(MAGIC_RESISTANCE) & ANTIMAGIC_TIER_IMMUNE)
 			visible_message(span_warning("[src] drops to the ground and melts on contact [victim]!"))
 			return PROJECTILE_DELETE_WITHOUT_HITTING
 

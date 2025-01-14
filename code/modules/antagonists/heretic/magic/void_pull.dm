@@ -8,12 +8,13 @@
 	button_icon_state = "voidpull"
 	sound = 'sound/magic/voidblink.ogg'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 40 SECONDS
 
 	invocation = "BR'NG F'RTH TH'M T' M'."
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	aoe_radius = 7
 	/// The radius of the actual damage circle done before cast
@@ -43,7 +44,7 @@
 			continue
 		if(IS_HERETIC_OR_MONSTER(nearby_mob))
 			continue
-		if(nearby_mob.can_block_magic(antimagic_flags))
+		if(nearby_mob.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 			continue
 
 		things += nearby_mob

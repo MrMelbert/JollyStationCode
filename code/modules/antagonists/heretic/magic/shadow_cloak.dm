@@ -9,11 +9,12 @@
 	button_icon_state = "ninja_cloak"
 	sound = 'sound/effects/curse2.ogg'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 6 SECONDS
 
 	invocation_type = INVOCATION_NONE
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	/// How long before we automatically uncloak?
 	var/uncloak_time = 3 MINUTES

@@ -38,7 +38,7 @@
 /datum/action/cooldown/spell/aoe/repulse/cast_on_thing_in_aoe(atom/movable/victim, atom/caster)
 	if(ismob(victim))
 		var/mob/victim_mob = victim
-		if(victim_mob.can_block_magic(antimagic_flags))
+		if(victim_mob.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 			return
 
 	var/turf/throwtarget = get_edge_target_turf(caster, get_dir(caster, get_step_away(victim, caster)))

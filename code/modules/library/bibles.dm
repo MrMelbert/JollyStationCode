@@ -82,7 +82,10 @@ GLOBAL_LIST_INIT(bibleitemstates, list(
 
 /obj/item/book/bible/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/anti_magic, MAGIC_RESISTANCE_HOLY)
+	AddComponent(/datum/component/anti_magic, \
+		antimagic_flags = MAGIC_RESISTANCE_HOLY, \
+		anti_magic_tier = ANTIMAGIC_TIER_WEAK, \
+	)
 	bullet_catcher = AddComponent(\
 		/datum/component/bullet_intercepting,\
 		active_slots = ITEM_SLOT_SUITSTORE,\
@@ -366,7 +369,11 @@ GLOBAL_LIST_INIT(bibleitemstates, list(
 
 /obj/item/book/bible/syndicate/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/anti_magic, MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY)
+	AddComponent(/datum/component/anti_magic, \
+		antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY, \
+		anti_magic_tier = ANTIMAGIC_TIER_STRONG, \
+		on_block = CALLBACK(src, PROC_REF(check_holiness)), \
+	)
 	AddComponent(/datum/component/effect_remover, \
 		success_feedback = "You disrupt the magic of %THEEFFECT with %THEWEAPON.", \
 		success_forcesay = "BEGONE FOUL MAGIKS!!", \
@@ -374,6 +381,11 @@ GLOBAL_LIST_INIT(bibleitemstates, list(
 		effects_we_clear = list(/obj/effect/rune, /obj/effect/heretic_rune, /obj/effect/cosmic_rune), \
 	)
 	AddElement(/datum/element/bane, target_type = /mob/living/basic/revenant, damage_multiplier = 0, added_damage = 25, requires_combat_mode = FALSE)
+
+/obj/item/book/bible/syndicate/proc/check_holiness(mob/user, ...)
+	if(!user.mind?.holy_role)
+		return NONE
+	return null // default
 
 /obj/item/book/bible/syndicate/attack_self(mob/living/carbon/human/user, modifiers)
 	if(!uses || !istype(user))

@@ -9,13 +9,15 @@
 	var/antimagic_flags = MAGIC_RESISTANCE
 	/// determines the drain cost on the antimagic item
 	var/antimagic_charge_cost = 1
+	/// determines the strength of the antimagic needed to block the spell projectile
+	var/antimagic_strength = ANTIMAGIC_TIER_IMMUNE
 
 /obj/projectile/magic/prehit_pierce(atom/target)
 	. = ..()
 
 	if(isliving(target))
 		var/mob/living/victim = target
-		if(victim.can_block_magic(antimagic_flags, antimagic_charge_cost))
+		if(victim.can_block_magic(antimagic_flags, antimagic_charge_cost) & antimagic_strength)
 			visible_message(span_warning("[src] fizzles on contact with [victim]!"))
 			return PROJECTILE_DELETE_WITHOUT_HITTING
 
@@ -56,6 +58,7 @@
 /obj/projectile/magic/resurrection
 	name = "bolt of resurrection"
 	icon_state = "ion"
+	antimagic_strength = ANTIMAGIC_TIER_WEAK
 
 /obj/projectile/magic/resurrection/on_hit(atom/target, blocked = 0, pierce_hit)
 	. = ..()
@@ -82,6 +85,7 @@
 /obj/projectile/magic/teleport
 	name = "bolt of teleportation"
 	icon_state = "bluespace"
+	antimagic_strength = ANTIMAGIC_TIER_STRONG
 	var/inner_tele_radius = 0
 	var/outer_tele_radius = 6
 
@@ -103,6 +107,7 @@
 /obj/projectile/magic/safety
 	name = "bolt of safety"
 	icon_state = "bluespace"
+	antimagic_strength = ANTIMAGIC_TIER_STRONG
 
 /obj/projectile/magic/safety/on_hit(atom/target, blocked = 0, pierce_hit)
 	. = ..()
@@ -121,6 +126,7 @@
 /obj/projectile/magic/door
 	name = "bolt of door creation"
 	icon_state = "energy"
+	antimagic_strength = ANTIMAGIC_TIER_WEAK
 	var/list/door_types = list(/obj/structure/mineral_door/wood, /obj/structure/mineral_door/iron, /obj/structure/mineral_door/silver, /obj/structure/mineral_door/gold, /obj/structure/mineral_door/uranium, /obj/structure/mineral_door/sandstone, /obj/structure/mineral_door/transparent/plasma, /obj/structure/mineral_door/transparent/diamond)
 
 /obj/projectile/magic/door/on_hit(atom/target, blocked = 0, pierce_hit)
@@ -148,6 +154,7 @@
 	name = "bolt of change"
 	icon_state = "ice_1"
 	damage_type = BURN
+	antimagic_strength = ANTIMAGIC_TIER_WEAK
 	/// If set, this projectile will only do a certain wabbajack effect
 	var/set_wabbajack_effect
 	/// If set, this projectile will only pass certain changeflags to wabbajack
@@ -170,6 +177,7 @@
 	name = "bolt of animation"
 	icon_state = "red_1"
 	damage_type = BURN
+	antimagic_strength = ANTIMAGIC_TIER_WEAK
 
 /obj/projectile/magic/animate/on_hit(atom/target, blocked = 0, pierce_hit)
 	. = ..()
@@ -197,6 +205,7 @@
 /obj/projectile/magic/locker
 	name = "locker bolt"
 	icon_state = "locker"
+	antimagic_strength = ANTIMAGIC_TIER_WEAK
 	var/weld = TRUE
 	var/created = FALSE //prevents creation of more then one locker if it has multiple hits
 	var/locker_suck = TRUE
@@ -283,6 +292,7 @@
 /obj/projectile/magic/flying
 	name = "bolt of flying"
 	icon_state = "flight"
+	antimagic_strength = ANTIMAGIC_TIER_WEAK
 
 /obj/projectile/magic/flying/on_hit(mob/living/target, blocked = 0, pierce_hit)
 	. = ..()
@@ -293,6 +303,7 @@
 /obj/projectile/magic/bounty
 	name = "bolt of bounty"
 	icon_state = "bounty"
+	antimagic_strength = ANTIMAGIC_TIER_WEAK
 
 /obj/projectile/magic/bounty/on_hit(mob/living/target, blocked = 0, pierce_hit)
 	. = ..()
@@ -302,6 +313,7 @@
 /obj/projectile/magic/antimagic
 	name = "bolt of antimagic"
 	icon_state = "antimagic"
+	antimagic_flags = NONE
 
 /obj/projectile/magic/antimagic/on_hit(mob/living/target, blocked = 0, pierce_hit)
 	. = ..()
@@ -311,6 +323,7 @@
 /obj/projectile/magic/fetch
 	name = "bolt of fetching"
 	icon_state = "fetch"
+	antimagic_strength = ANTIMAGIC_TIER_WEAK
 
 /obj/projectile/magic/fetch/on_hit(mob/living/target, blocked = 0, pierce_hit)
 	. = ..()
@@ -321,6 +334,7 @@
 /obj/projectile/magic/babel
 	name = "bolt of babel"
 	icon_state = "babel"
+	antimagic_strength = ANTIMAGIC_TIER_WEAK
 
 /obj/projectile/magic/babel/on_hit(mob/living/carbon/target, blocked = 0, pierce_hit)
 	. = ..()
@@ -331,6 +345,7 @@
 /obj/projectile/magic/necropotence
 	name = "bolt of necropotence"
 	icon_state = "necropotence"
+	antimagic_strength = ANTIMAGIC_TIER_STRONG
 
 /obj/projectile/magic/necropotence/on_hit(mob/living/target, blocked = 0, pierce_hit)
 	. = ..()
@@ -479,7 +494,7 @@
 	zap_flags = ZAP_MOB_DAMAGE | ZAP_OBJ_DAMAGE | ZAP_LOW_POWER_GEN
 
 /obj/projectile/magic/fireball
-	name = "bolt of fireball"
+	name = "fireball"
 	icon_state = "fireball"
 	damage = 10
 	damage_type = BRUTE
@@ -573,6 +588,7 @@
 
 /obj/projectile/magic/nothing
 	name = "bolt of nothing"
+	antimagic_strength = ANTIMAGIC_TIER_WEAK
 
 /obj/projectile/magic/spellcard
 	name = "enchanted card"
@@ -581,3 +597,4 @@
 	damage_type = BURN
 	damage = 2
 	antimagic_charge_cost = 0 // since the cards gets spammed like a shotgun
+	antimagic_strength = ANTIMAGIC_TIER_WEAK

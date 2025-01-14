@@ -52,7 +52,7 @@
 		if(victim in people_we_dazed)
 			continue
 
-		if(victim.can_block_magic())
+		if(victim.can_block_magic(MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY) & ANTIMAGIC_TIER_IMMUNE)
 			continue
 
 		daze_victim(victim)
@@ -89,7 +89,7 @@
 	if(victim in people_we_dazed)
 		return
 
-	if(victim.can_block_magic())
+	if(victim.can_block_magic(MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY) & ANTIMAGIC_TIER_IMMUNE)
 		return
 
 	new /obj/effect/particle_effect/sparks(get_turf(victim))

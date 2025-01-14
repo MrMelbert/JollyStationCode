@@ -20,7 +20,7 @@
 	. = ..()
 	var/mob/M = target
 	if(istype(M))
-		if(M.can_block_magic())
+		if(M.can_block_magic() & ANTIMAGIC_TIER_STRONG)
 			return BULLET_ACT_BLOCK
 		else
 			M.slip(100, M.loc, GALOSHES_DONT_HELP|SLIDE, 0, FALSE)

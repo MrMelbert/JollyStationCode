@@ -39,7 +39,7 @@
 
 	user.mob_light(range = 3, color = LIGHT_COLOR_BLOOD_MAGIC, duration = 0.3 SECONDS)
 
-	if(!human_target.can_block_magic())
+	if(!(human_target.can_block_magic(MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY) & ANTIMAGIC_TIER_IMMUNE))
 		to_chat(user, span_cultitalic("You curse [human_target] with [src]!"))
 		target.visible_message(
 			span_warning("[human_target] writhes in pain!"),

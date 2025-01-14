@@ -7,12 +7,13 @@
 	button_icon = 'icons/mob/actions/actions_ecult.dmi'
 	button_icon_state = "cleave"
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 45 SECONDS
 
 	invocation = "AP'TRA VULN'RA!"
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	cast_range = 4
 	/// What type of wound we apply
@@ -30,7 +31,7 @@
 	if(HAS_TRAIT(cast_on, TRAIT_NOBLOOD)) // NON-MODULE CHANGE
 		return FALSE
 
-	if(cast_on.can_block_magic(antimagic_flags))
+	if(cast_on.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 		cast_on.visible_message(
 			span_danger("[cast_on]'s bruises briefly glow, but repels the effect!"),
 			span_danger("Your bruises sting a little, but you are protected!")

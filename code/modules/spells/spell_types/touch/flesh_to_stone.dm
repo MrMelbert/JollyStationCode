@@ -18,11 +18,16 @@
 
 /datum/action/cooldown/spell/touch/flesh_to_stone/cast_on_hand_hit(obj/item/melee/touch_attack/hand, mob/living/victim, mob/living/carbon/caster)
 	var/mob/living/living_victim = victim
-	if(living_victim.can_block_magic(antimagic_flags))
+	var/magic_tier = living_victim.can_block_magic(antimagic_flags)
+	if(magic_tier & ANTIMAGIC_TIER_IMMUNE)
 		return TRUE
-
 	living_victim.Stun(4 SECONDS)
-	living_victim.petrify()
+	if(magic_tier & ANTIMAGIC_TIER_STRONG)
+		return TRUE
+	if(magic_tier & ANTIMAGIC_TIER_WEAK)
+		living_victim.petrify(1 MINUTES)
+		return TRUE
+	living_victim.petrify(8 MINUTES)
 	return TRUE
 
 /obj/item/melee/touch_attack/flesh_to_stone

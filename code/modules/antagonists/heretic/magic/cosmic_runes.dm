@@ -7,12 +7,13 @@
 	button_icon_state = "cosmic_rune"
 
 	sound = 'sound/magic/forcewall.ogg'
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 15 SECONDS
 
 	invocation = "ST'R R'N'"
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	/// Storage for the first rune.
 	var/datum/weakref/first_rune

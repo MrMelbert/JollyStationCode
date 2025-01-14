@@ -24,7 +24,7 @@
 	return things
 
 /datum/action/cooldown/spell/aoe/sacred_flame/cast_on_thing_in_aoe(mob/living/victim, mob/living/caster)
-	if(victim.can_block_magic(antimagic_flags))
+	if(victim.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_WEAK)
 		return
 
 	victim.adjust_fire_stacks(firestacks_to_give)

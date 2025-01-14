@@ -10,15 +10,18 @@
 	organ_traits = list(TRAIT_ADVANCEDTOOLUSER, TRAIT_LITERATE, TRAIT_CAN_STRIP, TRAIT_ANTIMAGIC_NO_SELFBLOCK)
 	w_class = WEIGHT_CLASS_NORMAL
 
+	var/datum/component/echo_comp
+	var/datum/component/anti_magic_comp
+
 /obj/item/organ/internal/brain/psyker/on_mob_insert(mob/living/carbon/inserted_into)
 	. = ..()
-	inserted_into.AddComponent(/datum/component/echolocation, blocking_trait = TRAIT_DUMB, echo_group = "psyker", echo_icon = "psyker", color_path = /datum/client_colour/psyker)
-	inserted_into.AddComponent(/datum/component/anti_magic, antimagic_flags = MAGIC_RESISTANCE_MIND)
+	echo_comp = inserted_into.AddComponent(/datum/component/echolocation, blocking_trait = TRAIT_DUMB, echo_group = "psyker", echo_icon = "psyker", color_path = /datum/client_colour/psyker)
+	anti_magic_comp = inserted_into.AddComponent(/datum/component/anti_magic, antimagic_flags = MAGIC_RESISTANCE_MIND, anti_magic_tier = ANTIMAGIC_TIER_IMMUNE)
 
 /obj/item/organ/internal/brain/psyker/on_mob_remove(mob/living/carbon/removed_from)
 	. = ..()
-	qdel(removed_from.GetComponent(/datum/component/echolocation))
-	qdel(removed_from.GetComponent(/datum/component/anti_magic))
+	qdel(echo_comp)
+	qdel(anti_magic_comp)
 
 /obj/item/organ/internal/brain/psyker/on_life(seconds_per_tick, times_fired)
 	. = ..()
@@ -192,7 +195,10 @@
 
 /obj/item/gun/ballistic/revolver/chaplain/Initialize(mapload, burden_spawned = FALSE)
 	. = ..()
-	AddComponent(/datum/component/anti_magic, MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY)
+	AddComponent(/datum/component/anti_magic, \
+		antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY, \
+		anti_magic_tier = ANTIMAGIC_TIER_IMMUNE, \
+	)
 	AddComponent(/datum/component/effect_remover, \
 		success_feedback = "You disrupt the magic of %THEEFFECT with %THEWEAPON.", \
 		success_forcesay = "BEGONE FOUL MAGIKS!!", \
@@ -343,7 +349,7 @@
 
 /datum/action/cooldown/spell/pointed/psychic_projection/cast(mob/living/cast_on)
 	. = ..()
-	if(cast_on.can_block_magic(antimagic_flags))
+	if(cast_on.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 		to_chat(cast_on, span_notice("Your mind feels weird, but it passes momentarily."))
 		to_chat(owner, span_warning("The spell had no effect!"))
 		return FALSE

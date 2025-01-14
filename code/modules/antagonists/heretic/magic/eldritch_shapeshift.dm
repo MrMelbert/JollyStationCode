@@ -6,7 +6,7 @@
 	background_icon_state = "bg_heretic"
 	overlay_icon_state = "bg_heretic_border"
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	invocation = "SH'PE"
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE

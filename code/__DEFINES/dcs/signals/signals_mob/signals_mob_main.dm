@@ -83,7 +83,12 @@
 #define COMSIG_MOB_RESTRICT_MAGIC "mob_cast_magic"
 ///from base of mob/can_block_magic(): (mob/user, casted_magic_flags, charge_cost)
 #define COMSIG_MOB_RECEIVE_MAGIC "mob_receive_magic"
-	#define COMPONENT_MAGIC_BLOCKED (1<<0)
+	/// Magic is blocked, but only surface level effects
+	#define ANTIMAGIC_TIER_WEAK (1<<0)
+	/// Magic is blocked, a majority of effects are blocked but especially powerful things may still get through
+	#define ANTIMAGIC_TIER_STRONG (1<<1)
+	/// Magic is 100% blocked, no magic can get through
+	#define ANTIMAGIC_TIER_IMMUNE (1<<2)
 
 ///from base of mob/create_mob_hud(): ()
 #define COMSIG_MOB_HUD_CREATED "mob_hud_created"

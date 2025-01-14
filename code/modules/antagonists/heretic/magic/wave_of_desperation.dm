@@ -8,12 +8,13 @@
 	button_icon_state = "uncuff"
 	sound = 'sound/magic/swap.ogg'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 5 MINUTES
 
 	invocation = "F'K 'FF."
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	aoe_radius = 3
 
@@ -53,7 +54,7 @@
 			continue
 		if(IS_HERETIC_OR_MONSTER(nearby_mob))
 			continue
-		if(nearby_mob.can_block_magic(antimagic_flags))
+		if(nearby_mob.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 			continue
 
 		. += nearby_mob

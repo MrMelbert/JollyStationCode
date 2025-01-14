@@ -7,12 +7,13 @@
 	button_icon_state = "ash_shift"
 	sound = null
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 15 SECONDS
 
 	invocation = "ASH'N P'SSG'"
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	exit_jaunt_sound = null
 	jaunt_duration = 1.1 SECONDS

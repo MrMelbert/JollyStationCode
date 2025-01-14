@@ -10,12 +10,13 @@
 	button_icon_state = "entropic_plume"
 	sound = 'sound/magic/forcewall.ogg'
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 30 SECONDS
 
 	invocation = "'NTR'P'C PL'M'"
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	cone_levels = 5
 	respect_density = TRUE
@@ -72,12 +73,13 @@
 	button_icon = 'icons/mob/actions/actions_ecult.dmi'
 	button_icon_state = "rust_wave"
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 35 SECONDS
 
 	invocation = "SPR'D TH' WO'D"
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	projectile_type = /obj/projectile/magic/aoe/rust_wave
 

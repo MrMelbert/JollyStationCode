@@ -29,7 +29,7 @@
 	origin.Beam(to_beam, icon_state = "lightning[rand(1,12)]", time = 0.5 SECONDS)
 	playsound(get_turf(to_beam), 'sound/magic/lightningshock.ogg', 50, TRUE, -1)
 
-	if(to_beam.can_block_magic(antimagic_flags))
+	if(to_beam.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_STRONG)
 		to_beam.visible_message(
 			span_warning("[to_beam] absorbs the spell, remaining unharmed!"),
 			span_userdanger("You absorb the spell, remaining unharmed!"),

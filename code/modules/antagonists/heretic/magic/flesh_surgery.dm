@@ -9,11 +9,12 @@
 	button_icon_state = "mad_touch"
 	sound = null
 
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 20 SECONDS
 	invocation = "CL'M M'N!" // "CLAIM MINE", but also almost "KALI MA"
 	invocation_type = INVOCATION_SHOUT
 	spell_requirements = NONE
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY
 
 	hand_path = /obj/item/melee/touch_attack/flesh_surgery
 	can_cast_on_self = TRUE

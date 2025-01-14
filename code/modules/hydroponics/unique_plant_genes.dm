@@ -21,9 +21,14 @@
 		antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY, \
 		inventory_flags = ITEM_SLOT_HANDS, \
 		charges = shield_uses, \
+		on_block = CALLBACK(src, PROC_REF(block_magic)), \
 		drain_antimagic = CALLBACK(src, PROC_REF(drain_antimagic)), \
 		expiration = CALLBACK(src, PROC_REF(expire)), \
 	)
+
+// Holy magic we're especially good at blocking, everything else is lackluster.
+/datum/plant_gene/trait/anti_magic/proc/block_magic(mob/user, obj/item/our_plant, casted_magic_flags, charge_cost)
+	return (casted_magic_flags & MAGIC_RESISTANCE_HOLY) ? ANTIMAGIC_TIER_IMMUNE : ANTIMAGIC_TIER_WEAK
 
 /// When the plant our gene is hosted in is drained of an anti-magic charge.
 /datum/plant_gene/trait/anti_magic/proc/drain_antimagic(mob/user, obj/item/our_plant)

@@ -32,12 +32,19 @@
 
 /datum/action/cooldown/spell/pointed/blind/cast(mob/living/carbon/human/cast_on)
 	. = ..()
-	if(cast_on.can_block_magic(antimagic_flags))
+	var/magic_tier = cast_on.can_block_magic(antimagic_flags)
+	if(magic_tier & ANTIMAGIC_TIER_IMMUNE)
 		to_chat(cast_on, span_notice("Your eye itches, but it passes momentarily."))
 		to_chat(owner, span_warning("The spell had no effect!"))
 		return FALSE
 
+	var/duration_mod = 1
+	if(magic_tier & ANTIMAGIC_TIER_STRONG)
+		duration_mod = 0.33
+	else if(magic_tier & ANTIMAGIC_TIER_WEAK)
+		duration_mod = 0.66
+
 	to_chat(cast_on, span_warning("Your eyes cry out in pain!"))
-	cast_on.adjust_temp_blindness(eye_blind_duration)
-	cast_on.set_eye_blur_if_lower(eye_blur_duration)
+	cast_on.adjust_temp_blindness(eye_blind_duration * duration_mod)
+	cast_on.set_eye_blur_if_lower(eye_blur_duration * duration_mod)
 	return TRUE

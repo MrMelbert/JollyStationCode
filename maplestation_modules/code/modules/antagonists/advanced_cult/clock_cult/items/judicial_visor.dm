@@ -60,8 +60,8 @@
 
 	// This point on, our attack was successful
 	COOLDOWN_START(src, examine_damage_cooldown, 10 SECONDS)
-	playsound(get_turf(source), 'sound/weapons/marauder.ogg', 50, TRUE, extrarange = SHORT_RANGE_SOUND_EXTRARANGE)
-	playsound(get_turf(examined), 'sound/weapons/sear.ogg', 30, TRUE, extrarange = MEDIUM_RANGE_SOUND_EXTRARANGE)
+	playsound(source, 'sound/weapons/marauder.ogg', 50, TRUE, extrarange = SHORT_RANGE_SOUND_EXTRARANGE)
+	playsound(examined, 'sound/weapons/sear.ogg', 30, TRUE, extrarange = MEDIUM_RANGE_SOUND_EXTRARANGE)
 	new /obj/effect/temp_visual/clock/marker(get_turf(examined))
 
 	// Sets our icon to the "off" state.
@@ -69,7 +69,7 @@
 	source.update_worn_glasses()
 	addtimer(CALLBACK(src, PROC_REF(reset_icon), source), 10 SECONDS)
 
-	if(target.can_block_magic())
+	if(target.can_block_magic(MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY) & ANTIMAGIC_TIER_IMMUNE)
 		return
 
 	// And THIS point on, is where attack effects are done to the target

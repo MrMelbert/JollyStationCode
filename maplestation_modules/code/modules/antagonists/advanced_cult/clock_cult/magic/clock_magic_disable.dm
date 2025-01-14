@@ -23,7 +23,7 @@
 
 	user.mob_light(range = 3, color = LIGHT_COLOR_TUNGSTEN, duration = 0.8 SECONDS)
 
-	if(victim.can_block_magic())
+	if(victim.can_block_magic(MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY) & ANTIMAGIC_TIER_IMMUNE)
 		return TRUE
 
 	if(living_target.getStaminaLoss() >= 70)

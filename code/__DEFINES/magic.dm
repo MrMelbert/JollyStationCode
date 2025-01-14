@@ -26,8 +26,10 @@
 // EVIL SPELLS (instant smite + banishment)
 /// Necromancy spells, usually involves soul / evil / bad stuff
 #define SCHOOL_NECROMANCY "necromancy"
-/// Other forbidden magics, such as heretic spells
+/// Other forbidden magics
 #define SCHOOL_FORBIDDEN "forbidden"
+/// Heretic magics
+#define SCHOOL_ELDRITCH "eldritch"
 /// Blood magic, involves vampirism, draining blood, etc.
 #define SCHOOL_SANGUINE "sanguine"
 

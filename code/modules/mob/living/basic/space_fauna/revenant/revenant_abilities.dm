@@ -131,7 +131,7 @@
 		if(human_mob == caster)
 			continue
 		to_shock.Beam(human_mob, icon_state = "purple_lightning", time = 0.5 SECONDS)
-		if(!human_mob.can_block_magic(antimagic_flags))
+		if(!(human_mob.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_WEAK))
 			human_mob.electrocute_act(shock_damage, to_shock, flags = SHOCK_NOGLOVES)
 
 		do_sparks(4, FALSE, human_mob)
@@ -209,7 +209,7 @@
 	for(var/mob/living/carbon/human/human in victim)
 		if(human == caster)
 			continue
-		if(human.can_block_magic(antimagic_flags))
+		if(human.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_WEAK)
 			continue
 		to_chat(human, span_revenwarning("You feel [pick("your sense of direction flicker out", "a stabbing pain in your head", "your mind fill with static")]."))
 		new /obj/effect/temp_visual/revenant(human.loc)
@@ -244,7 +244,7 @@
 	for(var/mob/living/mob in victim)
 		if(mob == caster)
 			continue
-		if(mob.can_block_magic(antimagic_flags))
+		if(mob.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_WEAK)
 			to_chat(caster, span_warning("The spell had no effect on [mob]!"))
 			continue
 		new /obj/effect/temp_visual/revenant(mob.loc)

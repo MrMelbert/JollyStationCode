@@ -8,13 +8,14 @@
 	button_icon_state = "mind_gate"
 
 	sound = 'sound/magic/curse.ogg'
-	school = SCHOOL_FORBIDDEN
+	school = SCHOOL_ELDRITCH
 	cooldown_time = 20 SECONDS
 
 	invocation = "Op' 'oY 'Mi'd"
 	invocation_type = INVOCATION_WHISPER
 	spell_requirements = NONE
 	cast_range = 6
+	antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_MIND
 
 	active_msg = "You prepare to open your mind..."
 
@@ -26,7 +27,7 @@
 
 /datum/action/cooldown/spell/pointed/mind_gate/cast(mob/living/carbon/human/cast_on, mob/living/carbon/human/owner)
 	. = ..()
-	if(cast_on.can_block_magic(antimagic_flags))
+	if(cast_on.can_block_magic(antimagic_flags) & ANTIMAGIC_TIER_IMMUNE)
 		to_chat(cast_on, span_notice("Your mind feels closed."))
 		to_chat(owner, span_warning("Their mind doesn't swing open, but neither does yours."))
 		return FALSE

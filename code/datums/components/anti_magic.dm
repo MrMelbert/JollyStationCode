@@ -1,5 +1,6 @@
 /// This provides different types of magic resistance on an object
 /datum/component/anti_magic
+	dupe_mode = COMPONENT_DUPE_ALLOWED
 	/// A bitflag with the types of magic resistance on the object
 	var/antimagic_flags
 	/// The amount of times the object can protect the user from magic
@@ -7,13 +8,18 @@
 	var/charges
 	/// The inventory slot the object must be located at in order to activate
 	var/inventory_flags
+	/// Callback when a block is successful.
+	/// You can return NONE from it to have no block occur, or null to use the default block
+	var/datum/callback/on_block
 	/// The callback invoked when we have been drained a antimagic charge
 	var/datum/callback/drain_antimagic
 	/// The callback invoked when twe have been depleted of all charges
 	var/datum/callback/expiration
 	/// Whether we should, on equipping, alert the caster that this item can block any of their spells
 	/// This changes between true and false on equip and drop, don't set it outright to something
-	var/alert_caster_on_equip = TRUE
+	VAR_PRIVATE/alert_caster_on_equip = TRUE
+	/// The tier of antimagic this object provides
+	var/antimagic_tier = ANTIMAGIC_TIER_WEAK
 
 /**
  * Adds magic resistances to an object
@@ -37,8 +43,10 @@
 		antimagic_flags = MAGIC_RESISTANCE,
 		charges = INFINITY,
 		inventory_flags = ~ITEM_SLOT_BACKPACK, // items in a backpack won't activate, anywhere else is fine
+		datum/callback/on_block,
 		datum/callback/drain_antimagic,
 		datum/callback/expiration,
+		anti_magic_tier = ANTIMAGIC_TIER_IMMUNE,
 	)
 
 	if(isitem(parent))
@@ -53,10 +61,13 @@
 	src.antimagic_flags = antimagic_flags
 	src.charges = charges
 	src.inventory_flags = inventory_flags
+	src.on_block = on_block
 	src.drain_antimagic = drain_antimagic
 	src.expiration = expiration
+	src.antimagic_tier = anti_magic_tier
 
 /datum/component/anti_magic/Destroy(force)
+	on_block = null
 	drain_antimagic = null
 	expiration = null
 	return ..()
@@ -107,11 +118,16 @@
 		return NONE
 
 	// We have already blocked this spell
-	if(parent in antimagic_sources)
+	if(antimagic_sources[parent])
+		return NONE
+
+	// Check on_block for custom block behavior, stop if we explicitly return NONE
+	var/block_tier = on_block?.Invoke(source, parent, casted_magic_flags, charge_cost)
+	if(block_tier == NONE)
 		return NONE
 
 	// Block success! Add this parent to the list of antimagic sources
-	antimagic_sources += parent
+	antimagic_sources[parent] = antimagic_flags
 
 	if((charges != INFINITY) && charge_cost > 0)
 		drain_antimagic?.Invoke(source, parent)
@@ -120,16 +136,20 @@
 			expiration?.Invoke(source, parent)
 			qdel(src) // no more antimagic
 
-	return COMPONENT_MAGIC_BLOCKED
+	// Return whatever the callback returns, or just the base antimagic tier
+	return block_tier || antimagic_tier
 
 /// cannot cast magic with the same type of antimagic present
-/datum/component/anti_magic/proc/restrict_casting_magic(mob/user, magic_flags)
+/datum/component/anti_magic/proc/restrict_casting_magic(mob/source, magic_flags)
 	SIGNAL_HANDLER
 
 	if(magic_flags & antimagic_flags)
-		if(HAS_TRAIT(user, TRAIT_ANTIMAGIC_NO_SELFBLOCK)) // this trait bypasses magic casting restrictions
+		if(HAS_TRAIT(source, TRAIT_ANTIMAGIC_NO_SELFBLOCK)) // this trait bypasses magic casting restrictions
 			return NONE
-		return COMPONENT_MAGIC_BLOCKED
+		var/block_tier = on_block?.Invoke(source, parent, magic_flags, 0)
+		if(block_tier == NONE)
+			return NONE
+		return block_tier || antimagic_tier
 
 	return NONE
 

@@ -379,7 +379,10 @@
 
 /obj/item/immortality_talisman/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/anti_magic, ALL)
+	AddComponent(/datum/component/anti_magic, \
+		antimagic_flags = ALL, \
+		anti_magic_tier = ANTIMAGIC_TIER_STRONG, \
+	)
 
 /datum/action/item_action/immortality
 	name = "Immortality"
@@ -689,7 +692,11 @@
 
 /obj/item/clothing/suit/hooded/berserker/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/anti_magic, ALL, inventory_flags = ITEM_SLOT_OCLOTHING)
+	AddComponent(/datum/component/anti_magic, \
+		antimagic_flags = ALL, \
+		inventory_flags = ITEM_SLOT_OCLOTHING, \
+		anti_magic_tier = ANTIMAGIC_TIER_STRONG, \
+	)
 
 #define MAX_BERSERK_CHARGE 100
 #define PROJECTILE_HIT_MULTIPLIER 1.5

@@ -98,6 +98,7 @@
 	. = ..()
 	AddComponent(/datum/component/anti_magic, \
 		antimagic_flags = MAGIC_RESISTANCE|MAGIC_RESISTANCE_HOLY, \
+		anti_magic_tier = ANTIMAGIC_TIER_IMMUNE, \
 		charges = 1, \
 		expiration = CALLBACK(src, PROC_REF(expire)), \
 	)

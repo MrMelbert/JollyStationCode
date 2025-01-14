@@ -412,7 +412,7 @@
 			var/old_color = target.color
 			target.color = rgb(0, 128, 0)
 			animate(target, color = old_color, time = 1 SECONDS, easing = EASE_IN)
-		else if(target.can_block_magic())
+		else if(target.can_block_magic(MAGIC_RESISTANCE_HOLY) & ANTIMAGIC_TIER_IMMUNE)
 			to_chat(user, span_warning("The spell had no effect!"))
 		else
 			to_chat(user, span_cultitalic("In a brilliant flash of red, [target] falls to the ground!"))

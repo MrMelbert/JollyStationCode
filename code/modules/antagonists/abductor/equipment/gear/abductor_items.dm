@@ -207,7 +207,7 @@
 		if(QDELETED(target_gland))
 			return
 
-		if(carbon_target.can_block_magic(MAGIC_RESISTANCE_MIND, charge_cost = 0))
+		if(carbon_target.can_block_magic(MAGIC_RESISTANCE_MIND, charge_cost = 0) & ANTIMAGIC_TIER_IMMUNE)
 			user.balloon_alert(user, "foiled!")
 			to_chat(user, span_warning("Your target seems to have some sort of mental blockage, preventing the message from being sent! It seems you've been foiled."))
 			return
@@ -399,7 +399,7 @@ Congratulations! You are now trained for invasive xenobiology research!"}
 /obj/item/melee/baton/abductor/proc/SleepAttack(mob/living/target, mob/living/user)
 	playsound(src, on_stun_sound, 50, TRUE, -1)
 	if(target.incapacitated(IGNORE_RESTRAINTS|IGNORE_GRAB))
-		if(target.can_block_magic(MAGIC_RESISTANCE_MIND))
+		if(target.can_block_magic(MAGIC_RESISTANCE_MIND) & ANTIMAGIC_TIER_STRONG)
 			to_chat(user, span_warning("The specimen has some kind of mental protection that is interfering with the sleep inducement! It seems you've been foiled."))
 			target.visible_message(span_danger("[user] tried to induced sleep in [target] with [src], but is unsuccessful!"), \
 			span_userdanger("You feel a strange wave of heavy drowsiness wash over you!"))
@@ -410,7 +410,7 @@ Congratulations! You are now trained for invasive xenobiology research!"}
 		target.Sleeping(sleep_time)
 		log_combat(user, target, "put to sleep")
 	else
-		if(target.can_block_magic(MAGIC_RESISTANCE_MIND, charge_cost = 0))
+		if(target.can_block_magic(MAGIC_RESISTANCE_MIND, charge_cost = 0) & ANTIMAGIC_TIER_STRONG)
 			to_chat(user, span_warning("The specimen has some kind of mental protection that is completely blocking our sleep inducement methods! It seems you've been foiled."))
 			target.visible_message(span_danger("[user] tried to induce sleep in [target] with [src], but is unsuccessful!"), \
 			span_userdanger("Any sense of drowsiness is quickly diminished!"))
