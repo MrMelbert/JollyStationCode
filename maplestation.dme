@@ -6490,6 +6490,7 @@
 #include "maplestation_modules\code\modules\mod\mod_control.dm"
 #include "maplestation_modules\code\modules\mod\modules\modules_general.dm"
 #include "maplestation_modules\code\modules\movespeed\modifiers\reagent.dm"
+#include "maplestation_modules\code\modules\objects\robot_magic.dm"
 #include "maplestation_modules\code\modules\paperwork\stamps.dm"
 #include "maplestation_modules\code\modules\pixel_shift\code\pixel_shift_component.dm"
 #include "maplestation_modules\code\modules\pixel_shift\code\pixel_shift_keybind.dm"

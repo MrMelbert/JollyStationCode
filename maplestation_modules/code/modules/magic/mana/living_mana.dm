@@ -1,3 +1,15 @@
+//Silicon stuff
+/mob/living/silicon
+	has_initial_mana_pool = TRUE
+
+/mob/living/silicon/get_initial_mana_pool_type()
+	return /datum/mana_pool/mob/living/silicon
+
+/datum/mana_pool/mob/living/silicon
+	maximum_mana_capacity = 25
+
+
+//Carbon stuff
 /mob/living/carbon
 	has_initial_mana_pool = TRUE
 
