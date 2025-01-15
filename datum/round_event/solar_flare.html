@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;round_event&#x2F;solar_flare - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/round_event/solar_flare.html#var">Var Details</a> - <a href="datum/round_event/solar_flare.html#proc">Proc Details</a></header>
+<main>
+<h1>solar_flare <aside>/<a href="datum.html">datum</a>/<a href="datum/round_event.html">round_event</a>/<a href="datum/round_event/solar_flare.html">solar_flare</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/solar_flare.dm#L10">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;solar_flare.dm 10"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/round_event/solar_flare.html#var/impacted_areas">impacted_areas</a></th><td>List of areas valid.</td></tr>
+            <tr><th><a href="datum/round_event/solar_flare.html#var/picked_dept">picked_dept</a></th><td>Department string picked.</td></tr>
+            <tr><th><a href="datum/round_event/solar_flare.html#var/time_between_flares">time_between_flares</a></th><td>Time (in seconds) between flares.</td></tr>
+            <tr><th><a href="datum/round_event/solar_flare.html#var/was_announced">was_announced</a></th><td>Whether the event was announced or hidden</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/round_event/solar_flare.html#proc/get_areas">get_areas</a></th><td>Get all areas associated with a department.</td></tr>
+            <tr><th><a href="datum/round_event/solar_flare.html#proc/get_valid_turf_from_area">get_valid_turf_from_area</a></th><td>Get a random non-dense turf of all the turfs in [chosen_area].</td></tr>
+            <tr><th><a href="datum/round_event/solar_flare.html#proc/trigger_flare">trigger_flare</a></th><td>Trigger a solar flare effect at a random non-dense turf in [chosen_area].</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/impacted_areas"><aside class="declaration">var </aside>impacted_areas
+            <aside>&ndash; /list/area</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/solar_flare.dm#L22">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;solar_flare.dm 22"/></a></h3>
+        <p>List of areas valid.</p><h3 id="var/picked_dept"><aside class="declaration">var </aside>picked_dept
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/solar_flare.dm#L18">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;solar_flare.dm 18"/></a></h3>
+        <p>Department string picked.</p><h3 id="var/time_between_flares"><aside class="declaration">var </aside>time_between_flares
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/solar_flare.dm#L16">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;solar_flare.dm 16"/></a></h3>
+        <p>Time (in seconds) between flares.</p><h3 id="var/was_announced"><aside class="declaration">var </aside>was_announced
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/solar_flare.dm#L14">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;solar_flare.dm 14"/></a></h3>
+        <p>Whether the event was announced or hidden</p><h2 id="proc">Proc Details</h2><h3 id="proc/get_areas"><aside class="declaration">proc </aside>get_areas<aside>(department, /<a href="area.html">area</a>/<a href="area/station.html">station</a>/area_path) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/solar_flare.dm#L102">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;solar_flare.dm 102"/></a></aside>
+        </h3>
+        <p>Get all areas associated with a department.</p><h3 id="proc/get_valid_turf_from_area"><aside class="declaration">proc </aside>get_valid_turf_from_area<aside>(/<a href="area.html">area</a>/chosen_area) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/solar_flare.dm#L86">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;solar_flare.dm 86"/></a></aside>
+        </h3>
+        <p>Get a random non-dense turf of all the turfs in [chosen_area].</p><h3 id="proc/trigger_flare"><aside class="declaration">proc </aside>trigger_flare<aside>(/<a href="area.html">area</a>/chosen_area) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/solar_flare.dm#L68">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;solar_flare.dm 68"/></a></aside>
+        </h3>
+        <p>Trigger a solar flare effect at a random non-dense turf in [chosen_area].</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

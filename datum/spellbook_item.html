@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;spellbook_item - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/spellbook_item.html#var">Var Details</a> - <a href="datum/spellbook_item.html#proc">Proc Details</a></header>
+<main>
+<h1>spellbook_item <aside>/<a href="datum.html">datum</a>/<a href="datum/spellbook_item.html">spellbook_item</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L28">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 28"/></a></h1>
+
+<p>Any item without a name is &quot;abstract&quot;
+A entry in the spellbook. Can add anything/adjust anything, but should be themed after magic.
+Only one instance of any given type should exist at a time. These are singleton instances, and are stored in GLOB.all_spellbook_datums, in a assoc list of (entry.type -&gt; entry singleton).</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/spellbook_item.html#var/can_be_picked">can_be_picked</a></th><td>Controls if this item can actually ever be picked by anyone. Useful for purely visual things.</td></tr>
+            <tr><th><a href="datum/spellbook_item.html#var/category">category</a></th><td>The category of the item. Should use a define from spellbook_categories.dm.</td></tr>
+            <tr><th><a href="datum/spellbook_item.html#var/description">description</a></th><td>The description of the entry to be displayed under the name.</td></tr>
+            <tr><th><a href="datum/spellbook_item.html#var/entry_type">entry_type</a></th><td>Returns the type of entry this is. Uses defines from spellbook_entry_types.dm.</td></tr>
+            <tr><th><a href="datum/spellbook_item.html#var/has_params">has_params</a></th><td>Does this entry have parameters for customization?
+If this is set to true, you MUST override generate_customization_params.</td></tr>
+            <tr><th><a href="datum/spellbook_item.html#var/lore">lore</a></th><td>This entry's place in the world. Should include it's importance, how people see it, what it's related to, etc. general worldbuilding.
+Should also include what and who typically has this entry. Note: NEVER make a HARD limit without good reason. Creativity is key,
+and people should be able to make up reasons for whatever they want.</td></tr>
+            <tr><th><a href="datum/spellbook_item.html#var/name">name</a></th><td>Displayed name of the spellbook entry.</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/spellbook_item.html#proc/apply">apply</a></th><td>The effect of the item on the person that picked it. Called when a character spawns in and has this as an enabled entry.</td></tr>
+            <tr><th><a href="datum/spellbook_item.html#proc/can_apply">can_apply</a></th><td>Called before apply() in spellbook_manager.dm. Used for determining if a specific entry should be enabled/applied.</td></tr>
+            <tr><th><a href="datum/spellbook_item.html#proc/generate_customization_params">generate_customization_params</a></th><td>Generates the assoc list of (key: String -&gt; spellbook_customization_entry instance) entries for use in entry customization.
+See spellbook_customization_entry for documentation on the variables you need to set.
+This MUST be overridden, but not parent-called, if you use params.</td></tr>
+            <tr><th><a href="datum/spellbook_item.html#proc/get_customization_menu_path">get_customization_menu_path</a></th><td>In the case that a item wants to return a custom menu, this proc exists. Should return a typepath of /datum/spellbook_item_customization_menu</td></tr>
+            <tr><th><a href="datum/spellbook_item.html#proc/get_customization_params">get_customization_params</a></th><td>Returns an assoc list of (key: String -&gt; spellbook_customization_entry instance), and applies existing values associated with said key to those instances.</td></tr>
+            <tr><th><a href="datum/spellbook_item.html#proc/get_existing_params">get_existing_params</a></th><td>Should always return the existing parameters associated with this type. Can be null.</td></tr>
+            <tr><th><a href="datum/spellbook_item.html#proc/handle_spellbook_action">handle_spellbook_action</a></th><td>Takes in an action from a spellbook manager and applies it</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/can_be_picked"><aside class="declaration">var </aside>can_be_picked
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L42">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 42"/></a></h3>
+        <p>Controls if this item can actually ever be picked by anyone. Useful for purely visual things.</p><h3 id="var/category"><aside class="declaration">var </aside>category
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L38">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 38"/></a></h3>
+        <p>The category of the item. Should use a define from spellbook_categories.dm.</p><h3 id="var/description"><aside class="declaration">var </aside>description
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L32">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 32"/></a></h3>
+        <p>The description of the entry to be displayed under the name.</p><h3 id="var/entry_type"><aside class="declaration">var </aside>entry_type
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L40">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 40"/></a></h3>
+        <p>Returns the type of entry this is. Uses defines from spellbook_entry_types.dm.</p><h3 id="var/has_params"><aside class="declaration">var </aside>has_params
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L47">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 47"/></a></h3>
+        <p>Does this entry have parameters for customization?
+If this is set to true, you MUST override generate_customization_params.</p><h3 id="var/lore"><aside class="declaration">var </aside>lore
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L36">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 36"/></a></h3>
+        <p>This entry's place in the world. Should include it's importance, how people see it, what it's related to, etc. general worldbuilding.
+Should also include what and who typically has this entry. Note: NEVER make a HARD limit without good reason. Creativity is key,
+and people should be able to make up reasons for whatever they want.</p><h3 id="var/name"><aside class="declaration">var </aside>name
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L30">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 30"/></a></h3>
+        <p>Displayed name of the spellbook entry.</p><h2 id="proc">Proc Details</h2><h3 id="proc/apply"><aside class="declaration">proc </aside>apply<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/<a href="mob/living/carbon.html">carbon</a>/<a href="mob/living/carbon/human.html">human</a>/target, /list/params) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L67">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 67"/></a></aside>
+        </h3>
+        <p>The effect of the item on the person that picked it. Called when a character spawns in and has this as an enabled entry.</p><h3 id="proc/can_apply"><aside class="declaration">proc </aside>can_apply<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/<a href="mob/living/carbon.html">carbon</a>/<a href="mob/living/carbon/human.html">human</a>/target, /list/params) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L62">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 62"/></a></aside>
+        </h3>
+        <p>Called before apply() in spellbook_manager.dm. Used for determining if a specific entry should be enabled/applied.</p><h3 id="proc/generate_customization_params"><aside class="declaration">proc </aside>generate_customization_params<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L115">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 115"/></a></aside>
+        </h3>
+        <p>Generates the assoc list of (key: String -&gt; spellbook_customization_entry instance) entries for use in entry customization.
+See spellbook_customization_entry for documentation on the variables you need to set.
+This MUST be overridden, but not parent-called, if you use params.</p><h3 id="proc/get_customization_menu_path"><aside class="declaration">proc </aside>get_customization_menu_path<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L89">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 89"/></a></aside>
+        </h3>
+        <p>In the case that a item wants to return a custom menu, this proc exists. Should return a typepath of /datum/spellbook_item_customization_menu</p><h3 id="proc/get_customization_params"><aside class="declaration">proc </aside>get_customization_params<aside>(/<a href="client.html">client</a>/owner) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L93">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 93"/></a></aside>
+        </h3>
+        <p>Returns an assoc list of (key: String -&gt; spellbook_customization_entry instance), and applies existing values associated with said key to those instances.</p><h3 id="proc/get_existing_params"><aside class="declaration">proc </aside>get_existing_params<aside>(/<a href="client.html">client</a>/owner) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L107">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 107"/></a></aside>
+        </h3>
+        <p>Should always return the existing parameters associated with this type. Can be null.</p><h3 id="proc/handle_spellbook_action"><aside class="declaration">proc </aside>handle_spellbook_action<aside>(/<a href="datum.html">datum</a>/<a href="datum/spellbook_manager.html">spellbook_manager</a>/manager, action) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/items/spellbook_entry.dm#L75">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;items&#x2F;spellbook_entry.dm 75"/></a></aside>
+        </h3>
+        <p>Takes in an action from a spellbook manager and applies it</p>
+<p>Useful for subtypes of spellbook items with unique actions</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

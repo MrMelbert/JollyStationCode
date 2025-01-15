@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;advanced_antag_goal - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/advanced_antag_goal.html#var">Var Details</a> - <a href="datum/advanced_antag_goal.html#proc">Proc Details</a></header>
+<main>
+<h1>advanced_antag_goal <aside>/<a href="datum.html">datum</a>/<a href="datum/advanced_antag_goal.html">advanced_antag_goal</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/_common/advanced_objective.dm#L4">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;_common&#x2F;advanced_objective.dm 4"/></a></h1>
+
+<p>-- Base Advanced antag goal datum. --
+Like your standard /datum/objective/custom, but with more fun stuff.
+Used by advanced antags <a href="datum.html" title="/datum">/datum/advaced_antagonist</a></p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/advanced_antag_goal.html#var/always_succeed">always_succeed</a></th><td>Whether this objective is successful, regardless of our [similar_objectives]</td></tr>
+            <tr><th><a href="datum/advanced_antag_goal.html#var/check_all_objectives">check_all_objectives</a></th><td>Whether we check all objectives or just the first successful one in our [similar_objectives]</td></tr>
+            <tr><th><a href="datum/advanced_antag_goal.html#var/goal">goal</a></th><td>What's our actual set goal?</td></tr>
+            <tr><th><a href="datum/advanced_antag_goal.html#var/notes">notes</a></th><td>Extra notes about this goal.</td></tr>
+            <tr><th><a href="datum/advanced_antag_goal.html#var/our_antag">our_antag</a></th><td>Our antag datum</td></tr>
+            <tr><th><a href="datum/advanced_antag_goal.html#var/similar_objectives">similar_objectives</a></th><td>Similar objective datums we can compare this goal too for success and such</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/advanced_antag_goal.html#proc/add_similar_objective">add_similar_objective</a></th><td>Adds an objective to our similar objective list. Pass an instantiated objective.</td></tr>
+            <tr><th><a href="datum/advanced_antag_goal.html#proc/check_relative_success">check_relative_success</a></th><td>Loop through all our similar objectives and see if we completed them.
+If [check_all_objectives] is true, we need all objectives in the list to be successful to return TRUE.
+If it is false, we only need ONE objective to be true to return TRUE.</td></tr>
+            <tr><th><a href="datum/advanced_antag_goal.html#proc/get_roundend_text">get_roundend_text</a></th><td>Generate roundend text for the roundend report for this advanced goal.
+Number is the number in the list that this objective is. (1 to 5)</td></tr>
+            <tr><th><a href="datum/advanced_antag_goal.html#proc/remove_similar_objective">remove_similar_objective</a></th><td>Remove an objective to our similar objective list. Pass an instantiated objective ref.</td></tr>
+            <tr><th><a href="datum/advanced_antag_goal.html#proc/set_goal_text">set_goal_text</a></th><td>Set our goal to our passed goal.</td></tr>
+            <tr><th><a href="datum/advanced_antag_goal.html#proc/set_intensity">set_intensity</a></th><td>Set our intensity level to our passed intensity.</td></tr>
+            <tr><th><a href="datum/advanced_antag_goal.html#proc/set_note_text">set_note_text</a></th><td>Set our goal to our passed goal.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/always_succeed"><aside class="declaration">var </aside>always_succeed
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/_common/advanced_objective.dm#L24">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;_common&#x2F;advanced_objective.dm 24"/></a></h3>
+        <p>Whether this objective is successful, regardless of our [similar_objectives]</p><h3 id="var/check_all_objectives"><aside class="declaration">var </aside>check_all_objectives
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/_common/advanced_objective.dm#L22">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;_common&#x2F;advanced_objective.dm 22"/></a></h3>
+        <p>Whether we check all objectives or just the first successful one in our [similar_objectives]</p><h3 id="var/goal"><aside class="declaration">var </aside>goal
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/_common/advanced_objective.dm#L8">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;_common&#x2F;advanced_objective.dm 8"/></a></h3>
+        <p>What's our actual set goal?</p><h3 id="var/notes"><aside class="declaration">var </aside>notes
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/_common/advanced_objective.dm#L18">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;_common&#x2F;advanced_objective.dm 18"/></a></h3>
+        <p>Extra notes about this goal.</p><h3 id="var/our_antag"><aside class="declaration">var </aside>our_antag
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/advanced_antag_datum.html">advanced_antag_datum</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/_common/advanced_objective.dm#L6">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;_common&#x2F;advanced_objective.dm 6"/></a></h3>
+        <p>Our antag datum</p><h3 id="var/similar_objectives"><aside class="declaration">var </aside>similar_objectives
+            <aside>&ndash; /list/datum/objective</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/_common/advanced_objective.dm#L20">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;_common&#x2F;advanced_objective.dm 20"/></a></h3>
+        <p>Similar objective datums we can compare this goal too for success and such</p><h2 id="proc">Proc Details</h2><h3 id="proc/add_similar_objective"><aside class="declaration">proc </aside>add_similar_objective<aside>(/<a href="datum.html">datum</a>/<a href="datum/objective.html">objective</a>/added_objective) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/_common/advanced_objective.dm#L47">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;_common&#x2F;advanced_objective.dm 47"/></a></aside>
+        </h3>
+        <p>Adds an objective to our similar objective list. Pass an instantiated objective.</p><h3 id="proc/check_relative_success"><aside class="declaration">proc </aside>check_relative_success<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/_common/advanced_objective.dm#L74">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;_common&#x2F;advanced_objective.dm 74"/></a></aside>
+        </h3>
+        <p>Loop through all our similar objectives and see if we completed them.
+If [check_all_objectives] is true, we need all objectives in the list to be successful to return TRUE.
+If it is false, we only need ONE objective to be true to return TRUE.</p><h3 id="proc/get_roundend_text"><aside class="declaration">proc </aside>get_roundend_text<aside>(number) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/_common/advanced_objective.dm#L58">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;_common&#x2F;advanced_objective.dm 58"/></a></aside>
+        </h3>
+        <p>Generate roundend text for the roundend report for this advanced goal.
+Number is the number in the list that this objective is. (1 to 5)</p><h3 id="proc/remove_similar_objective"><aside class="declaration">proc </aside>remove_similar_objective<aside>(/<a href="datum.html">datum</a>/<a href="datum/objective.html">objective</a>/removed_objective) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/_common/advanced_objective.dm#L52">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;_common&#x2F;advanced_objective.dm 52"/></a></aside>
+        </h3>
+        <p>Remove an objective to our similar objective list. Pass an instantiated objective ref.</p><h3 id="proc/set_goal_text"><aside class="declaration">proc </aside>set_goal_text<aside>(goal) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/_common/advanced_objective.dm#L35">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;_common&#x2F;advanced_objective.dm 35"/></a></aside>
+        </h3>
+        <p>Set our goal to our passed goal.</p><h3 id="proc/set_intensity"><aside class="declaration">proc </aside>set_intensity<aside>(intensity) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/_common/advanced_objective.dm#L43">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;_common&#x2F;advanced_objective.dm 43"/></a></aside>
+        </h3>
+        <p>Set our intensity level to our passed intensity.</p><h3 id="proc/set_note_text"><aside class="declaration">proc </aside>set_note_text<aside>(notes) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/_common/advanced_objective.dm#L39">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;_common&#x2F;advanced_objective.dm 39"/></a></aside>
+        </h3>
+        <p>Set our goal to our passed goal.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

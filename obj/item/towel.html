@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;obj&#x2F;item&#x2F;towel - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="obj/item/towel.html#var">Var Details</a> - <a href="obj/item/towel.html#proc">Proc Details</a></header>
+<main>
+<h1>towel <aside>/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/<a href="obj/item/towel.html">towel</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/clothing/suits/towels.dm#L8">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;clothing&#x2F;suits&#x2F;towels.dm 8"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="obj/item/towel.html#var/cooling_timer_id">cooling_timer_id</a></th><td>The timer ID on our towel cooling.</td></tr>
+            <tr><th><a href="obj/item/towel.html#var/warm_towel">warm_towel</a></th><td>Whether our tower is warm and comfy.</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="obj/item/towel.html#proc/cool_towel">cool_towel</a></th><td>Cool down the towel.</td></tr>
+            <tr><th><a href="obj/item/towel.html#proc/do_dry_floor">do_dry_floor</a></th><td>Actually dry the floor, removing a minute of wetness from [target_turf] and washing it lightly.</td></tr>
+            <tr><th><a href="obj/item/towel.html#proc/do_dry_mob">do_dry_mob</a></th><td>Actually dry the mob, giving them a moodlet if the towel is warm and washing them.
+Also removes negative firestacks (wetness).</td></tr>
+            <tr><th><a href="obj/item/towel.html#proc/try_dry_floor">try_dry_floor</a></th><td>Check if our [target_turf] is valid to try to dry and begin a do_after.
+If the turf is valid, try a do_after, and if successful, call [do_dry_floor].</td></tr>
+            <tr><th><a href="obj/item/towel.html#proc/try_dry_mob">try_dry_mob</a></th><td>Begin drying off a [target_mob] with [src].
+If [target_mob] is on fire, call [try_extinguish_mob].
+Otherwise, begin a do_after, and call [do_dry_mob] afterwards.</td></tr>
+            <tr><th><a href="obj/item/towel.html#proc/try_extinguish_mob">try_extinguish_mob</a></th><td>Has a chance to remove some firestacks from [target_mob], or set [src] on fire.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/cooling_timer_id"><aside class="declaration">var </aside>cooling_timer_id
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/clothing/suits/towels.dm#L41">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;clothing&#x2F;suits&#x2F;towels.dm 41"/></a></h3>
+        <p>The timer ID on our towel cooling.</p><h3 id="var/warm_towel"><aside class="declaration">var </aside>warm_towel
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/clothing/suits/towels.dm#L37">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;clothing&#x2F;suits&#x2F;towels.dm 37"/></a></h3>
+        <p>Whether our tower is warm and comfy.</p><h2 id="proc">Proc Details</h2><h3 id="proc/cool_towel"><aside class="declaration">proc </aside>cool_towel<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/clothing/suits/towels.dm#L191">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;clothing&#x2F;suits&#x2F;towels.dm 191"/></a></aside>
+        </h3>
+        <p>Cool down the towel.</p><h3 id="proc/do_dry_floor"><aside class="declaration">proc </aside>do_dry_floor<aside>(/<a href="turf.html">turf</a>/<a href="turf/open.html">open</a>/target_turf, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/clothing/suits/towels.dm#L111">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;clothing&#x2F;suits&#x2F;towels.dm 111"/></a></aside>
+        </h3>
+        <p>Actually dry the floor, removing a minute of wetness from [target_turf] and washing it lightly.</p>
+<p>target_turf - the turf we're drying
+user - the mob drying the turf</p><h3 id="proc/do_dry_mob"><aside class="declaration">proc </aside>do_dry_mob<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/target_mob, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/clothing/suits/towels.dm#L160">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;clothing&#x2F;suits&#x2F;towels.dm 160"/></a></aside>
+        </h3>
+        <p>Actually dry the mob, giving them a moodlet if the towel is warm and washing them.
+Also removes negative firestacks (wetness).</p>
+<p>target_mob - the mob we're drying
+user - the mob drying the target_mob</p><h3 id="proc/try_dry_floor"><aside class="declaration">proc </aside>try_dry_floor<aside>(/<a href="turf.html">turf</a>/<a href="turf/open.html">open</a>/target_turf, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/clothing/suits/towels.dm#L80">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;clothing&#x2F;suits&#x2F;towels.dm 80"/></a></aside>
+        </h3>
+        <p>Check if our [target_turf] is valid to try to dry and begin a do_after.
+If the turf is valid, try a do_after, and if successful, call [do_dry_floor].</p>
+<p>target_turf - the turf we're trying to dry
+user - the mob drying the turf</p>
+<p>returns FALSE if the floor is invalid to dry, and TRUE otherwise.</p><h3 id="proc/try_dry_mob"><aside class="declaration">proc </aside>try_dry_mob<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/target_mob, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/clothing/suits/towels.dm#L127">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;clothing&#x2F;suits&#x2F;towels.dm 127"/></a></aside>
+        </h3>
+        <p>Begin drying off a [target_mob] with [src].
+If [target_mob] is on fire, call [try_extinguish_mob].
+Otherwise, begin a do_after, and call [do_dry_mob] afterwards.</p>
+<p>target_mob - the mob we're trying to dry
+user - the mob drying the target_mob</p>
+<p>returns FALSE if the mob is invalid to dry, and TRUE otherwise.</p><h3 id="proc/try_extinguish_mob"><aside class="declaration">proc </aside>try_extinguish_mob<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/target_mob, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/clothing/suits/towels.dm#L179">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;clothing&#x2F;suits&#x2F;towels.dm 179"/></a></aside>
+        </h3>
+        <p>Has a chance to remove some firestacks from [target_mob], or set [src] on fire.</p>
+<p>target_mob - the mob we're extinguishing
+user - the mob extinguishing the target_mob</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

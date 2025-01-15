@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;spellbook_customization_entry - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/spellbook_customization_entry.html#var">Var Details</a> - <a href="datum/spellbook_customization_entry.html#proc">Proc Details</a></header>
+<main>
+<h1>spellbook_customization_entry <aside>/<a href="datum.html">datum</a>/<a href="datum/spellbook_customization_entry.html">spellbook_customization_entry</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L3">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 3"/></a></h1>
+
+<p>NOT SERIALIZED - The data provided by these entries are instead extracted and serialized into lists of (string -&gt; any) values,
+that are then associated in the spellbook preference as (item.type -&gt; list).</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/spellbook_customization_entry.html#var/current_value">current_value</a></th><td>The stored value of this key. This is what will be serialized into a list, and displayed to the user. Should be updated
+every time the value changes. Do not access directly - use get_value and change_value()</td></tr>
+            <tr><th><a href="datum/spellbook_customization_entry.html#var/default_value">default_value</a></th><td>In the case that no current value is provided in construction, or a pre-sanitized value cannot be converted into the correct format,
+default_value will be used.</td></tr>
+            <tr><th><a href="datum/spellbook_customization_entry.html#var/interfacetype">interfacetype</a></th><td>How the user will interface with this entry.
+Accepted types:
+SPELLBOOK_CUSTOMIZATION_BOOLEAN - Creates a checkbox
+SPELLBOOK_CUSTOMIZATION_ANY_INPUT - Creates a text field that can have anything put in it
+SPELLBOOK_CUSTOMIZATION_SLIDER - Creates a numeric slider, with min/max associated with min/max_value
+SPELLBOOK_CUSTOMIZATION_NUMERIC_INPUT - Creates a text field that only accepts numbers
+Uses defines from spellbook_customization_interfaces.dm</td></tr>
+            <tr><th><a href="datum/spellbook_customization_entry.html#var/key">key</a></th><td>The savefile key that this entry is associated with. This will be the &quot;key&quot; of the serialization. This specific
+parameter will save to, and take from, this key. Ex. &quot;damage_amount&quot; will look for the &quot;damage_amount&quot; parameter assocaited with item.type,
+and apply the value of that to this entry. When we are done, we will save the value of this entry to the &quot;damage_amount&quot; parameter.</td></tr>
+            <tr><th><a href="datum/spellbook_customization_entry.html#var/name">name</a></th><td>The name that will be displayed to the left of the interface (e.g. button, input, slider, etc.)</td></tr>
+            <tr><th><a href="datum/spellbook_customization_entry.html#var/tooltip">tooltip</a></th><td>The tooltip to be displayed when you hover over the interface. Optional.</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/spellbook_customization_entry.html#proc/change_value">change_value</a></th><td>Setter for current_value. Sanitizes new_value before setting current_value to it.</td></tr>
+            <tr><th><a href="datum/spellbook_customization_entry.html#proc/generate_ui_data">generate_ui_data</a></th><td>Generates the data to be supplies to the TGUI window. Should be in list(key -&gt; value) format.</td></tr>
+            <tr><th><a href="datum/spellbook_customization_entry.html#proc/get_value">get_value</a></th><td>Getter for current_value. Sanitizes it before returning it.</td></tr>
+            <tr><th><a href="datum/spellbook_customization_entry.html#proc/sanitize_value">sanitize_value</a></th><td>Ensures the provided value is correctly formatted for this entry. If it isn't, it will convert it into a correct format.
+Ex. numeric entries will clamp numbers to the max and min, booleans will default to FALSE if the value isn't a boolean.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/current_value"><aside class="declaration">var </aside>current_value
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L22">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 22"/></a></h3>
+        <p>The stored value of this key. This is what will be serialized into a list, and displayed to the user. Should be updated
+every time the value changes. Do not access directly - use get_value and change_value()</p><h3 id="var/default_value"><aside class="declaration">var </aside>default_value
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L27">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 27"/></a></h3>
+        <p>In the case that no current value is provided in construction, or a pre-sanitized value cannot be converted into the correct format,
+default_value will be used.</p><h3 id="var/interfacetype"><aside class="declaration">var </aside>interfacetype
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L19">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 19"/></a></h3>
+        <p>How the user will interface with this entry.
+Accepted types:
+SPELLBOOK_CUSTOMIZATION_BOOLEAN - Creates a checkbox
+SPELLBOOK_CUSTOMIZATION_ANY_INPUT - Creates a text field that can have anything put in it
+SPELLBOOK_CUSTOMIZATION_SLIDER - Creates a numeric slider, with min/max associated with min/max_value
+SPELLBOOK_CUSTOMIZATION_NUMERIC_INPUT - Creates a text field that only accepts numbers
+Uses defines from spellbook_customization_interfaces.dm</p><h3 id="var/key"><aside class="declaration">var </aside>key
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L7">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 7"/></a></h3>
+        <p>The savefile key that this entry is associated with. This will be the &quot;key&quot; of the serialization. This specific
+parameter will save to, and take from, this key. Ex. &quot;damage_amount&quot; will look for the &quot;damage_amount&quot; parameter assocaited with item.type,
+and apply the value of that to this entry. When we are done, we will save the value of this entry to the &quot;damage_amount&quot; parameter.</p><h3 id="var/name"><aside class="declaration">var </aside>name
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L9">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 9"/></a></h3>
+        <p>The name that will be displayed to the left of the interface (e.g. button, input, slider, etc.)</p><h3 id="var/tooltip"><aside class="declaration">var </aside>tooltip
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L11">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 11"/></a></h3>
+        <p>The tooltip to be displayed when you hover over the interface. Optional.</p><h2 id="proc">Proc Details</h2><h3 id="proc/change_value"><aside class="declaration">proc </aside>change_value<aside>(new_value) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L49">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 49"/></a></aside>
+        </h3>
+        <p>Setter for current_value. Sanitizes new_value before setting current_value to it.</p><h3 id="proc/generate_ui_data"><aside class="declaration">proc </aside>generate_ui_data<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L37">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 37"/></a></aside>
+        </h3>
+        <p>Generates the data to be supplies to the TGUI window. Should be in list(key -&gt; value) format.</p><h3 id="proc/get_value"><aside class="declaration">proc </aside>get_value<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L54">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 54"/></a></aside>
+        </h3>
+        <p>Getter for current_value. Sanitizes it before returning it.</p><h3 id="proc/sanitize_value"><aside class="declaration">proc </aside>sanitize_value<aside>(value) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L60">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 60"/></a></aside>
+        </h3>
+        <p>Ensures the provided value is correctly formatted for this entry. If it isn't, it will convert it into a correct format.
+Ex. numeric entries will clamp numbers to the max and min, booleans will default to FALSE if the value isn't a boolean.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

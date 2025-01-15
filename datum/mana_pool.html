@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;mana_pool - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/mana_pool.html#var">Var Details</a> - <a href="datum/mana_pool.html#proc">Proc Details</a></header>
+<main>
+<h1>mana_pool <aside>/<a href="datum.html">datum</a>/<a href="datum/mana_pool.html">mana_pool</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L10">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 10"/></a></h1>
+
+<p>An abstract representation of collections of mana, as it's impossible to represent each individual mana unit</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/amount">amount</a></th><td>The abstract representation of how many &quot;Vols&quot; this mana pool currently contains.
+Capped at [maximum_mana_capacity], begins decaying exponentially when above [softcap].</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/attunements">attunements</a></th><td>A abstract representation of the attunements of [amount]. This is just an abstraction of the overall bias of all stored mana - in reality, every Vol has its own attunement.</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/attunements_to_generate">attunements_to_generate</a></th><td>If we have an ethereal recharge rate,i ths is the attunement set that will be given to the generated mana.</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/discharge_destinations">discharge_destinations</a></th><td>The mana pool types we will try to discharge excess mana (from exponential decay) into. Uses defines from magic_charge_bitflags.dm.</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/discharge_method">discharge_method</a></th><td>The priority method we will use to transfer mana to [discharge_destination] mana pools. Any given type does not guarantee all destinations will receive mana if they are full.
+Uses defines from magic_charge_bitflags.dm.</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/donation_budget_this_tick">donation_budget_this_tick</a></th><td>The maximum mana we can transfer for this tick. Is used to cap our mana output per tick. Calculated with [max_donation_rate_per_second] * seconds_per_tick.</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/ethereal_recharge_rate">ethereal_recharge_rate</a></th><td>The natural regen rate, detached from transferrals. Mana generated via this comes from nothing. Has nothing to do with the ethereal species.</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/exponential_decay_divisor">exponential_decay_divisor</a></th><td>The divisor used in exponential decay when [amount] surpasses [softcap]. Lower = A steeper decay curve.</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/intrinsic_recharge_sources">intrinsic_recharge_sources</a></th><td>The intrinsic sources of mana we will constantly try to draw from. Uses defines from magic_charge_bitflags.dm.</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/max_donation_rate_per_second">max_donation_rate_per_second</a></th><td>The maximum mana we can transfer per second. [donation_budget_per_tick] is set to this, times seconds_per_tick, every process tick.</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/maximum_mana_capacity">maximum_mana_capacity</a></th><td>The absolute maximum [amount] we can hold. Under no circumstances should [amount] ever exceed this value.</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/softcap">softcap</a></th><td>The threshold at which mana begins decaying exponentially.</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/transfer_caps">transfer_caps</a></th><td>List of (mana_pool -&gt; max mana we will give)</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/transfer_default_softcap">transfer_default_softcap</a></th><td>If true, if no cap is specified, we only go up to the softcap of the target when transferring</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/transfer_method">transfer_method</a></th><td>The priority method we will use to transfer mana to all that we are trying to transfer into. Uses defines from magic_charge_bitflags.dm</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/transfer_rates">transfer_rates</a></th><td>List of (mana_pool -&gt; transfer rate)</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/transferring_from">transferring_from</a></th><td>List of mana_pools transferring to us</td></tr>
+            <tr><th><a href="datum/mana_pool.html#var/transferring_to">transferring_to</a></th><td>List of (mana_pool -&gt; mana_pool_process_bitflags). Holds pools we are transferring to.</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/mana_pool.html#proc/adjust_mana">adjust_mana</a></th><td>The proc used to modify the mana composition of a mana pool. Should modify attunements in proportion to the ratio
+between the current amount of mana we have and the mana coming in/being removed, as well as the attunements.
+Mana pools in general will eventually be refactored to be lists of individual mana pieces with unchanging attunements,
+so this is not permanent.
+Returns how much of &quot;amount&quot; was used.</td></tr>
+            <tr><th><a href="datum/mana_pool.html#proc/get_attuned_amount">get_attuned_amount</a></th><td>Returns an adjusted amount of &quot;effective&quot; mana, affected by the attunements.
+Will always return a minimum of zero and a maximum of the total amount of mana we can give multiplied by the mults.</td></tr>
+            <tr><th><a href="datum/mana_pool.html#proc/get_overall_attunement_mults">get_overall_attunement_mults</a></th><td>Returns the combined attunement mults of all entries in the argument.</td></tr>
+            <tr><th><a href="datum/mana_pool.html#proc/get_transfer_rate_for">get_transfer_rate_for</a></th><td>Returns the amount of mana we want to give in a given tick</td></tr>
+            <tr><th><a href="datum/mana_pool.html#proc/transfer_mana_to">transfer_mana_to</a></th><td>Perform a &quot;natural&quot; transfer where we use the default transfer rate, capped by the usual math</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/amount"><aside class="declaration">var </aside>amount
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L22">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 22"/></a></h3>
+        <p>The abstract representation of how many &quot;Vols&quot; this mana pool currently contains.
+Capped at [maximum_mana_capacity], begins decaying exponentially when above [softcap].</p><h3 id="var/attunements"><aside class="declaration">var </aside>attunements
+            <aside>&ndash; /list/datum/attunement</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L15">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 15"/></a></h3>
+        <p>A abstract representation of the attunements of [amount]. This is just an abstraction of the overall bias of all stored mana - in reality, every Vol has its own attunement.</p><h3 id="var/attunements_to_generate"><aside class="declaration">var </aside>attunements_to_generate
+            <aside>&ndash; /list/datum/attunement</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L51">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 51"/></a></h3>
+        <p>If we have an ethereal recharge rate,i ths is the attunement set that will be given to the generated mana.</p><h3 id="var/discharge_destinations"><aside class="declaration">var </aside>discharge_destinations
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L54">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 54"/></a></h3>
+        <p>The mana pool types we will try to discharge excess mana (from exponential decay) into. Uses defines from magic_charge_bitflags.dm.</p><h3 id="var/discharge_method"><aside class="declaration">var </aside>discharge_method
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L57">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 57"/></a></h3>
+        <p>The priority method we will use to transfer mana to [discharge_destination] mana pools. Any given type does not guarantee all destinations will receive mana if they are full.
+Uses defines from magic_charge_bitflags.dm.</p><h3 id="var/donation_budget_this_tick"><aside class="declaration">var </aside>donation_budget_this_tick
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L32">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 32"/></a></h3>
+        <p>The maximum mana we can transfer for this tick. Is used to cap our mana output per tick. Calculated with [max_donation_rate_per_second] * seconds_per_tick.</p><h3 id="var/ethereal_recharge_rate"><aside class="declaration">var </aside>ethereal_recharge_rate
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L49">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 49"/></a></h3>
+        <p>The natural regen rate, detached from transferrals. Mana generated via this comes from nothing. Has nothing to do with the ethereal species.</p><h3 id="var/exponential_decay_divisor"><aside class="declaration">var </aside>exponential_decay_divisor
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L27">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 27"/></a></h3>
+        <p>The divisor used in exponential decay when [amount] surpasses [softcap]. Lower = A steeper decay curve.</p><h3 id="var/intrinsic_recharge_sources"><aside class="declaration">var </aside>intrinsic_recharge_sources
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L60">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 60"/></a></h3>
+        <p>The intrinsic sources of mana we will constantly try to draw from. Uses defines from magic_charge_bitflags.dm.</p><h3 id="var/max_donation_rate_per_second"><aside class="declaration">var </aside>max_donation_rate_per_second
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L30">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 30"/></a></h3>
+        <p>The maximum mana we can transfer per second. [donation_budget_per_tick] is set to this, times seconds_per_tick, every process tick.</p><h3 id="var/maximum_mana_capacity"><aside class="declaration">var </aside>maximum_mana_capacity
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L19">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 19"/></a></h3>
+        <p>The absolute maximum [amount] we can hold. Under no circumstances should [amount] ever exceed this value.</p><h3 id="var/softcap"><aside class="declaration">var </aside>softcap
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L25">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 25"/></a></h3>
+        <p>The threshold at which mana begins decaying exponentially.</p><h3 id="var/transfer_caps"><aside class="declaration">var </aside>transfer_caps
+            <aside>&ndash; /list/datum/mana_pool</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L37">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 37"/></a></h3>
+        <p>List of (mana_pool -&gt; max mana we will give)</p><h3 id="var/transfer_default_softcap"><aside class="declaration">var </aside>transfer_default_softcap
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L46">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 46"/></a></h3>
+        <p>If true, if no cap is specified, we only go up to the softcap of the target when transferring</p><h3 id="var/transfer_method"><aside class="declaration">var </aside>transfer_method
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L43">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 43"/></a></h3>
+        <p>The priority method we will use to transfer mana to all that we are trying to transfer into. Uses defines from magic_charge_bitflags.dm</p><h3 id="var/transfer_rates"><aside class="declaration">var </aside>transfer_rates
+            <aside>&ndash; /list/datum/mana_pool</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L35">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 35"/></a></h3>
+        <p>List of (mana_pool -&gt; transfer rate)</p><h3 id="var/transferring_from"><aside class="declaration">var </aside>transferring_from
+            <aside>&ndash; /list/datum/mana_pool</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L41">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 41"/></a></h3>
+        <p>List of mana_pools transferring to us</p><h3 id="var/transferring_to"><aside class="declaration">var </aside>transferring_to
+            <aside>&ndash; /list/datum/mana_pool</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L39">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 39"/></a></h3>
+        <p>List of (mana_pool -&gt; mana_pool_process_bitflags). Holds pools we are transferring to.</p><h2 id="proc">Proc Details</h2><h3 id="proc/adjust_mana"><aside class="declaration">proc </aside>adjust_mana<aside>(amount, /list/incoming_attunements) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L269">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 269"/></a></aside>
+        </h3>
+        <p>The proc used to modify the mana composition of a mana pool. Should modify attunements in proportion to the ratio
+between the current amount of mana we have and the mana coming in/being removed, as well as the attunements.
+Mana pools in general will eventually be refactored to be lists of individual mana pieces with unchanging attunements,
+so this is not permanent.
+Returns how much of &quot;amount&quot; was used.</p><h3 id="proc/get_attuned_amount"><aside class="declaration">proc </aside>get_attuned_amount<aside>(/list/datum/attunement/incoming_attunements, /<a href="atom.html">atom</a>/caster, amount_to_adjust) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L279">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 279"/></a></aside>
+        </h3>
+        <p>Returns an adjusted amount of &quot;effective&quot; mana, affected by the attunements.
+Will always return a minimum of zero and a maximum of the total amount of mana we can give multiplied by the mults.</p><h3 id="proc/get_overall_attunement_mults"><aside class="declaration">proc </aside>get_overall_attunement_mults<aside>(/list/attunements, /<a href="atom.html">atom</a>/caster) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L285">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 285"/></a></aside>
+        </h3>
+        <p>Returns the combined attunement mults of all entries in the argument.</p><h3 id="proc/get_transfer_rate_for"><aside class="declaration">proc </aside>get_transfer_rate_for<aside>(/<a href="datum.html">datum</a>/<a href="datum/mana_pool.html">mana_pool</a>/target_pool) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L202">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 202"/></a></aside>
+        </h3>
+        <p>Returns the amount of mana we want to give in a given tick</p><h3 id="proc/transfer_mana_to"><aside class="declaration">proc </aside>transfer_mana_to<aside>(/<a href="datum.html">datum</a>/<a href="datum/mana_pool.html">mana_pool</a>/target_pool, seconds_per_tick) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/mana/mana_pool.dm#L198">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;mana&#x2F;mana_pool.dm 198"/></a></aside>
+        </h3>
+        <p>Perform a &quot;natural&quot; transfer where we use the default transfer rate, capped by the usual math</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

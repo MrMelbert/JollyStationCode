@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;obj&#x2F;structure&#x2F;towel_rack&#x2F;warmer - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="obj/structure/towel_rack/warmer.html#proc">Proc Details</a></header>
+<main>
+<h1>warmer <aside>/<a href="obj.html">obj</a>/<a href="obj/structure/towel_rack.html">structure/towel_rack</a>/<a href="obj/structure/towel_rack/warmer.html">warmer</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/towel_rack.dm#L119">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;towel_rack.dm 119"/></a></h1>
+
+<p>A towel rack that automagically warms the towels inside after a short time.
+Should probably be a machine and used power, but I can't really care (it's solar powered)</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="obj/structure/towel_rack/warmer.html#proc/add_towel">add_towel</a></th><td>Warm up towels after we add them.</td></tr>
+            <tr><th><a href="obj/structure/towel_rack/warmer.html#proc/heat_towel">heat_towel</a></th><td>Heat [warmed_towel] (set its warm_towel var to TRUE), called after a timer.</td></tr>
+            <tr><th><a href="obj/structure/towel_rack/warmer.html#proc/remove_towel">remove_towel</a></th><td>After we remove towels, cool them off after a time period.</td></tr></table><h2 id="proc">Proc Details</h2><h3 id="proc/add_towel"><aside class="parent"><a title="/obj/structure/towel_rack" href="obj/structure/towel_rack.html#proc/add_towel">&uarr;</a></aside>add_towel<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/<a href="obj/item/towel.html">towel</a>/added_towel, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/towel_rack.dm#L130">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;towel_rack.dm 130"/></a></aside>
+        </h3>
+        <p>Warm up towels after we add them.</p><h3 id="proc/heat_towel"><aside class="declaration">proc </aside>heat_towel<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/<a href="obj/item/towel.html">towel</a>/warmed_towel) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/towel_rack.dm#L148">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;towel_rack.dm 148"/></a></aside>
+        </h3>
+        <p>Heat [warmed_towel] (set its warm_towel var to TRUE), called after a timer.</p>
+<p>warmed_towel - the towel we're warming up</p>
+<p>returns FALSE if we can't warm anything, TRUE otherwise</p><h3 id="proc/remove_towel"><aside class="parent"><a title="/obj/structure/towel_rack" href="obj/structure/towel_rack.html#proc/remove_towel">&uarr;</a></aside>remove_towel<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/towel_rack.dm#L158">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;towel_rack.dm 158"/></a></aside>
+        </h3>
+        <p>After we remove towels, cool them off after a time period.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

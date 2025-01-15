@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;preference_middleware&#x2F;limbs - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/preference_middleware/limbs.html#var">Var Details</a> - <a href="datum/preference_middleware/limbs.html#proc">Proc Details</a></header>
+<main>
+<h1>limbs <aside>/<a href="datum.html">datum</a>/<a href="datum/preference_middleware.html">preference_middleware</a>/<a href="datum/preference_middleware/limbs.html">limbs</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/loadouts/loadout_ui/limbs.dm#L24">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;loadouts&#x2F;loadout_ui&#x2F;limbs.dm 24"/></a></h1>
+
+<p>See <a href="atom/movable/screen/map_view/char_preview.html" title="/atom/movable/screen/map_view/char_preview">/atom/movable/screen/map_view/char_preview/loadout</a> for why this is needed.</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/preference_middleware/limbs.html#var/cached_icon">cached_icon</a></th><td>Caches the last icon we generated, see above</td></tr>
+            <tr><th><a href="datum/preference_middleware/limbs.html#var/character_preview_view">character_preview_view</a></th><td>The preview dummy</td></tr>
+            <tr><th><a href="datum/preference_middleware/limbs.html#var/paths_on_last_ui_update">paths_on_last_ui_update</a></th><td>Records all paths that were selected the last time we updated the preview icon
+This is done because we have to use getflat icon (very laggy) rather than byondui
+as byondUI doesn't really allow layering other UI elements such as SVGs above it</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/preference_middleware/limbs.html#proc/create_character_preview_view">create_character_preview_view</a></th><td>Initialize our character dummy.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/cached_icon"><aside class="declaration">var </aside>cached_icon
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/loadouts/loadout_ui/limbs.dm#L39">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;loadouts&#x2F;loadout_ui&#x2F;limbs.dm 39"/></a></h3>
+        <p>Caches the last icon we generated, see above</p><h3 id="var/character_preview_view"><aside class="declaration">var </aside>character_preview_view
+            <aside>&ndash; /<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/<a href="atom/movable/screen.html">screen</a>/<a href="atom/movable/screen/map_view.html">map_view</a>/<a href="atom/movable/screen/map_view/char_preview.html">char_preview</a>/limb_viewer</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/loadouts/loadout_ui/limbs.dm#L31">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;loadouts&#x2F;loadout_ui&#x2F;limbs.dm 31"/></a></h3>
+        <p>The preview dummy</p><h3 id="var/paths_on_last_ui_update"><aside class="declaration">var </aside>paths_on_last_ui_update
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/loadouts/loadout_ui/limbs.dm#L35">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;loadouts&#x2F;loadout_ui&#x2F;limbs.dm 35"/></a></h3>
+        <p>Records all paths that were selected the last time we updated the preview icon
+This is done because we have to use getflat icon (very laggy) rather than byondui
+as byondUI doesn't really allow layering other UI elements such as SVGs above it</p><h2 id="proc">Proc Details</h2><h3 id="proc/create_character_preview_view"><aside class="declaration">proc </aside>create_character_preview_view<aside>(/<a href="mob.html">mob</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/loadouts/loadout_ui/limbs.dm#L49">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;loadouts&#x2F;loadout_ui&#x2F;limbs.dm 49"/></a></aside>
+        </h3>
+        <p>Initialize our character dummy.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

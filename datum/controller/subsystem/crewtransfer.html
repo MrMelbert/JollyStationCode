@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;controller&#x2F;subsystem&#x2F;crewtransfer - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/controller/subsystem/crewtransfer.html#var">Var Details</a> - <a href="datum/controller/subsystem/crewtransfer.html#proc">Proc Details</a></header>
+<main>
+<h1>crewtransfer <aside>/<a href="datum.html">datum</a>/<a href="datum/controller/subsystem.html">controller/subsystem</a>/<a href="datum/controller/subsystem/crewtransfer.html">crewtransfer</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/controllers/subsystem/autotransfer.dm#L8">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;controllers&#x2F;subsystem&#x2F;autotransfer.dm 8"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/controller/subsystem/crewtransfer.html#var/minimum_time_between_votes">minimum_time_between_votes</a></th><td>Minimum length of time between automatic votes - from config.</td></tr>
+            <tr><th><a href="datum/controller/subsystem/crewtransfer.html#var/minimum_transfer_time">minimum_transfer_time</a></th><td>Minimum shift length before automatic votes begin - from config.</td></tr>
+            <tr><th><a href="datum/controller/subsystem/crewtransfer.html#var/shuttle_call_reason">shuttle_call_reason</a></th><td>What do we say when the shuttle's called</td></tr>
+            <tr><th><a href="datum/controller/subsystem/crewtransfer.html#var/transfer_vote_successful">transfer_vote_successful</a></th><td>We stop calling votes if a vote passed</td></tr>
+            <tr><th><a href="datum/controller/subsystem/crewtransfer.html#var/transfer_votes_attempted">transfer_votes_attempted</a></th><td>Number of votes attempted total, including auto and manual votes</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/controller/subsystem/crewtransfer.html#proc/autocall_crew_transfer_vote">autocall_crew_transfer_vote</a></th><td>Call an crew transfer vote from the server if a vote isn't running.
+returns TRUE if it successfully called a vote, FALSE if it failed.</td></tr>
+            <tr><th><a href="datum/controller/subsystem/crewtransfer.html#proc/disable_vote">disable_vote</a></th><td>prevents the crew transfer SS from firing.</td></tr>
+            <tr><th><a href="datum/controller/subsystem/crewtransfer.html#proc/initiate_crew_transfer">initiate_crew_transfer</a></th><td>initiates the shuttle call and logs it.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/minimum_time_between_votes"><aside class="declaration">var </aside>minimum_time_between_votes
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/controllers/subsystem/autotransfer.dm#L18">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;controllers&#x2F;subsystem&#x2F;autotransfer.dm 18"/></a></h3>
+        <p>Minimum length of time between automatic votes - from config.</p><h3 id="var/minimum_transfer_time"><aside class="declaration">var </aside>minimum_transfer_time
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/controllers/subsystem/autotransfer.dm#L16">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;controllers&#x2F;subsystem&#x2F;autotransfer.dm 16"/></a></h3>
+        <p>Minimum shift length before automatic votes begin - from config.</p><h3 id="var/shuttle_call_reason"><aside class="declaration">var </aside>shuttle_call_reason
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/controllers/subsystem/autotransfer.dm#L22">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;controllers&#x2F;subsystem&#x2F;autotransfer.dm 22"/></a></h3>
+        <p>What do we say when the shuttle's called</p><h3 id="var/transfer_vote_successful"><aside class="declaration">var </aside>transfer_vote_successful
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/controllers/subsystem/autotransfer.dm#L20">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;controllers&#x2F;subsystem&#x2F;autotransfer.dm 20"/></a></h3>
+        <p>We stop calling votes if a vote passed</p><h3 id="var/transfer_votes_attempted"><aside class="declaration">var </aside>transfer_votes_attempted
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/controllers/subsystem/autotransfer.dm#L14">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;controllers&#x2F;subsystem&#x2F;autotransfer.dm 14"/></a></h3>
+        <p>Number of votes attempted total, including auto and manual votes</p><h2 id="proc">Proc Details</h2><h3 id="proc/autocall_crew_transfer_vote"><aside class="declaration">proc </aside>autocall_crew_transfer_vote<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/controllers/subsystem/autotransfer.dm#L76">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;controllers&#x2F;subsystem&#x2F;autotransfer.dm 76"/></a></aside>
+        </h3>
+        <p>Call an crew transfer vote from the server if a vote isn't running.
+returns TRUE if it successfully called a vote, FALSE if it failed.</p><h3 id="proc/disable_vote"><aside class="declaration">proc </aside>disable_vote<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/controllers/subsystem/autotransfer.dm#L68">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;controllers&#x2F;subsystem&#x2F;autotransfer.dm 68"/></a></aside>
+        </h3>
+        <p>prevents the crew transfer SS from firing.</p><h3 id="proc/initiate_crew_transfer"><aside class="declaration">proc </aside>initiate_crew_transfer<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/controllers/subsystem/autotransfer.dm#L94">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;controllers&#x2F;subsystem&#x2F;autotransfer.dm 94"/></a></aside>
+        </h3>
+        <p>initiates the shuttle call and logs it.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

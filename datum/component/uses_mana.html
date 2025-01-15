@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;component&#x2F;uses_mana - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/component/uses_mana.html#proc">Proc Details</a></header>
+<main>
+<h1>uses_mana <aside>/<a href="datum.html">datum</a>/<a href="datum/component.html">component</a>/<a href="datum/component/uses_mana.html">uses_mana</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/components/uses_mana.dm#L12">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;components&#x2F;uses_mana.dm 12"/></a></h1>
+
+<p>Designates the item it's added to as something that &quot;uses mana&quot;.</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/component/uses_mana.html#proc/can_activate">can_activate</a></th><td>Should be the raw conditional we use for determining if the thing that &quot;uses mana&quot; can actually
+activate the behavior that &quot;uses mana&quot;.</td></tr>
+            <tr><th><a href="datum/component/uses_mana.html#proc/can_activate_check_failure">can_activate_check_failure</a></th><td>What can_activate_check returns apon failing to activate.</td></tr>
+            <tr><th><a href="datum/component/uses_mana.html#proc/can_activate_with_feedback">can_activate_with_feedback</a></th><td>Wrapper for can_activate(). Should return a bitflag that will be passed down to the signal sender on failure.</td></tr>
+            <tr><th><a href="datum/component/uses_mana.html#proc/drain_mana">drain_mana</a></th><td>The primary proc we will use for draining mana to simulate it being consumed to power our actions.</td></tr>
+            <tr><th><a href="datum/component/uses_mana.html#proc/get_mana_required">get_mana_required</a></th><td>Should return the numerical value of mana needed to use whatever it is we're using. Unaffected by attunements.</td></tr>
+            <tr><th><a href="datum/component/uses_mana.html#proc/is_mana_sufficient">is_mana_sufficient</a></th><td>Should return TRUE if the total adjusted mana of all mana pools surpasses get_mana_required(). FALSE otherwise.</td></tr>
+            <tr><th><a href="datum/component/uses_mana.html#proc/react_to_successful_use">react_to_successful_use</a></th><td>Should react to a post-use signal given by the parent, and ideally subtract mana, or something.</td></tr></table><h2 id="proc">Proc Details</h2><h3 id="proc/can_activate"><aside class="declaration">proc </aside>can_activate<aside>(...) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/components/uses_mana.dm#L139">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;components&#x2F;uses_mana.dm 139"/></a></aside>
+        </h3>
+        <p>Should be the raw conditional we use for determining if the thing that &quot;uses mana&quot; can actually
+activate the behavior that &quot;uses mana&quot;.</p><h3 id="proc/can_activate_check_failure"><aside class="declaration">proc </aside>can_activate_check_failure<aside>(...) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/components/uses_mana.dm#L160">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;components&#x2F;uses_mana.dm 160"/></a></aside>
+        </h3>
+        <p>What can_activate_check returns apon failing to activate.</p><h3 id="proc/can_activate_with_feedback"><aside class="declaration">proc </aside>can_activate_with_feedback<aside>(...) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/components/uses_mana.dm#L144">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;components&#x2F;uses_mana.dm 144"/></a></aside>
+        </h3>
+        <p>Wrapper for can_activate(). Should return a bitflag that will be passed down to the signal sender on failure.</p><h3 id="proc/drain_mana"><aside class="declaration">proc </aside>drain_mana<aside>(...) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/components/uses_mana.dm#L113">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;components&#x2F;uses_mana.dm 113"/></a></aside>
+        </h3>
+        <p>The primary proc we will use for draining mana to simulate it being consumed to power our actions.</p><h3 id="proc/get_mana_required"><aside class="declaration">proc </aside>get_mana_required<aside>(/<a href="atom.html">atom</a>/caster, ...) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/components/uses_mana.dm#L71">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;components&#x2F;uses_mana.dm 71"/></a></aside>
+        </h3>
+        <p>Should return the numerical value of mana needed to use whatever it is we're using. Unaffected by attunements.</p><h3 id="proc/is_mana_sufficient"><aside class="declaration">proc </aside>is_mana_sufficient<aside>(/<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/user, ...) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/components/uses_mana.dm#L98">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;components&#x2F;uses_mana.dm 98"/></a></aside>
+        </h3>
+        <p>Should return TRUE if the total adjusted mana of all mana pools surpasses get_mana_required(). FALSE otherwise.</p><h3 id="proc/react_to_successful_use"><aside class="declaration">proc </aside>react_to_successful_use<aside>(...) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/components/uses_mana.dm#L164">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;components&#x2F;uses_mana.dm 164"/></a></aside>
+        </h3>
+        <p>Should react to a post-use signal given by the parent, and ideally subtract mana, or something.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

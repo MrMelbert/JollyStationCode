@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>maplestation_modules&#x2F;README.md - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+</header>
+<main>
+<h1>MapleStation Modules Folder <aside>maplestation_modules/README.md</aside> 
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/README.md">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;README.md"/></a></h1>
+
+<table class="summary" cellspacing="0">
+        <tr><td colspan="2"><hh2 id="modules-are-you">MODULES ARE YOU:</hh2>
+<p>So you want to add content? Then you've come to the right place. I appreciate you for reading this first before jumping in and adding a buncha changes to /tg/ files.</p>
+<p>We use module files to separate our added content from /tg/ content to prevent un-necessary and excessive merge conflicts when trying to merge from /tg/.</p>
+<p>What does this mean to you? This means if you want to add something, you should add it in THIS FOLDER (maplestation_modules) and not in ANY OF THE OTHER FOLDERS unless absolutly necessary (it usually isn't).</p>
+<hh1 id="what-if-i-want-to-add">What if I want to add...</hh1><hh2 id="icons-to-this-fork">...icons to this fork:</hh2>
+<p>ALWAYS add icons to a new .dmi in the <code>maplestation_modules/icons</code> folder. Icon are rather difficult for to resolve merge conflicts so we opt to completely override our files on merge. Adding icons can be complicated for things such as jumpsuits and IDs, so be sure to ask for help if it gets confusing.</p>
+<hh2 id="a-one-off-object-datum-etc-to-this-fork">...a one-off object, datum, etc. to this fork:</hh2>
+<p>Create all new content in a new .dm file in the <code>maplestation_modules/code</code> folder. For the sake of organization, we attempt to mimic the folder path of the place we would normally add something to /tg/, but in our modules folder instead. For example, if you want to add a positive quirk, make the file path <code>maplestation_modules/code/datums/quirks/good.dm</code>. Sometimes it may make sense to put your change somewhere else rather than creating a million empty folders - just use logic and try to leave your changes in places that follow logic.</p>
+<hh2 id="a-minor-change-to-a-pre-existing-object-datum-etc">...a minor change to a pre-existing object, datum, etc.:</hh2>
+<p>If you want to add a behavior to an existing item or object, you should hook onto it in a new file, instead of adding it to the pre-existing one.</p>
+<p>For example, if I have an object <code>foo_bar</code> and want to make it do a flip when it's picked up, create a NEW FILE named <code>foo_bar.dm</code> in our module folder and add the <code>cool_flip</code> proc definition and code in that file. Then, you can call the proc <code>cool_flip</code> from <code>foo_bar/attack</code> proc in the main file if it already has one defined, or add a <code>foo_bar/attack</code> to your new file if it doesn't. Keep as much code as possible in the module files and out of /tg/ files for our sanity.</p>
+<hh2 id="big-balance-code-changes-to-tg-files">...big balance/code changes to /tg/ files:</hh2>
+<p>Oh boy. This is where it gets annoying.
+You CAN override existing object variable and definitions easily, but adding sweeping changes to multiple procs is more difficult.
+Modules exist to minimize merge conflicts with the upstream, but if you want to change the main files then we can't just use modules in most cases.</p>
+<p>First: I recommend trying to make the change to the upstream first to save everyone's headaches.
+If your idea doesn't have a chance in hell of getting merged to the upstream, or you really don't want to deal with the upstream git, then feel free to PR it here instead, but take a few precautions:</p>
+<ul>
+<li>
+<p>Keep your changes to an absolute minimum. Touch as few lines and as few files as possible.</p>
+</li>
+<li>
+<p>Add a comment before and after your changed code so the spot is known in the future that something was changed.
+Something like so:</p>
+</li>
+</ul>
+<pre><code class="language-dm">var/epic_variable = 3 // NON-MODULE CHANGE
+</code></pre>
+<pre><code class="language-dm">// NON-MODULE CHANGE START
+/obj/foo/bar/proc/do_thing()
+	to_chat(world, &quot;I added a proc to something&quot;)
+	qdel(src)
+// NON-MODULE CHANGE END
+</code></pre>
+<ul>
+<li>What DOES matter: The formatting of the first part of the comment! The comment MUST start with <code>// NON-MODULE</code>, space included, exact number of forward slashes, capitalized.</li>
+<li>What doesnt matter: what follows above. <code>// NON-MODULE CHANGE</code>, <code>// NON-MODULE CHANGE START</code>, <code>// NON-MODULE CHANGES</code>, <code>// NON-MODULE CHANGE: I did stuff</code></li>
+</ul>
+<hh2 id="custom-things-to-vendors">...custom things to vendors:</hh2>
+<p>Go to <code>maplestation_modules/code/modules/vending/_vending.dm</code> and use the template provided to add or remove items from vendors. Follow the provided template there.</p>
+<hh2 id="defines">...defines:</hh2>
+<p>Defines can only be seen by files if it's been compiled beforehand.</p>
+<ul>
+<li>Add any defines you need to use across multiple files to <code>maplestation_modules/code/__DEFINES/_module_defines</code></li>
+<li>Add any defines you need just in that file to the top of the file - make sure to undef it at the end.</li>
+<li>Add any defines you need to use in core files to their respective core define files, but be sure to comment it.</li>
+</ul>
+<hh2 id="maps">...maps:</hh2>
+<p>Don't edit /tg/station maps with sweeping changes! Like with icons, map merge conflicts are difficult to resolve, so we simply override the maps with the never versions on updates, so any changes made will be lost.</p>
+<p>But what if I want to make a station?</p>
+<ul>
+<li>You will be expected to help maintain it. It's not guaranteed that it will be updated with future changes, which means after updates your map likely will not be playable until fixed.</li>
+</ul>
+<hh2 id="some-other-file">...some other file:</hh2>
+<p>If you made an edit to some other file, like a json or js file in some strange corner of the code base, it would be wise to leave a comment <em>somewhere</em> that you did this, otherwise it is very likely your change will be reset automatically.</p>
+<p>A good place to leave this comment would be wherever the file is read in its corresponding DM file. If you can't find a good place to put it, just leave it in the readme below.</p></td></tr></table></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

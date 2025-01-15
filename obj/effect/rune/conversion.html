@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;obj&#x2F;effect&#x2F;rune&#x2F;conversion - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="obj/effect/rune/conversion.html#var">Var Details</a> - <a href="obj/effect/rune/conversion.html#proc">Proc Details</a></header>
+<main>
+<h1>conversion <aside>/<a href="obj.html">obj</a>/<a href="obj/effect/rune.html">effect/rune</a>/<a href="obj/effect/rune/conversion.html">conversion</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/conversion_rune.dm#L1">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;conversion_rune.dm 1"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="obj/effect/rune/conversion.html#var/conversion_blocked_invocations">conversion_blocked_invocations</a></th><td>A list of invocations if the victim is mindshileded or holy and cannot be converted.</td></tr>
+            <tr><th><a href="obj/effect/rune/conversion.html#var/conversion_success_invocations">conversion_success_invocations</a></th><td>A list of invoctions if the victim can be converted.</td></tr>
+            <tr><th><a href="obj/effect/rune/conversion.html#var/conversion_unallowed_invocations">conversion_unallowed_invocations</a></th><td>A list of invocations required if the user has conversion disbaled and use this rune.</td></tr>
+            <tr><th><a href="obj/effect/rune/conversion.html#var/on_conversion_message">on_conversion_message</a></th><td>Message displayed to someone in big, bold text when they're converted.</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="obj/effect/rune/conversion.html#proc/do_convert">do_convert</a></th><td>Actually convert [convertee] to [cult] by [user].</td></tr>
+            <tr><th><a href="obj/effect/rune/conversion.html#proc/do_torment">do_torment</a></th><td>For when [user] has conversion disabled, or [convertee] is a protected role, such as chaplain or mindshielded.
+Protected is a return value, from can_join_cult(). Will be 0, 1, or 2. see antag_defines.dm for more informaiton.</td></tr>
+            <tr><th><a href="obj/effect/rune/conversion.html#proc/invoke_do_afters">invoke_do_afters</a></th><td>Causes multiple do_afters, similar to how changeling absorbing works,
+based on the length of the invocations list passed into it.</td></tr>
+            <tr><th><a href="obj/effect/rune/conversion.html#proc/invoke_process">invoke_process</a></th><td>The actual process of invoking the rune on [convertee] by [user]. Sleeps.</td></tr>
+            <tr><th><a href="obj/effect/rune/conversion.html#proc/invoke_wrapper">invoke_wrapper</a></th><td>Wraps [invoke_process] to ensure [var/rune_in_use] is properly set.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/conversion_blocked_invocations"><aside class="declaration">var </aside>conversion_blocked_invocations
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/conversion_rune.dm#L7">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;conversion_rune.dm 7"/></a></h3>
+        <p>A list of invocations if the victim is mindshileded or holy and cannot be converted.</p><h3 id="var/conversion_success_invocations"><aside class="declaration">var </aside>conversion_success_invocations
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/conversion_rune.dm#L11">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;conversion_rune.dm 11"/></a></h3>
+        <p>A list of invoctions if the victim can be converted.</p><h3 id="var/conversion_unallowed_invocations"><aside class="declaration">var </aside>conversion_unallowed_invocations
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/conversion_rune.dm#L5">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;conversion_rune.dm 5"/></a></h3>
+        <p>A list of invocations required if the user has conversion disbaled and use this rune.</p><h3 id="var/on_conversion_message"><aside class="declaration">var </aside>on_conversion_message
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/conversion_rune.dm#L3">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;conversion_rune.dm 3"/></a></h3>
+        <p>Message displayed to someone in big, bold text when they're converted.</p><h2 id="proc">Proc Details</h2><h3 id="proc/do_convert"><aside class="declaration">proc </aside>do_convert<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/convertee, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user, /<a href="datum.html">datum</a>/<a href="datum/team.html">team</a>/<a href="datum/team/advanced_cult.html">advanced_cult</a>/cult) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/conversion_rune.dm#L113">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;conversion_rune.dm 113"/></a></aside>
+        </h3>
+        <p>Actually convert [convertee] to [cult] by [user].</p><h3 id="proc/do_torment"><aside class="declaration">proc </aside>do_torment<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/convertee, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user, protected) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/conversion_rune.dm#L150">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;conversion_rune.dm 150"/></a></aside>
+        </h3>
+        <p>For when [user] has conversion disabled, or [convertee] is a protected role, such as chaplain or mindshielded.
+Protected is a return value, from can_join_cult(). Will be 0, 1, or 2. see antag_defines.dm for more informaiton.</p>
+<p>Causes the [convertee] to experience some kind of discomfort.
+Ideally, enough such that they will be out of the cultist's business for a while,
+but not enough such that they're effectively removed from the round.</p><h3 id="proc/invoke_do_afters"><aside class="declaration">proc </aside>invoke_do_afters<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/convertee, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user, /list/invocations) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/conversion_rune.dm#L82">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;conversion_rune.dm 82"/></a></aside>
+        </h3>
+        <p>Causes multiple do_afters, similar to how changeling absorbing works,
+based on the length of the invocations list passed into it.</p>
+<p>Duration = 6 seconds * length of invocations.</p><h3 id="proc/invoke_process"><aside class="declaration">proc </aside>invoke_process<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/convertee, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/conversion_rune.dm#L46">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;conversion_rune.dm 46"/></a></aside>
+        </h3>
+        <p>The actual process of invoking the rune on [convertee] by [user]. Sleeps.</p><h3 id="proc/invoke_wrapper"><aside class="declaration">proc </aside>invoke_wrapper<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/convertee, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/conversion_rune.dm#L38">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;conversion_rune.dm 38"/></a></aside>
+        </h3>
+        <p>Wraps [invoke_process] to ensure [var/rune_in_use] is properly set.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

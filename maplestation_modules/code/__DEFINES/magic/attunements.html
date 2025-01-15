@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;magic&#x2F;attunements.dm - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="maplestation_modules/code/__DEFINES/magic/attunements.html#define">Define Details</a></header>
+<main>
+<h1>maplestation_modules/code/__DEFINES/magic/attunements.dm 
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/magic/attunements.dm">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;magic&#x2F;attunements.dm"/></a></h1>
+
+<table class="summary" cellspacing="0">
+        <tr><th><a href="maplestation_modules/code/__DEFINES/magic/attunements.html#define/GET_RAW_ATTUNEMENT_CORRESPONDANCE">GET_RAW_ATTUNEMENT_CORRESPONDANCE</a></th><td>Returns the raw attunement correspondance between args 1 and 3. Its fine if both are negative, since thats a positive correspondance.
+The direction and intensity of the correspondance should correspond to altered casting cost - intense positive correspondance should lower
+casting cost by a large amount-but a weak negative correspondance should increase casting cost by a small amount.</td></tr>
+        <tr><th>/proc/<a href="global.html#proc/get_total_correspondance">get_total_correspondance</a></th>
+                <td>Compares the two lists of attunements and combines the raw correspondance.</td></tr>
+        <tr><th>/proc/<a href="global.html#proc/get_total_attunement_mult">get_total_attunement_mult</a></th>
+                <td>Returns the &quot;mult&quot; value using the correspondance between attunements and intensity. This value should be multiplied against
+the mana cost of an action to determine how much &quot;effective&quot; mana a certain mana source can provide to it.
+Should NEVER return anything negative, ever. The minimum is 0.</td></tr>
+        <tr><th>/proc/<a href="global.html#proc/get_total_attunement_bias">get_total_attunement_bias</a></th>
+                <td>attunements should only ever be attunements of a mana source, not mana user.</td></tr></table><h2 id="define">Define Details</h2>
+<h3 id="define/GET_RAW_ATTUNEMENT_CORRESPONDANCE"><aside class="declaration">#define </aside>GET_RAW_ATTUNEMENT_CORRESPONDANCE
+            <aside>(attunements, intensity, attunement)</aside>
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/magic/attunements.dm#L38">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;magic&#x2F;attunements.dm 38"/></a>
+    </h3>
+    <p>Returns the raw attunement correspondance between args 1 and 3. Its fine if both are negative, since thats a positive correspondance.
+The direction and intensity of the correspondance should correspond to altered casting cost - intense positive correspondance should lower
+casting cost by a large amount-but a weak negative correspondance should increase casting cost by a small amount.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

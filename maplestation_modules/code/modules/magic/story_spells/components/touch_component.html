@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../../../../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;story_spells&#x2F;components&#x2F;touch_component.dm - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="maplestation_modules/code/modules/magic/story_spells/components/touch_component.html#define">Define Details</a></header>
+<main>
+<h1>maplestation_modules/code/modules/magic/story_spells/components/touch_component.dm 
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/story_spells/components/touch_component.dm">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;story_spells&#x2F;components&#x2F;touch_component.dm"/></a></h1>
+
+<table class="summary" cellspacing="0">
+        <tr><th><a href="maplestation_modules/code/modules/magic/story_spells/components/touch_component.html#define/COMSIG_SPELL_TOUCH_CAN_HIT">COMSIG_SPELL_TOUCH_CAN_HIT</a></th><td>Actions done before the actual cast is called.
+This is the last chance to cancel the spell from being cast.</td></tr>
+        <tr><th><a href="datum&#x2F;component&#x2F;uses_mana&#x2F;touch_spell.html">&#x2F;datum&#x2F;component&#x2F;uses_mana&#x2F;touch_spell</a></th><td>A preset component for touch spells that use mana</td></tr></table><h2 id="define">Define Details</h2>
+<h3 id="define/COMSIG_SPELL_TOUCH_CAN_HIT"><aside class="declaration">#define </aside>COMSIG_SPELL_TOUCH_CAN_HIT
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/story_spells/components/touch_component.dm#L1">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;story_spells&#x2F;components&#x2F;touch_component.dm 1"/></a>
+    </h3>
+    <p>Actions done before the actual cast is called.
+This is the last chance to cancel the spell from being cast.</p>
+<p>Can be used for target selection or to validate checks on the caster (cast_on).</p>
+<p>Returns a bitflag.</p>
+<ul>
+<li>SPELL_CANCEL_CAST will stop the spell from being cast.</li>
+<li>SPELL_NO_FEEDBACK will prevent the spell from calling [proc/spell_feedback] on cast. (invocation), sounds)</li>
+<li>SPELL_NO_IMMEDIATE_COOLDOWN will prevent the spell from starting its cooldown between cast and before after_cast.</li>
+</ul>
+<p>Actions done as the main effect of the spell.</p>
+<p>For spells without a click intercept, [cast_on] will be the owner.
+For click spells, [cast_on] is whatever the owner clicked on in casting the spell.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

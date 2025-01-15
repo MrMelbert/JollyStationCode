@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;round_event&#x2F;resource_drift - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/round_event/resource_drift.html#var">Var Details</a> - <a href="datum/round_event/resource_drift.html#proc">Proc Details</a></header>
+<main>
+<h1>resource_drift <aside>/<a href="datum.html">datum</a>/<a href="datum/round_event.html">round_event</a>/<a href="datum/round_event/resource_drift.html">resource_drift</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_drift.dm#L16">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_drift.dm 16"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/round_event/resource_drift.html#var/amt_debris">amt_debris</a></th><td>Amount of debris that spawns.</td></tr>
+            <tr><th><a href="datum/round_event/resource_drift.html#var/num_caches">num_caches</a></th><td>The number of caches that spawn</td></tr>
+            <tr><th><a href="datum/round_event/resource_drift.html#var/picked_crates">picked_crates</a></th><td>Crates we're throwing</td></tr>
+            <tr><th><a href="datum/round_event/resource_drift.html#var/possible_crates">possible_crates</a></th><td>All subtypes of normal resource_caches</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/round_event/resource_drift.html#proc/get_debris">get_debris</a></th><td>Picks a adjective describing the amount of debris being thrown and returns it.</td></tr>
+            <tr><th><a href="datum/round_event/resource_drift.html#proc/get_source">get_source</a></th><td>The target we're throwing at
+Generate a &quot;source event&quot; / reason as to why the crates and debris are spawning.</td></tr>
+            <tr><th><a href="datum/round_event/resource_drift.html#proc/spawn_and_throw_crate">spawn_and_throw_crate</a></th><td>The possible spawn locs for our crates
+Spawns the supplied crate path [selected_cache_path] at [spawn_loc].
+After being spawned, the crate is thrown towards a random human, or a communications console if there are no humans.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/amt_debris"><aside class="declaration">var </aside>amt_debris
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_drift.dm#L20">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_drift.dm 20"/></a></h3>
+        <p>Amount of debris that spawns.</p><h3 id="var/num_caches"><aside class="declaration">var </aside>num_caches
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_drift.dm#L18">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_drift.dm 18"/></a></h3>
+        <p>The number of caches that spawn</p><h3 id="var/picked_crates"><aside class="declaration">var </aside>picked_crates
+            <aside>&ndash; /list/obj/structure/closet/crate</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_drift.dm#L24">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_drift.dm 24"/></a></h3>
+        <p>Crates we're throwing</p><h3 id="var/possible_crates"><aside class="declaration">var </aside>possible_crates
+            <aside>&ndash; /static/list</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_drift.dm#L22">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_drift.dm 22"/></a></h3>
+        <p>All subtypes of normal resource_caches</p><h2 id="proc">Proc Details</h2><h3 id="proc/get_debris"><aside class="declaration">proc </aside>get_debris<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_drift.dm#L115">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_drift.dm 115"/></a></aside>
+        </h3>
+        <p>Picks a adjective describing the amount of debris being thrown and returns it.</p><h3 id="proc/get_source"><aside class="declaration">proc </aside>get_source<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_drift.dm#L102">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_drift.dm 102"/></a></aside>
+        </h3>
+        <p>The target we're throwing at
+Generate a &quot;source event&quot; / reason as to why the crates and debris are spawning.</p><h3 id="proc/spawn_and_throw_crate"><aside class="declaration">proc </aside>spawn_and_throw_crate<aside>(/<a href="obj.html">obj</a>/<a href="obj/structure/closet.html">structure/closet</a>/<a href="obj/structure/closet/crate.html">crate</a>/<a href="obj/structure/closet/crate/resource_cache.html">resource_cache</a>/selected_cache_path, spawn_loc) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_drift.dm#L74">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_drift.dm 74"/></a></aside>
+        </h3>
+        <p>The possible spawn locs for our crates
+Spawns the supplied crate path [selected_cache_path] at [spawn_loc].
+After being spawned, the crate is thrown towards a random human, or a communications console if there are no humans.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

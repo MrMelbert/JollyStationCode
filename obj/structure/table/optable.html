@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;obj&#x2F;structure&#x2F;table&#x2F;optable - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="obj/structure/table/optable.html#var">Var Details</a> - <a href="obj/structure/table/optable.html#proc">Proc Details</a></header>
+<main>
+<h1>optable <aside>/<a href="obj.html">obj</a>/<a href="obj/structure/table.html">structure/table</a>/<a href="obj/structure/table/optable.html">optable</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/objects/structures/tables_racks.dm#L726">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;objects&#x2F;structures&#x2F;tables_racks.dm 726"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="obj/structure/table/optable.html#var/attached_tank">attached_tank</a></th><td>Internals tank clamped onto the table.
+Allows an operating computer to easily attach it to the mob and use it for anesthesia.</td></tr>
+            <tr><th><a href="obj/structure/table/optable.html#var/failsafe_time">failsafe_time</a></th><td>Time after which the anesthesia will be automatically disabled
+Can be set to INFINITY to never auto-disable</td></tr>
+            <tr><th><a href="obj/structure/table/optable.html#var/patient_set_at">patient_set_at</a></th><td>World time when the patient was set onto the tank</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="obj/structure/table/optable.html#proc/can_have_tank_opened">can_have_tank_opened</a></th><td>Checks if the passed mob is in a valid state to start breathing out of the attached tank.</td></tr>
+            <tr><th><a href="obj/structure/table/optable.html#proc/disable_anesthesia">disable_anesthesia</a></th><td>Disables the patient from breathing out of the attached tank.</td></tr>
+            <tr><th><a href="obj/structure/table/optable.html#proc/enable_anesthesia">enable_anesthesia</a></th><td>Enables the patient to start breathing out of the attached tank.</td></tr>
+            <tr><th><a href="obj/structure/table/optable.html#proc/mark_patient">mark_patient</a></th><td>Any mob that enters our tile will be marked as a potential patient. They will be turned into a patient if they lie down.</td></tr>
+            <tr><th><a href="obj/structure/table/optable.html#proc/post_buckle_mob">post_buckle_mob</a></th><td>Align the mob with the table when buckled.</td></tr>
+            <tr><th><a href="obj/structure/table/optable.html#proc/post_unbuckle_mob">post_unbuckle_mob</a></th><td>Disalign the mob with the table when unbuckled.</td></tr>
+            <tr><th><a href="obj/structure/table/optable.html#proc/safety_disable">safety_disable</a></th><td>Called when the safety triggers and attempts to unhook the patient from the tank.</td></tr>
+            <tr><th><a href="obj/structure/table/optable.html#proc/toggle_anesthesia">toggle_anesthesia</a></th><td>Toggles the tank on and off, playing a sound as well.</td></tr>
+            <tr><th><a href="obj/structure/table/optable.html#proc/unmark_patient">unmark_patient</a></th><td>Unmark the potential patient.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/attached_tank"><aside class="declaration">var </aside>attached_tank
+            <aside>&ndash; /<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/<a href="obj/item/tank.html">tank</a>/<a href="obj/item/tank/internals.html">internals</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/objects/structures/surgery_table.dm#L4">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;objects&#x2F;structures&#x2F;surgery_table.dm 4"/></a></h3>
+        <p>Internals tank clamped onto the table.
+Allows an operating computer to easily attach it to the mob and use it for anesthesia.</p><h3 id="var/failsafe_time"><aside class="declaration">var </aside>failsafe_time
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/objects/structures/surgery_table.dm#L9">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;objects&#x2F;structures&#x2F;surgery_table.dm 9"/></a></h3>
+        <p>Time after which the anesthesia will be automatically disabled
+Can be set to INFINITY to never auto-disable</p><h3 id="var/patient_set_at"><aside class="declaration">var </aside>patient_set_at
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/objects/structures/surgery_table.dm#L6">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;objects&#x2F;structures&#x2F;surgery_table.dm 6"/></a></h3>
+        <p>World time when the patient was set onto the tank</p><h2 id="proc">Proc Details</h2><h3 id="proc/can_have_tank_opened"><aside class="declaration">proc </aside>can_have_tank_opened<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/<a href="mob/living/carbon.html">carbon</a>/who) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/objects/structures/surgery_table.dm#L127">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;objects&#x2F;structures&#x2F;surgery_table.dm 127"/></a></aside>
+        </h3>
+        <p>Checks if the passed mob is in a valid state to start breathing out of the attached tank.</p><h3 id="proc/disable_anesthesia"><aside class="declaration">proc </aside>disable_anesthesia<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/<a href="mob/living/carbon.html">carbon</a>/old_patient) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/objects/structures/surgery_table.dm#L160">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;objects&#x2F;structures&#x2F;surgery_table.dm 160"/></a></aside>
+        </h3>
+        <p>Disables the patient from breathing out of the attached tank.</p><h3 id="proc/enable_anesthesia"><aside class="declaration">proc </aside>enable_anesthesia<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/<a href="mob/living/carbon.html">carbon</a>/new_patient) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/objects/structures/surgery_table.dm#L150">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;objects&#x2F;structures&#x2F;surgery_table.dm 150"/></a></aside>
+        </h3>
+        <p>Enables the patient to start breathing out of the attached tank.</p><h3 id="proc/mark_patient"><aside class="declaration">proc </aside>mark_patient<aside>(/<a href="datum.html">datum</a>/source, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/<a href="mob/living/carbon.html">carbon</a>/potential_patient) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/objects/structures/tables_racks.dm#L779">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;objects&#x2F;structures&#x2F;tables_racks.dm 779"/></a></aside>
+        </h3>
+        <p>Any mob that enters our tile will be marked as a potential patient. They will be turned into a patient if they lie down.</p><h3 id="proc/post_buckle_mob">post_buckle_mob<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/buckled) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/objects/structures/tables_racks.dm#L769">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;objects&#x2F;structures&#x2F;tables_racks.dm 769"/></a></aside>
+        </h3>
+        <p>Align the mob with the table when buckled.</p><h3 id="proc/post_unbuckle_mob">post_unbuckle_mob<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/buckled) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/objects/structures/tables_racks.dm#L774">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;objects&#x2F;structures&#x2F;tables_racks.dm 774"/></a></aside>
+        </h3>
+        <p>Disalign the mob with the table when unbuckled.</p><h3 id="proc/safety_disable"><aside class="declaration">proc </aside>safety_disable<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/objects/structures/surgery_table.dm#L139">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;objects&#x2F;structures&#x2F;surgery_table.dm 139"/></a></aside>
+        </h3>
+        <p>Called when the safety triggers and attempts to unhook the patient from the tank.</p><h3 id="proc/toggle_anesthesia"><aside class="declaration">proc </aside>toggle_anesthesia<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/objects/structures/surgery_table.dm#L170">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;objects&#x2F;structures&#x2F;surgery_table.dm 170"/></a></aside>
+        </h3>
+        <p>Toggles the tank on and off, playing a sound as well.</p><h3 id="proc/unmark_patient"><aside class="declaration">proc </aside>unmark_patient<aside>(/<a href="datum.html">datum</a>/source, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/<a href="mob/living/carbon.html">carbon</a>/potential_patient) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/objects/structures/tables_racks.dm#L787">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;objects&#x2F;structures&#x2F;tables_racks.dm 787"/></a></aside>
+        </h3>
+        <p>Unmark the potential patient.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

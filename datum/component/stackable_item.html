@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;component&#x2F;stackable_item - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/component/stackable_item.html#var">Var Details</a> - <a href="datum/component/stackable_item.html#proc">Proc Details</a></header>
+<main>
+<h1>stackable_item <aside>/<a href="datum.html">datum</a>/<a href="datum/component.html">component</a>/<a href="datum/component/stackable_item.html">stackable_item</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/datums/components/stackable_item.dm#L8">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;datums&#x2F;components&#x2F;stackable_item.dm 8"/></a></h1>
+
+<p>Stackble item component</p>
+<p>This lets an item be attached to another item, combining the sprites and benefits of both</p>
+<p>When the parent is equipped, so is the attached item. And when the parent is dropped, so is the attached item.</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/component/stackable_item.html#var/can_stack">can_stack</a></th><td>Optional callback that checks if incoming items are valid to attach.</td></tr>
+            <tr><th><a href="datum/component/stackable_item.html#var/on_drop">on_drop</a></th><td>Optional callback that is called when an item is dropped.</td></tr>
+            <tr><th><a href="datum/component/stackable_item.html#var/on_equip">on_equip</a></th><td>Optional callback that is called when an item is equipped.</td></tr>
+            <tr><th><a href="datum/component/stackable_item.html#var/stacked_on">stacked_on</a></th><td>The item actively stacked on our stackable item.</td></tr>
+            <tr><th><a href="datum/component/stackable_item.html#var/wearable_descriptor">wearable_descriptor</a></th><td>Descriptor for what you can attach to this item.</td></tr>
+            <tr><th><a href="datum/component/stackable_item.html#var/wearables">wearables</a></th><td>List of types that can be worn.
+Swap to a typecache if people make really large lists.</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/component/stackable_item.html#proc/on_stacked_icon_update">on_stacked_icon_update</a></th><td>Performs a clothing update if our stacked item had their appearance change.
+Essentially just <a href="datum/element/update_icon_updates_onmob.html" title="/datum/element/update_icon_updates_onmob">/datum/element/update_icon_updates_onmob</a>, but for the linked item, becuase it's not technically &quot;on-mob&quot;.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/can_stack"><aside class="declaration">var </aside>can_stack
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/callback.html">callback</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/datums/components/stackable_item.dm#L17">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;datums&#x2F;components&#x2F;stackable_item.dm 17"/></a></h3>
+        <p>Optional callback that checks if incoming items are valid to attach.</p><h3 id="var/on_drop"><aside class="declaration">var </aside>on_drop
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/callback.html">callback</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/datums/components/stackable_item.dm#L23">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;datums&#x2F;components&#x2F;stackable_item.dm 23"/></a></h3>
+        <p>Optional callback that is called when an item is dropped.</p><h3 id="var/on_equip"><aside class="declaration">var </aside>on_equip
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/callback.html">callback</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/datums/components/stackable_item.dm#L19">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;datums&#x2F;components&#x2F;stackable_item.dm 19"/></a></h3>
+        <p>Optional callback that is called when an item is equipped.</p><h3 id="var/stacked_on"><aside class="declaration">var </aside>stacked_on
+            <aside>&ndash; /<a href="obj.html">obj</a>/<a href="obj/item.html">item</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/datums/components/stackable_item.dm#L15">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;datums&#x2F;components&#x2F;stackable_item.dm 15"/></a></h3>
+        <p>The item actively stacked on our stackable item.</p><h3 id="var/wearable_descriptor"><aside class="declaration">var </aside>wearable_descriptor
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/datums/components/stackable_item.dm#L10">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;datums&#x2F;components&#x2F;stackable_item.dm 10"/></a></h3>
+        <p>Descriptor for what you can attach to this item.</p><h3 id="var/wearables"><aside class="declaration">var </aside>wearables
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/datums/components/stackable_item.dm#L13">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;datums&#x2F;components&#x2F;stackable_item.dm 13"/></a></h3>
+        <p>List of types that can be worn.
+Swap to a typecache if people make really large lists.</p><h2 id="proc">Proc Details</h2><h3 id="proc/on_stacked_icon_update"><aside class="declaration">proc </aside>on_stacked_icon_update<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/source, updates, updated) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/datums/components/stackable_item.dm#L165">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;datums&#x2F;components&#x2F;stackable_item.dm 165"/></a></aside>
+        </h3>
+        <p>Performs a clothing update if our stacked item had their appearance change.
+Essentially just <a href="datum/element/update_icon_updates_onmob.html" title="/datum/element/update_icon_updates_onmob">/datum/element/update_icon_updates_onmob</a>, but for the linked item, becuase it's not technically &quot;on-mob&quot;.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

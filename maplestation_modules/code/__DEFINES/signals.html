@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;signals.dm - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="maplestation_modules/code/__DEFINES/signals.html#define">Define Details</a></header>
+<main>
+<h1>maplestation_modules/code/__DEFINES/signals.dm 
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/signals.dm">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;signals.dm"/></a></h1>
+
+<table class="summary" cellspacing="0">
+        <tr><th><a href="maplestation_modules/code/__DEFINES/signals.html#define/COMSIG_LIVING_LATE_EXAMINE">COMSIG_LIVING_LATE_EXAMINE</a></th><td>Sent from <a href="mob/living.html#proc/examine" title="/mob/living">/mob/living/examine</a> late, after the first signal is sent, but BEFORE flavor text handling,
+for when you prefer something guaranteed to appear at the bottom of the stack
+(Flavor text should stay at the very very bottom though)</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/signals.html#define/COMSIG_HANDLE_VENTCRAWLING">COMSIG_HANDLE_VENTCRAWLING</a></th><td>Entering or exiting a vent.</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/signals.html#define/COMPONENT_NO_VENT">COMPONENT_NO_VENT</a></th><td>Return to block entrance / exit</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/signals.html#define/COMSIG_CARBON_FLASH_ACT">COMSIG_CARBON_FLASH_ACT</a></th><td>A carbon is being flashed - actually being blinded and taking (eye) damage</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/signals.html#define/COMSIG_CARBON_THROW_ON">COMSIG_CARBON_THROW_ON</a></th><td>Sent when a carbon enables throw mode</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/signals.html#define/COMSIG_CARBON_THROW_OFF">COMSIG_CARBON_THROW_OFF</a></th><td>Sent when a carbon disables throw mode</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/signals.html#define/COMSIG_CARBON_DRINK_CAFFEINE">COMSIG_CARBON_DRINK_CAFFEINE</a></th><td>A carbon drank some caffeine. (signal, caffeine_content)</td></tr></table><h2 id="define">Define Details</h2>
+<h3 id="define/COMPONENT_NO_VENT"><aside class="declaration">#define </aside>COMPONENT_NO_VENT
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/signals.dm#L15">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;signals.dm 15"/></a>
+    </h3>
+    <p>Return to block entrance / exit</p><h3 id="define/COMSIG_CARBON_DRINK_CAFFEINE"><aside class="declaration">#define </aside>COMSIG_CARBON_DRINK_CAFFEINE
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/signals.dm#L26">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;signals.dm 26"/></a>
+    </h3>
+    <p>A carbon drank some caffeine. (signal, caffeine_content)</p><h3 id="define/COMSIG_CARBON_FLASH_ACT"><aside class="declaration">#define </aside>COMSIG_CARBON_FLASH_ACT
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/signals.dm#L18">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;signals.dm 18"/></a>
+    </h3>
+    <p>A carbon is being flashed - actually being blinded and taking (eye) damage</p><h3 id="define/COMSIG_CARBON_THROW_OFF"><aside class="declaration">#define </aside>COMSIG_CARBON_THROW_OFF
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/signals.dm#L23">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;signals.dm 23"/></a>
+    </h3>
+    <p>Sent when a carbon disables throw mode</p><h3 id="define/COMSIG_CARBON_THROW_ON"><aside class="declaration">#define </aside>COMSIG_CARBON_THROW_ON
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/signals.dm#L21">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;signals.dm 21"/></a>
+    </h3>
+    <p>Sent when a carbon enables throw mode</p><h3 id="define/COMSIG_HANDLE_VENTCRAWLING"><aside class="declaration">#define </aside>COMSIG_HANDLE_VENTCRAWLING
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/signals.dm#L13">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;signals.dm 13"/></a>
+    </h3>
+    <p>Entering or exiting a vent.</p><h3 id="define/COMSIG_LIVING_LATE_EXAMINE"><aside class="declaration">#define </aside>COMSIG_LIVING_LATE_EXAMINE
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/signals.dm#L10">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;signals.dm 10"/></a>
+    </h3>
+    <p>Sent from <a href="mob/living.html#proc/examine" title="/mob/living">/mob/living/examine</a> late, after the first signal is sent, but BEFORE flavor text handling,
+for when you prefer something guaranteed to appear at the bottom of the stack
+(Flavor text should stay at the very very bottom though)</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

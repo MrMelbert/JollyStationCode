@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;round_event&#x2F;resource_pods - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/round_event/resource_pods.html#var">Var Details</a> - <a href="datum/round_event/resource_pods.html#proc">Proc Details</a></header>
+<main>
+<h1>resource_pods <aside>/<a href="datum.html">datum</a>/<a href="datum/round_event.html">round_event</a>/<a href="datum/round_event/resource_pods.html">resource_pods</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L11">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 11"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/round_event/resource_pods.html#var/impact_area">impact_area</a></th><td>The area the pods are landing in</td></tr>
+            <tr><th><a href="datum/round_event/resource_pods.html#var/num_pods">num_pods</a></th><td>The number of pods</td></tr>
+            <tr><th><a href="datum/round_event/resource_pods.html#var/picked_crates">picked_crates</a></th><td>The list of crates we're spawning</td></tr>
+            <tr><th><a href="datum/round_event/resource_pods.html#var/pod_style">pod_style</a></th><td>The style the pod uses</td></tr>
+            <tr><th><a href="datum/round_event/resource_pods.html#var/possible_crates">possible_crates</a></th><td>The list of possible crates to draw from</td></tr>
+            <tr><th><a href="datum/round_event/resource_pods.html#var/priority_crates">priority_crates</a></th><td>Crates guaranteed to spawn with the pods</td></tr>
+            <tr><th><a href="datum/round_event/resource_pods.html#var/source">source</a></th><td>The source of the resources (a short descriptive string)</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/round_event/resource_pods.html#proc/find_event_area">find_event_area</a></th><td>Finds a valid area for our event to fire.
+We avoid places that pod explosions can cause critical infrastructre damage.</td></tr>
+            <tr><th><a href="datum/round_event/resource_pods.html#proc/get_company_sources">get_company_sources</a></th><td>Picks a random, neutral &quot;source&quot; of the pods and returns it.</td></tr>
+            <tr><th><a href="datum/round_event/resource_pods.html#proc/get_nanotrasen_sources">get_nanotrasen_sources</a></th><td>Picks a Nanotrasen-related &quot;source&quot; of the pods based on the number of pods that are being sent and returns it.</td></tr>
+            <tr><th><a href="datum/round_event/resource_pods.html#proc/get_num_pod_identifier">get_num_pod_identifier</a></th><td>Picks a adjective describing the number of pods being sent and returns it.</td></tr>
+            <tr><th><a href="datum/round_event/resource_pods.html#proc/get_syndicate_sources">get_syndicate_sources</a></th><td>Picks a Syndicate-related &quot;source&quot; of the pods based on the number of pods that are being sent and returns it.</td></tr>
+            <tr><th><a href="datum/round_event/resource_pods.html#proc/get_valid_turfs">get_valid_turfs</a></th><td>Places that we shouldn't send crates.
+Returns a list of all turfs in the area [found_area] that have no dense objects within the tile.</td></tr>
+            <tr><th><a href="datum/round_event/resource_pods.html#proc/launch_pod">launch_pod</a></th><td>Launch the supplied crate path [crate] via pod to the target turf [landing_turf].</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/impact_area"><aside class="declaration">var </aside>impact_area
+            <aside>&ndash; /<a href="area.html">area</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L19">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 19"/></a></h3>
+        <p>The area the pods are landing in</p><h3 id="var/num_pods"><aside class="declaration">var </aside>num_pods
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L15">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 15"/></a></h3>
+        <p>The number of pods</p><h3 id="var/picked_crates"><aside class="declaration">var </aside>picked_crates
+            <aside>&ndash; /list/obj/structure/closet/crate</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L23">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 23"/></a></h3>
+        <p>The list of crates we're spawning</p><h3 id="var/pod_style"><aside class="declaration">var </aside>pod_style
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L17">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 17"/></a></h3>
+        <p>The style the pod uses</p><h3 id="var/possible_crates"><aside class="declaration">var </aside>possible_crates
+            <aside>&ndash; /static/list</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L21">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 21"/></a></h3>
+        <p>The list of possible crates to draw from</p><h3 id="var/priority_crates"><aside class="declaration">var </aside>priority_crates
+            <aside>&ndash; /list/obj/structure/closet/crate</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L25">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 25"/></a></h3>
+        <p>Crates guaranteed to spawn with the pods</p><h3 id="var/source"><aside class="declaration">var </aside>source
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L13">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 13"/></a></h3>
+        <p>The source of the resources (a short descriptive string)</p><h2 id="proc">Proc Details</h2><h3 id="proc/find_event_area"><aside class="declaration">proc </aside>find_event_area<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L136">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 136"/></a></aside>
+        </h3>
+        <p>Finds a valid area for our event to fire.
+We avoid places that pod explosions can cause critical infrastructre damage.</p>
+<p>returns the area our event will fire in.</p><h3 id="proc/get_company_sources"><aside class="declaration">proc </aside>get_company_sources<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L223">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 223"/></a></aside>
+        </h3>
+        <p>Picks a random, neutral &quot;source&quot; of the pods and returns it.</p><h3 id="proc/get_nanotrasen_sources"><aside class="declaration">proc </aside>get_nanotrasen_sources<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L201">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 201"/></a></aside>
+        </h3>
+        <p>Picks a Nanotrasen-related &quot;source&quot; of the pods based on the number of pods that are being sent and returns it.</p><h3 id="proc/get_num_pod_identifier"><aside class="declaration">proc </aside>get_num_pod_identifier<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L239">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 239"/></a></aside>
+        </h3>
+        <p>Picks a adjective describing the number of pods being sent and returns it.</p><h3 id="proc/get_syndicate_sources"><aside class="declaration">proc </aside>get_syndicate_sources<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L179">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 179"/></a></aside>
+        </h3>
+        <p>Picks a Syndicate-related &quot;source&quot; of the pods based on the number of pods that are being sent and returns it.</p><h3 id="proc/get_valid_turfs"><aside class="declaration">proc </aside>get_valid_turfs<aside>(/<a href="area.html">area</a>/found_area) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L163">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 163"/></a></aside>
+        </h3>
+        <p>Places that we shouldn't send crates.
+Returns a list of all turfs in the area [found_area] that have no dense objects within the tile.</p><h3 id="proc/launch_pod"><aside class="declaration">proc </aside>launch_pod<aside>(/<a href="turf.html">turf</a>/landing_turf, /<a href="obj.html">obj</a>/<a href="obj/structure/closet.html">structure/closet</a>/<a href="obj/structure/closet/crate.html">crate</a>/crate) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/events/resource_pods.dm#L113">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;events&#x2F;resource_pods.dm 113"/></a></aside>
+        </h3>
+        <p>Launch the supplied crate path [crate] via pod to the target turf [landing_turf].</p>
+<p>landing_turf - reference to a turf that we're targeting with our pod
+crate - a path of something, normally a crate, that gets instantiated and launched via pod</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

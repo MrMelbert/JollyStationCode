@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;HOW_TO_USE.md - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+</header>
+<main>
+<h1>maplestation_modules/code/modules/magic/HOW_TO_USE.md 
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/magic/HOW_TO_USE.md">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;magic&#x2F;HOW_TO_USE.md"/></a></h1>
+
+<table class="summary" cellspacing="0">
+        <tr><td colspan="2"><hh2 id="adding-a-new-spell-mana-user">Adding a new spell/mana user</hh2>
+<p>Adding a mana user is very simple. All you have to do is subtype /datum/component/uses_mana, then add this subtype to the item thats now a mana user.</p>
+<hh3 id="extending-uses-mana">Extending uses_mana</hh3>
+<p>There are a few crucial steps to extending uses_mana.
+Firstly, you must override get_mana_required() and have it return the exact numerical value in EFFECTIVE mana (we will get to this later)
+it requires for the action to be cast. The action in this case can be quite literally anything - anything that requires a signal to determine
+if it will execute.</p>
+<p>If you wish your action to be fail if not enough mana is acquired (common behavior), register a signal to a signal handler from some sort of pre-usage check
+(story_spell_component uses COMSIG_SPELL_BEFORE_CAST, attached to handle_precast, so for spells this is already handled). Most things have a signal for this, you just
+have to look.</p>
+<p>If you wish the action to use mana, you must register a signal that fires when the action is successful to a signal handler, and then call drain_mana(), which will get
+the available mana and drain the required mana from all mana pools it finds.</p>
+<p>The next crucial step is overriding get_attunement_dispositions() to return the actual attunements of the spell/action. The proc itself returns a copy of the default
+attunement list, a list of every attunement in the game with an attunement value of 0. You must modify your selected attunements by the values you desire.
+Ex. firebolt should do . = ..(), then .[MAGIC_ELEMENT_FIRE] += (Value), then return .</p>
+<p>Congratulations. You have now made a spell that uses mana. If youre making a spell, you can extend /datum/component/uses_mana/story_spell - it already has 3 signal handlers for precast, cast, and postcast, meaning you dont have to worry about finding the signals yourself.</p></td></tr></table></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

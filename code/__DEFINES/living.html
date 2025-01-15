@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>code&#x2F;__DEFINES&#x2F;living.dm - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="code/__DEFINES/living.html#define">Define Details</a></header>
+<main>
+<h1>code/__DEFINES/living.dm 
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm"/></a></h1>
+
+<table class="summary" cellspacing="0">
+        <tr><th><a href="code/__DEFINES/living.html#define/MOVES_ON_ITS_OWN">MOVES_ON_ITS_OWN</a></th><td>Simple mob trait, indicating it may follow continuous move actions controlled by code instead of by user input.</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/COMSIG_LIVING_LIMBLESS_MOVESPEED_UPDATE">COMSIG_LIVING_LIMBLESS_MOVESPEED_UPDATE</a></th><td>Updating a mob's movespeed when lacking limbs. (list/modifiers)</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/COMSIG_CARBON_PAIN_GAINED">COMSIG_CARBON_PAIN_GAINED</a></th><td>Sent when a carbon gains pain. (source = mob/living/carbon/human, obj/item/bodypart/affected_bodypart, amount, type)</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/COMSIG_CARBON_PAIN_LOST">COMSIG_CARBON_PAIN_LOST</a></th><td>Sent when a carbon loses pain. (source = mob/living/carbon/human, obj/item/bodypart/affected_bodypart, amount, type)</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/COMSIG_TEMPERATURE_PACK_EXPIRED">COMSIG_TEMPERATURE_PACK_EXPIRED</a></th><td>Sent when a temperature pack runs out of juice. (source = obj/item/temperature_pack)</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/BODY_ZONES_ALL">BODY_ZONES_ALL</a></th><td>Various lists of body zones affected by pain.</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/PAIN_EMOTES">PAIN_EMOTES</a></th><td>List of some emotes that convey pain.</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/PAIN_LIMB_DISMEMBERED">PAIN_LIMB_DISMEMBERED</a></th><td>Amount of pain gained (to chest) from dismembered limb</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/PAIN_LIMB_REMOVED">PAIN_LIMB_REMOVED</a></th><td>Amount of pain gained (to chest) from surgically removed limb</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/PAIN_LIMB_MAX">PAIN_LIMB_MAX</a></th><td>Soft max pains for bodyparts, adds up to 500</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/TRAIT_ABATES_SHOCK">TRAIT_ABATES_SHOCK</a></th><td>If the mob enters shock, they will have +1 cure condition (helps cure it faster)</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/TRAIT_NO_PAIN_EFFECTS">TRAIT_NO_PAIN_EFFECTS</a></th><td>Pain effects, such as stuttering or feedback messages (&quot;Everything hurts&quot;) are disabled.</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/TRAIT_NO_SHOCK_BUILDUP">TRAIT_NO_SHOCK_BUILDUP</a></th><td>Shock buildup does not increase, only decrease. No effect if already in shock (unlike abates_shock)</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/TRAIT_NO_GRAB_SPEED_PENALTY">TRAIT_NO_GRAB_SPEED_PENALTY</a></th><td>Don't get slowed down by aggro grabbing (or above)</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/TRAIT_NO_MOVE_PULL">TRAIT_NO_MOVE_PULL</a></th><td>Doesn't let a mob shift this atom around with move_pulled</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/TRAIT_ROBOTIC_LIMBATTACHMENT">TRAIT_ROBOTIC_LIMBATTACHMENT</a></th><td>The trait that determines if someone has the robotic limb reattachment quirk.</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/TRAIT_NO_LEG_AID">TRAIT_NO_LEG_AID</a></th><td>Mob can walk despite having two disabled/missing legs so long as they have two of this trait.
+Kind of jank, refactor at a later day when I can think of a better solution.
+Just be sure to call update_limbless_locomotion() after applying / removal</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/CKEY_ANON">CKEY_ANON</a></th><td>Hide ckey</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/NAME_ANON">NAME_ANON</a></th><td>Hide character name</td></tr>
+        <tr><th><a href="code/__DEFINES/living.html#define/JOB_ANON">JOB_ANON</a></th><td>Hide top job preference</td></tr></table><h2 id="define">Define Details</h2>
+<h3 id="define/BODY_ZONES_ALL"><aside class="declaration">#define </aside>BODY_ZONES_ALL
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L26">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 26"/></a>
+    </h3>
+    <p>Various lists of body zones affected by pain.</p><h3 id="define/CKEY_ANON"><aside class="declaration">#define </aside>CKEY_ANON
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L82">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 82"/></a>
+    </h3>
+    <p>Hide ckey</p><h3 id="define/COMSIG_CARBON_PAIN_GAINED"><aside class="declaration">#define </aside>COMSIG_CARBON_PAIN_GAINED
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L14">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 14"/></a>
+    </h3>
+    <p>Sent when a carbon gains pain. (source = mob/living/carbon/human, obj/item/bodypart/affected_bodypart, amount, type)</p><h3 id="define/COMSIG_CARBON_PAIN_LOST"><aside class="declaration">#define </aside>COMSIG_CARBON_PAIN_LOST
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L16">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 16"/></a>
+    </h3>
+    <p>Sent when a carbon loses pain. (source = mob/living/carbon/human, obj/item/bodypart/affected_bodypart, amount, type)</p><h3 id="define/COMSIG_LIVING_LIMBLESS_MOVESPEED_UPDATE"><aside class="declaration">#define </aside>COMSIG_LIVING_LIMBLESS_MOVESPEED_UPDATE
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L9">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 9"/></a>
+    </h3>
+    <p>Updating a mob's movespeed when lacking limbs. (list/modifiers)</p><h3 id="define/COMSIG_TEMPERATURE_PACK_EXPIRED"><aside class="declaration">#define </aside>COMSIG_TEMPERATURE_PACK_EXPIRED
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L18">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 18"/></a>
+    </h3>
+    <p>Sent when a temperature pack runs out of juice. (source = obj/item/temperature_pack)</p><h3 id="define/JOB_ANON"><aside class="declaration">#define </aside>JOB_ANON
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L86">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 86"/></a>
+    </h3>
+    <p>Hide top job preference</p><h3 id="define/MOVES_ON_ITS_OWN"><aside class="declaration">#define </aside>MOVES_ON_ITS_OWN
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L3">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 3"/></a>
+    </h3>
+    <p>Simple mob trait, indicating it may follow continuous move actions controlled by code instead of by user input.</p><h3 id="define/NAME_ANON"><aside class="declaration">#define </aside>NAME_ANON
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L84">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 84"/></a>
+    </h3>
+    <p>Hide character name</p><h3 id="define/PAIN_EMOTES"><aside class="declaration">#define </aside>PAIN_EMOTES
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L32">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 32"/></a>
+    </h3>
+    <p>List of some emotes that convey pain.</p><h3 id="define/PAIN_LIMB_DISMEMBERED"><aside class="declaration">#define </aside>PAIN_LIMB_DISMEMBERED
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L35">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 35"/></a>
+    </h3>
+    <p>Amount of pain gained (to chest) from dismembered limb</p><h3 id="define/PAIN_LIMB_MAX"><aside class="declaration">#define </aside>PAIN_LIMB_MAX
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L40">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 40"/></a>
+    </h3>
+    <p>Soft max pains for bodyparts, adds up to 500</p><h3 id="define/PAIN_LIMB_REMOVED"><aside class="declaration">#define </aside>PAIN_LIMB_REMOVED
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L37">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 37"/></a>
+    </h3>
+    <p>Amount of pain gained (to chest) from surgically removed limb</p><h3 id="define/TRAIT_ABATES_SHOCK"><aside class="declaration">#define </aside>TRAIT_ABATES_SHOCK
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L60">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 60"/></a>
+    </h3>
+    <p>If the mob enters shock, they will have +1 cure condition (helps cure it faster)</p><h3 id="define/TRAIT_NO_GRAB_SPEED_PENALTY"><aside class="declaration">#define </aside>TRAIT_NO_GRAB_SPEED_PENALTY
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L66">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 66"/></a>
+    </h3>
+    <p>Don't get slowed down by aggro grabbing (or above)</p><h3 id="define/TRAIT_NO_LEG_AID"><aside class="declaration">#define </aside>TRAIT_NO_LEG_AID
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L76">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 76"/></a>
+    </h3>
+    <p>Mob can walk despite having two disabled/missing legs so long as they have two of this trait.
+Kind of jank, refactor at a later day when I can think of a better solution.
+Just be sure to call update_limbless_locomotion() after applying / removal</p><h3 id="define/TRAIT_NO_MOVE_PULL"><aside class="declaration">#define </aside>TRAIT_NO_MOVE_PULL
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L68">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 68"/></a>
+    </h3>
+    <p>Doesn't let a mob shift this atom around with move_pulled</p><h3 id="define/TRAIT_NO_PAIN_EFFECTS"><aside class="declaration">#define </aside>TRAIT_NO_PAIN_EFFECTS
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L62">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 62"/></a>
+    </h3>
+    <p>Pain effects, such as stuttering or feedback messages (&quot;Everything hurts&quot;) are disabled.</p><h3 id="define/TRAIT_NO_SHOCK_BUILDUP"><aside class="declaration">#define </aside>TRAIT_NO_SHOCK_BUILDUP
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L64">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 64"/></a>
+    </h3>
+    <p>Shock buildup does not increase, only decrease. No effect if already in shock (unlike abates_shock)</p><h3 id="define/TRAIT_ROBOTIC_LIMBATTACHMENT"><aside class="declaration">#define </aside>TRAIT_ROBOTIC_LIMBATTACHMENT
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/__DEFINES/living.dm#L71">
+        <img src="git.png" width="16" height="16" title="code&#x2F;__DEFINES&#x2F;living.dm 71"/></a>
+    </h3>
+    <p>The trait that determines if someone has the robotic limb reattachment quirk.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

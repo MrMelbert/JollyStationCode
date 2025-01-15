@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;examine_defines.dm - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="maplestation_modules/code/__DEFINES/examine_defines.html#define">Define Details</a></header>
+<main>
+<h1>maplestation_modules/code/__DEFINES/examine_defines.dm 
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/examine_defines.dm">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;examine_defines.dm"/></a></h1>
+
+<table class="summary" cellspacing="0">
+        <tr><th><a href="maplestation_modules/code/__DEFINES/examine_defines.html#define/EXAMINE_CHECK_NONE">EXAMINE_CHECK_NONE</a></th><td>-- Defines for the unique-examine element. --
+Displays the special_desc regardless if it's set.</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/examine_defines.html#define/EXAMINE_CHECK_SYNDICATE">EXAMINE_CHECK_SYNDICATE</a></th><td>For displaying descriptors for all varieties of syndiates (nuke ops, traitors, lavaland syndies, cybersun guys). Pass nothing</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/examine_defines.html#define/EXAMINE_CHECK_MINDSHIELD">EXAMINE_CHECK_MINDSHIELD</a></th><td>For displaying descriptors for those with a mindshield implant. Pass nothing</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/examine_defines.html#define/EXAMINE_CHECK_ANTAG">EXAMINE_CHECK_ANTAG</a></th><td>For displaying descriptors for those with a certain antag datum. Pass a type &quot;/datum/antagonist&quot;.
+Can include an [affiliation] if you want to override the displayed antagonist name (IE, passing &quot;Donk Co.&quot; so it shows that, instead of &quot;Traitor&quot;)</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/examine_defines.html#define/EXAMINE_CHECK_JOB">EXAMINE_CHECK_JOB</a></th><td>For displaying descriptors for specific jobs, e.g scientist. Pass a string job title &quot;Job&quot;</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/examine_defines.html#define/EXAMINE_CHECK_DEPARTMENT">EXAMINE_CHECK_DEPARTMENT</a></th><td>For displaying descriptors for specific departments, like &quot;service&quot;. Pass a bitflag of departments.</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/examine_defines.html#define/EXAMINE_CHECK_FACTION">EXAMINE_CHECK_FACTION</a></th><td>For displaying descriptors for mob factions, e.g. a zombie, or... turrets. Or syndicate. Pass a string &quot;faction&quot;</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/examine_defines.html#define/EXAMINE_CHECK_SKILLCHIP">EXAMINE_CHECK_SKILLCHIP</a></th><td>For displaying descriptors for people with certain skill-chips. Pass a type &quot;/obj/item/skillchip&quot;</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/examine_defines.html#define/EXAMINE_CHECK_TRAIT">EXAMINE_CHECK_TRAIT</a></th><td>For displayind descriptors for people with certain traits. Pass a string &quot;trait&quot;</td></tr>
+        <tr><th><a href="maplestation_modules/code/__DEFINES/examine_defines.html#define/EXAMINE_CHECK_SPECIES">EXAMINE_CHECK_SPECIES</a></th><td>For displayind descriptors for people of certain species. Pass a type &quot;/datum/species&quot;</td></tr></table><h2 id="define">Define Details</h2>
+<h3 id="define/EXAMINE_CHECK_ANTAG"><aside class="declaration">#define </aside>EXAMINE_CHECK_ANTAG
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/examine_defines.dm#L10">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;examine_defines.dm 10"/></a>
+    </h3>
+    <p>For displaying descriptors for those with a certain antag datum. Pass a type &quot;/datum/antagonist&quot;.
+Can include an [affiliation] if you want to override the displayed antagonist name (IE, passing &quot;Donk Co.&quot; so it shows that, instead of &quot;Traitor&quot;)</p><h3 id="define/EXAMINE_CHECK_DEPARTMENT"><aside class="declaration">#define </aside>EXAMINE_CHECK_DEPARTMENT
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/examine_defines.dm#L14">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;examine_defines.dm 14"/></a>
+    </h3>
+    <p>For displaying descriptors for specific departments, like &quot;service&quot;. Pass a bitflag of departments.</p><h3 id="define/EXAMINE_CHECK_FACTION"><aside class="declaration">#define </aside>EXAMINE_CHECK_FACTION
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/examine_defines.dm#L17">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;examine_defines.dm 17"/></a>
+    </h3>
+    <p>For displaying descriptors for mob factions, e.g. a zombie, or... turrets. Or syndicate. Pass a string &quot;faction&quot;</p><h3 id="define/EXAMINE_CHECK_JOB"><aside class="declaration">#define </aside>EXAMINE_CHECK_JOB
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/examine_defines.dm#L12">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;examine_defines.dm 12"/></a>
+    </h3>
+    <p>For displaying descriptors for specific jobs, e.g scientist. Pass a string job title &quot;Job&quot;</p><h3 id="define/EXAMINE_CHECK_MINDSHIELD"><aside class="declaration">#define </aside>EXAMINE_CHECK_MINDSHIELD
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/examine_defines.dm#L7">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;examine_defines.dm 7"/></a>
+    </h3>
+    <p>For displaying descriptors for those with a mindshield implant. Pass nothing</p><h3 id="define/EXAMINE_CHECK_NONE"><aside class="declaration">#define </aside>EXAMINE_CHECK_NONE
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/examine_defines.dm#L3">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;examine_defines.dm 3"/></a>
+    </h3>
+    <p>-- Defines for the unique-examine element. --
+Displays the special_desc regardless if it's set.</p><h3 id="define/EXAMINE_CHECK_SKILLCHIP"><aside class="declaration">#define </aside>EXAMINE_CHECK_SKILLCHIP
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/examine_defines.dm#L19">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;examine_defines.dm 19"/></a>
+    </h3>
+    <p>For displaying descriptors for people with certain skill-chips. Pass a type &quot;/obj/item/skillchip&quot;</p><h3 id="define/EXAMINE_CHECK_SPECIES"><aside class="declaration">#define </aside>EXAMINE_CHECK_SPECIES
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/examine_defines.dm#L23">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;examine_defines.dm 23"/></a>
+    </h3>
+    <p>For displayind descriptors for people of certain species. Pass a type &quot;/datum/species&quot;</p><h3 id="define/EXAMINE_CHECK_SYNDICATE"><aside class="declaration">#define </aside>EXAMINE_CHECK_SYNDICATE
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/examine_defines.dm#L5">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;examine_defines.dm 5"/></a>
+    </h3>
+    <p>For displaying descriptors for all varieties of syndiates (nuke ops, traitors, lavaland syndies, cybersun guys). Pass nothing</p><h3 id="define/EXAMINE_CHECK_TRAIT"><aside class="declaration">#define </aside>EXAMINE_CHECK_TRAIT
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/__DEFINES/examine_defines.dm#L21">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;__DEFINES&#x2F;examine_defines.dm 21"/></a>
+    </h3>
+    <p>For displayind descriptors for people with certain traits. Pass a string &quot;trait&quot;</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

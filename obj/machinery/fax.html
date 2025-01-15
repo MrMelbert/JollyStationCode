@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;obj&#x2F;machinery&#x2F;fax - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="obj/machinery/fax.html#var">Var Details</a> - <a href="obj/machinery/fax.html#proc">Proc Details</a></header>
+<main>
+<h1>fax <aside>/<a href="obj.html">obj</a>/<a href="obj/machinery.html">machinery</a>/<a href="obj/machinery/fax.html">fax</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L35">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 35"/></a></h1>
+
+<p>Fax machine. Sends messages, receives messages, sends paperwork, receives paperwork.</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="obj/machinery/fax.html#var/can_receive_paperwork">can_receive_paperwork</a></th><td>Whether this fax machine can receive paperwork to process on SSeconomy ticks.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#var/fax_cooldown">fax_cooldown</a></th><td>Cooldown between sending faxes</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#var/is_allowed_to_toggle_paperwork">is_allowed_to_toggle_paperwork</a></th><td>Whether this fax can toggle paperwork on or off</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#var/locked">locked</a></th><td>Whether this fax machine is locked.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#var/max_paperwork">max_paperwork</a></th><td>Max amount of paperwork we can hold. Any more and the UI gets less readable.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#var/received_paper">received_paper</a></th><td>The paper received that was sent FROM admins. Reference to something in our contents.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#var/received_paperwork">received_paperwork</a></th><td>Lazylist of all paperwork we have in this fax machine. List of references to things in our contents.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#var/receiving_enabled">receiving_enabled</a></th><td>Whether this machine can receive faxes</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#var/room_tag">room_tag</a></th><td>The area string this fax machine is set to.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#var/sending_enabled">sending_enabled</a></th><td>Whether this machine can send faxes</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#var/stored_paper">stored_paper</a></th><td>The paper stored that we can send to admins. Reference to something in our contents.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#var/unread_message">unread_message</a></th><td>Whether we have an unread message</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/alert_received_paper">alert_received_paper</a></th><td>Display an alert that [src] received a message from [source].
+[source] is a string of a location or company.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/check_paperwork">check_paperwork</a></th><td>Check if [checked_paper] has had its paperwork fulfilled successfully.
+[checked_paper] is an instantiated paper.
+[user] is the mob who triggered the check.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/eject_all_paperwork">eject_all_paperwork</a></th><td>Call [proc/eject_select_paperwork] on all papers in [received_paperwork].
+if [user] is specified, pass it into [proc/eject_select_paperwork],
+dispensing as much paper into their hands as possible.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/eject_all_paperwork_with_delay">eject_all_paperwork_with_delay</a></th><td>Recursively call [proc/eject_select_paperwork] on the first index
+of [received_paperwork], applying a delay in between each call.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/eject_select_paperwork">eject_select_paperwork</a></th><td>Remove [paper] from the list of [received_paperwork] and
+dispense it into [user]'s hands, if user is supplied.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/emag_act">emag_act</a></th><td>Sends messages to the syndicate when emagged.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/find_overlay_state">find_overlay_state</a></th><td>Returns an appropriate icon state to represent a passed item.
+Arguments:</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/history_add">history_add</a></th><td>A procedure that makes entries in the history of fax transactions.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/history_clear">history_clear</a></th><td>Clears the history of fax operations.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/insert_paper">insert_paper</a></th><td>Insert [inserted_paper] into the fax machine, setting [stored_paper] to [inserted_paper].
+[inserted_paper] is an instantiated paper.
+[user] is the mob placing the paper into the machine.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/insert_processed_paper">insert_processed_paper</a></th><td>Insert [inserted_paper] into the fax machine, adding it to the list of [received_paperwork] if possible.
+[inserted_paper] is an instantiated paper.
+[user] is the mob placing the paper into the machine.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/receive_paper">receive_paper</a></th><td>receive [new_paper] as a fax from [source].
+Ejects any [received_paper] we may have, and sets [received_paper] to [new_paper].
+If [source] is null or empty, we go with a preset name.</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/send_fax_to_admins">send_fax_to_admins</a></th><td>Send the content of admin faxes to admins directly.
+[sender] - the mob who sent the fax
+[fax_contents] - the contents of the fax
+[destination_color] - the color of the span that encompasses [destination_string]
+[destination_string] - the string that says where this fax was sent (syndiate or centcom)</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/send_stored_paper">send_stored_paper</a></th><td>Send [stored_paper] from [user] to [destinatoin].
+if [destination] is an admin fax machine, send it to admins.
+Otherwise, send it to the corresponding fax machine in the world, looking for (room_tag == [destination])</td></tr>
+            <tr><th><a href="obj/machinery/fax.html#proc/set_room_tag">set_room_tag</a></th><td>Set this fax machine's [room_tag] to the current room or null.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/can_receive_paperwork"><aside class="declaration">var </aside>can_receive_paperwork
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L64">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 64"/></a></h3>
+        <p>Whether this fax machine can receive paperwork to process on SSeconomy ticks.</p><h3 id="var/fax_cooldown"><aside class="declaration">var </aside>fax_cooldown
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L80">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 80"/></a></h3>
+        <p>Cooldown between sending faxes</p><h3 id="var/is_allowed_to_toggle_paperwork"><aside class="declaration">var </aside>is_allowed_to_toggle_paperwork
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L66">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 66"/></a></h3>
+        <p>Whether this fax can toggle paperwork on or off</p><h3 id="var/locked"><aside class="declaration">var </aside>locked
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L62">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 62"/></a></h3>
+        <p>Whether this fax machine is locked.</p><h3 id="var/max_paperwork"><aside class="declaration">var </aside>max_paperwork
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L78">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 78"/></a></h3>
+        <p>Max amount of paperwork we can hold. Any more and the UI gets less readable.</p><h3 id="var/received_paper"><aside class="declaration">var </aside>received_paper
+            <aside>&ndash; /<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/<a href="obj/item/paper.html">paper</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L74">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 74"/></a></h3>
+        <p>The paper received that was sent FROM admins. Reference to something in our contents.</p><h3 id="var/received_paperwork"><aside class="declaration">var </aside>received_paperwork
+            <aside>&ndash; /list/obj/item/paper/processed</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L76">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 76"/></a></h3>
+        <p>Lazylist of all paperwork we have in this fax machine. List of references to things in our contents.</p><h3 id="var/receiving_enabled"><aside class="declaration">var </aside>receiving_enabled
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L60">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 60"/></a></h3>
+        <p>Whether this machine can receive faxes</p><h3 id="var/room_tag"><aside class="declaration">var </aside>room_tag
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L70">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 70"/></a></h3>
+        <p>The area string this fax machine is set to.</p><h3 id="var/sending_enabled"><aside class="declaration">var </aside>sending_enabled
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L58">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 58"/></a></h3>
+        <p>Whether this machine can send faxes</p><h3 id="var/stored_paper"><aside class="declaration">var </aside>stored_paper
+            <aside>&ndash; /<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/<a href="obj/item/paper.html">paper</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L72">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 72"/></a></h3>
+        <p>The paper stored that we can send to admins. Reference to something in our contents.</p><h3 id="var/unread_message"><aside class="declaration">var </aside>unread_message
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L68">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 68"/></a></h3>
+        <p>Whether we have an unread message</p><h2 id="proc">Proc Details</h2><h3 id="proc/alert_received_paper"><aside class="declaration">proc </aside>alert_received_paper<aside>(source) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L532">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 532"/></a></aside>
+        </h3>
+        <p>Display an alert that [src] received a message from [source].
+[source] is a string of a location or company.</p><h3 id="proc/check_paperwork"><aside class="declaration">proc </aside>check_paperwork<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/<a href="obj/item/paper.html">paper</a>/<a href="obj/item/paper/processed.html">processed</a>/checked_paper, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L550">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 550"/></a></aside>
+        </h3>
+        <p>Check if [checked_paper] has had its paperwork fulfilled successfully.
+[checked_paper] is an instantiated paper.
+[user] is the mob who triggered the check.</p>
+<p>returns TRUE if the paperwork was correct, FALSE otherwise.</p><h3 id="proc/eject_all_paperwork"><aside class="declaration">proc </aside>eject_all_paperwork<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L619">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 619"/></a></aside>
+        </h3>
+        <p>Call [proc/eject_select_paperwork] on all papers in [received_paperwork].
+if [user] is specified, pass it into [proc/eject_select_paperwork],
+dispensing as much paper into their hands as possible.</p>
+<p>Then, null the list after all is done.</p><h3 id="proc/eject_all_paperwork_with_delay"><aside class="declaration">proc </aside>eject_all_paperwork_with_delay<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L631">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 631"/></a></aside>
+        </h3>
+        <p>Recursively call [proc/eject_select_paperwork] on the first index
+of [received_paperwork], applying a delay in between each call.</p>
+<p>If [user] is specified, pass [user] into the [proc/eject_select_paperwork] call,
+dispensing as much paper into their hands as possible.</p><h3 id="proc/eject_select_paperwork"><aside class="declaration">proc </aside>eject_select_paperwork<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user, /<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/<a href="obj/item/paper.html">paper</a>/<a href="obj/item/paper/processed.html">processed</a>/paper, silent) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L647">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 647"/></a></aside>
+        </h3>
+        <p>Remove [paper] from the list of [received_paperwork] and
+dispense it into [user]'s hands, if user is supplied.</p>
+<p>[paper] must be an instantiated paper already in [list/received_paperwork].
+if [silent] is FALSE, give feedback and play a sound.</p><h3 id="proc/emag_act"><aside class="parent"><a title="/atom" href="atom.html#proc/emag_act">&uarr;</a></aside>emag_act<aside>(/<a href="mob.html">mob</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L663">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 663"/></a></aside>
+        </h3>
+        <p>Sends messages to the syndicate when emagged.</p><h3 id="proc/find_overlay_state"><aside class="declaration">proc </aside>find_overlay_state<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/item, state_prefix) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/modules/paperwork/fax.dm#L392">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;paperwork&#x2F;fax.dm 392"/></a></aside>
+        </h3>
+        <p>Returns an appropriate icon state to represent a passed item.
+Arguments:</p>
+<ul>
+<li>item - Item to interrogate.</li>
+<li>state_prefix - Icon state action prefix to mutate.</li>
+</ul><h3 id="proc/history_add"><aside class="declaration">proc </aside>history_add<aside>(history_type, history_fax_name) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/modules/paperwork/fax.dm#L437">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;paperwork&#x2F;fax.dm 437"/></a></aside>
+        </h3>
+        <p>A procedure that makes entries in the history of fax transactions.</p>
+<p>Called to record the operation in the fax history list.
+Records the type of operation, the name of the fax machine with which the operation was performed, and the station time.
+Arguments:</p>
+<ul>
+<li>history_type - Type of operation. By default, &quot;Send&quot; and &quot;Receive&quot; should be used.</li>
+<li>history_fax_name - The name of the fax machine that performed the operation.</li>
+</ul><h3 id="proc/history_clear"><aside class="declaration">proc </aside>history_clear<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/modules/paperwork/fax.dm#L446">
+        <img src="git.png" width="16" height="16" title="code&#x2F;modules&#x2F;paperwork&#x2F;fax.dm 446"/></a></aside>
+        </h3>
+        <p>Clears the history of fax operations.</p><h3 id="proc/insert_paper"><aside class="declaration">proc </aside>insert_paper<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/<a href="obj/item/paper.html">paper</a>/inserted_paper, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L602">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 602"/></a></aside>
+        </h3>
+        <p>Insert [inserted_paper] into the fax machine, setting [stored_paper] to [inserted_paper].
+[inserted_paper] is an instantiated paper.
+[user] is the mob placing the paper into the machine.</p><h3 id="proc/insert_processed_paper"><aside class="declaration">proc </aside>insert_processed_paper<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/<a href="obj/item/paper.html">paper</a>/<a href="obj/item/paper/processed.html">processed</a>/inserted_paper, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L588">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 588"/></a></aside>
+        </h3>
+        <p>Insert [inserted_paper] into the fax machine, adding it to the list of [received_paperwork] if possible.
+[inserted_paper] is an instantiated paper.
+[user] is the mob placing the paper into the machine.</p><h3 id="proc/receive_paper"><aside class="declaration">proc </aside>receive_paper<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/<a href="obj/item/paper.html">paper</a>/new_paper, source, forced) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L503">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 503"/></a></aside>
+        </h3>
+        <p>receive [new_paper] as a fax from [source].
+Ejects any [received_paper] we may have, and sets [received_paper] to [new_paper].
+If [source] is null or empty, we go with a preset name.</p>
+<p>[new_paper] is a reference to an instantiated, written paper.
+[source] is a string of the location or company sending the fax.
+[forced] will always send the fax if TRUE even if the machine is broken, unpowered, or disabled.</p>
+<p>returns TRUE if the fax was received.</p><h3 id="proc/send_fax_to_admins"><aside class="declaration">proc </aside>send_fax_to_admins<aside>(/<a href="mob.html">mob</a>/sender, fax_contents, destination_color, destination_string) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L458">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 458"/></a></aside>
+        </h3>
+        <p>Send the content of admin faxes to admins directly.
+[sender] - the mob who sent the fax
+[fax_contents] - the contents of the fax
+[destination_color] - the color of the span that encompasses [destination_string]
+[destination_string] - the string that says where this fax was sent (syndiate or centcom)</p><h3 id="proc/send_stored_paper"><aside class="declaration">proc </aside>send_stored_paper<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user, destination) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L390">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 390"/></a></aside>
+        </h3>
+        <p>Send [stored_paper] from [user] to [destinatoin].
+if [destination] is an admin fax machine, send it to admins.
+Otherwise, send it to the corresponding fax machine in the world, looking for (room_tag == [destination])</p>
+<p>returns TRUE if the fax was sent.</p><h3 id="proc/set_room_tag"><aside class="declaration">proc </aside>set_room_tag<aside>(to_curr_room, update_all_faxes) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/game/machinery/fax_machine.dm#L370">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;game&#x2F;machinery&#x2F;fax_machine.dm 370"/></a></aside>
+        </h3>
+        <p>Set this fax machine's [room_tag] to the current room or null.</p>
+<p>if to_curr_room is TRUE, sets the room_tag to the current area's name.
+otherwise, sets it to null.</p>
+<p>if update_all_faxes is TRUE, updates all fax machines in the world.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

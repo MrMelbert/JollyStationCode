@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;obj&#x2F;machinery&#x2F;airlock_controller - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="obj/machinery/airlock_controller.html#var">Var Details</a> - <a href="obj/machinery/airlock_controller.html#proc">Proc Details</a></header>
+<main>
+<h1>airlock_controller <aside>/<a href="obj.html">obj</a>/<a href="obj/machinery.html">machinery</a>/<a href="obj/machinery/airlock_controller.html">airlock_controller</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L14">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 14"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#var/exterior_target_pressure">exterior_target_pressure</a></th><td>Desired pressure for cycling to the exterior</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#var/exterior_temperature_target">exterior_temperature_target</a></th><td>Desired temperature for cycling to the exterior</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#var/interior_target_pressure">interior_target_pressure</a></th><td>Desired pressure for cycling to the interior</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#var/interior_temperature_target">interior_temperature_target</a></th><td>Desired temperature for cycling to the interior</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#var/pressure_leeway">pressure_leeway</a></th><td>Pressure leeway for cycling, because getting exact is tedious</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#var/processing">processing</a></th><td>Whether we are currently processing a state change, used for icon</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#var/state">state</a></th><td>Current state of the airlock setup</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#var/target_state">target_state</a></th><td>Desired state of the airlock setup</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#var/temperature_leeway">temperature_leeway</a></th><td>Temperature leeway for cycling</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#proc/cycle">cycle</a></th><td>Helper to cycle between the three &quot;final&quot; states</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#proc/cycle_door">cycle_door</a></th><td>Handls a door actively cycling, checking if it's in a valid state to finish / abort / continue</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#proc/pump_depressurize">pump_depressurize</a></th><td>Attempts to swap the pump from pressurizing to depressurizing
+Also turns it on if it is off</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#proc/pump_pressurize">pump_pressurize</a></th><td>Attempts to swap the pump from depressurizing to pressurizing
+Also turns it on if it is off</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#proc/pump_shutoff">pump_shutoff</a></th><td>Attempt to shut off the pump if it is on and exists</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#proc/sensor_reading">sensor_reading</a></th><td>Returns a reading of the sensors, or null if no sensors are available</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#proc/temp_regulator_activate">temp_regulator_activate</a></th><td>Attempts to set the temperature regulators to a target temperature, which turns them on</td></tr>
+            <tr><th><a href="obj/machinery/airlock_controller.html#proc/temp_regulator_shutoff">temp_regulator_shutoff</a></th><td>Attempts to shut off the temperature regulators by setting the target temperature to null</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/exterior_target_pressure"><aside class="declaration">var </aside>exterior_target_pressure
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L41">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 41"/></a></h3>
+        <p>Desired pressure for cycling to the exterior</p><h3 id="var/exterior_temperature_target"><aside class="declaration">var </aside>exterior_temperature_target
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L49">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 49"/></a></h3>
+        <p>Desired temperature for cycling to the exterior</p><h3 id="var/interior_target_pressure"><aside class="declaration">var </aside>interior_target_pressure
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L39">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 39"/></a></h3>
+        <p>Desired pressure for cycling to the interior</p><h3 id="var/interior_temperature_target"><aside class="declaration">var </aside>interior_temperature_target
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L47">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 47"/></a></h3>
+        <p>Desired temperature for cycling to the interior</p><h3 id="var/pressure_leeway"><aside class="declaration">var </aside>pressure_leeway
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L43">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 43"/></a></h3>
+        <p>Pressure leeway for cycling, because getting exact is tedious</p><h3 id="var/processing"><aside class="declaration">var </aside>processing
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L58">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 58"/></a></h3>
+        <p>Whether we are currently processing a state change, used for icon</p><h3 id="var/state"><aside class="declaration">var </aside>state
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L54">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 54"/></a></h3>
+        <p>Current state of the airlock setup</p><h3 id="var/target_state"><aside class="declaration">var </aside>target_state
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L56">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 56"/></a></h3>
+        <p>Desired state of the airlock setup</p><h3 id="var/temperature_leeway"><aside class="declaration">var </aside>temperature_leeway
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L51">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 51"/></a></h3>
+        <p>Temperature leeway for cycling</p><h2 id="proc">Proc Details</h2><h3 id="proc/cycle"><aside class="declaration">proc </aside>cycle<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L310">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 310"/></a></aside>
+        </h3>
+        <p>Helper to cycle between the three &quot;final&quot; states</p><h3 id="proc/cycle_door"><aside class="declaration">proc </aside>cycle_door<aside>(/<a href="datum.html">datum</a>/<a href="datum/weakref.html">weakref</a>/door_ref, target_pressure, temperature_target) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L156">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 156"/></a></aside>
+        </h3>
+        <p>Handls a door actively cycling, checking if it's in a valid state to finish / abort / continue</p>
+<p>Return TRUE to update state
+Return FALSE to keep waiting on the current state</p><h3 id="proc/pump_depressurize"><aside class="declaration">proc </aside>pump_depressurize<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L118">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 118"/></a></aside>
+        </h3>
+        <p>Attempts to swap the pump from pressurizing to depressurizing
+Also turns it on if it is off</p><h3 id="proc/pump_pressurize"><aside class="declaration">proc </aside>pump_pressurize<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L102">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 102"/></a></aside>
+        </h3>
+        <p>Attempts to swap the pump from depressurizing to pressurizing
+Also turns it on if it is off</p><h3 id="proc/pump_shutoff"><aside class="declaration">proc </aside>pump_shutoff<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L90">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 90"/></a></aside>
+        </h3>
+        <p>Attempt to shut off the pump if it is on and exists</p><h3 id="proc/sensor_reading"><aside class="declaration">proc </aside>sensor_reading<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L319">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 319"/></a></aside>
+        </h3>
+        <p>Returns a reading of the sensors, or null if no sensors are available</p><h3 id="proc/temp_regulator_activate"><aside class="declaration">proc </aside>temp_regulator_activate<aside>(to_what_temp) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L133">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 133"/></a></aside>
+        </h3>
+        <p>Attempts to set the temperature regulators to a target temperature, which turns them on</p><h3 id="proc/temp_regulator_shutoff"><aside class="declaration">proc </aside>temp_regulator_shutoff<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/code/game/machinery/embedded_controller/airlock_controller.dm#L142">
+        <img src="git.png" width="16" height="16" title="code&#x2F;game&#x2F;machinery&#x2F;embedded_controller&#x2F;airlock_controller.dm 142"/></a></aside>
+        </h3>
+        <p>Attempts to shut off the temperature regulators by setting the target temperature to null</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;component&#x2F;verbal_confirmation - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/component/verbal_confirmation.html#var">Var Details</a></header>
+<main>
+<h1>verbal_confirmation <aside>/<a href="datum.html">datum</a>/<a href="datum/component.html">component</a>/<a href="datum/component/verbal_confirmation.html">verbal_confirmation</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/mob/living/carbon/human/species_types/vampire.dm#L72">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;mob&#x2F;living&#x2F;carbon&#x2F;human&#x2F;species_types&#x2F;vampire.dm 72"/></a></h1>
+
+<p>Component which disallows the mob from entering areas they do not have access to,
+without getting permission from someone who does</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/component/verbal_confirmation.html#var/allowed_regex">allowed_regex</a></th><td>Regexes for responses indicating we're allowed in</td></tr>
+            <tr><th><a href="datum/component/verbal_confirmation.html#var/asking_regex">asking_regex</a></th><td>Regexes for matching asking to be allowed in</td></tr>
+            <tr><th><a href="datum/component/verbal_confirmation.html#var/begone_regex">begone_regex</a></th><td>Regexes for responses indicating we're explicitly not allowed in</td></tr>
+            <tr><th><a href="datum/component/verbal_confirmation.html#var/old_id_card">old_id_card</a></th><td>Weakref to the mob's ID card when shapechanging</td></tr>
+            <tr><th><a href="datum/component/verbal_confirmation.html#var/prior_allowance">prior_allowance</a></th><td>Assoc List of all mobs which have given access (key to department bitflag)</td></tr>
+            <tr><th><a href="datum/component/verbal_confirmation.html#var/recently_asked">recently_asked</a></th><td>Tracks if we've recently asked someone to allow us in</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/allowed_regex"><aside class="declaration">var </aside>allowed_regex
+            <aside>&ndash; /static/regex</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/mob/living/carbon/human/species_types/vampire.dm#L82">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;mob&#x2F;living&#x2F;carbon&#x2F;human&#x2F;species_types&#x2F;vampire.dm 82"/></a></h3>
+        <p>Regexes for responses indicating we're allowed in</p><h3 id="var/asking_regex"><aside class="declaration">var </aside>asking_regex
+            <aside>&ndash; /static/regex</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/mob/living/carbon/human/species_types/vampire.dm#L80">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;mob&#x2F;living&#x2F;carbon&#x2F;human&#x2F;species_types&#x2F;vampire.dm 80"/></a></h3>
+        <p>Regexes for matching asking to be allowed in</p><h3 id="var/begone_regex"><aside class="declaration">var </aside>begone_regex
+            <aside>&ndash; /static/regex</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/mob/living/carbon/human/species_types/vampire.dm#L84">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;mob&#x2F;living&#x2F;carbon&#x2F;human&#x2F;species_types&#x2F;vampire.dm 84"/></a></h3>
+        <p>Regexes for responses indicating we're explicitly not allowed in</p><h3 id="var/old_id_card"><aside class="declaration">var </aside>old_id_card
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/weakref.html">weakref</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/mob/living/carbon/human/species_types/vampire.dm#L88">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;mob&#x2F;living&#x2F;carbon&#x2F;human&#x2F;species_types&#x2F;vampire.dm 88"/></a></h3>
+        <p>Weakref to the mob's ID card when shapechanging</p><h3 id="var/prior_allowance"><aside class="declaration">var </aside>prior_allowance
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/mob/living/carbon/human/species_types/vampire.dm#L78">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;mob&#x2F;living&#x2F;carbon&#x2F;human&#x2F;species_types&#x2F;vampire.dm 78"/></a></h3>
+        <p>Assoc List of all mobs which have given access (key to department bitflag)</p><h3 id="var/recently_asked"><aside class="declaration">var </aside>recently_asked
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/mob/living/carbon/human/species_types/vampire.dm#L76">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;mob&#x2F;living&#x2F;carbon&#x2F;human&#x2F;species_types&#x2F;vampire.dm 76"/></a></h3>
+        <p>Tracks if we've recently asked someone to allow us in</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

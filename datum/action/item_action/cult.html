@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;action&#x2F;item_action&#x2F;cult - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/action/item_action/cult.html#var">Var Details</a> - <a href="datum/action/item_action/cult.html#proc">Proc Details</a></header>
+<main>
+<h1>cult <aside>/<a href="datum.html">datum</a>/<a href="datum/action.html">action</a>/<a href="datum/action/item_action/cult.html">item_action/cult</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L2">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 2"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#var/active">active</a></th><td>Whether this spell is invoked / active.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#var/active_overlay_file">active_overlay_file</a></th><td>The file the overlay is made from.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#var/active_overlay_held_name">active_overlay_held_name</a></th><td>The overlay that is shown in hand invoked.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#var/active_overlay_lhand_file">active_overlay_lhand_file</a></th><td>The file that the left hand overlay takes from.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#var/active_overlay_name">active_overlay_name</a></th><td>The overlay that is shown when invoked.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#var/active_overlay_rhand_file">active_overlay_rhand_file</a></th><td>The file that the right hand overlay takes from.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#var/base_desc">base_desc</a></th><td>The base description, so we can edit it.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#var/charges">charges</a></th><td>The amount of charges of this spell.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#var/examine_hint">examine_hint</a></th><td>Text displayed when examining the item while this spell is invoked.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#var/invocation">invocation</a></th><td>The invocation said after a successful cast.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#var/magic_source">magic_source</a></th><td>The blood magic ability that created this spell</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#var/manually_handle_charges">manually_handle_charges</a></th><td>If FALSE, after_successful_spell() will be called automatically after a spell is used.
+If set to TRUE, you will need to handle saying the invocation and reducing the charges manually.</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#proc/activate">activate</a></th><td>Activate the spell, registering signals to make it function.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#proc/after_successful_spell">after_successful_spell</a></th><td>Called after a spell is successfuly cast.
+Forces the user to say the invocation,
+Reduces the amount of charges,
+and updates the description if there are charges remaining.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#proc/deactivate">deactivate</a></th><td>Deactivate the spell, unregistering all the signals.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#proc/do_atom_spell_effects">do_atom_spell_effects</a></th><td>Called when (user) hits (hit) with (target).</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#proc/do_hit_spell_effects">do_hit_spell_effects</a></th><td>Called when (user) hits (victim) with (target).</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#proc/do_self_spell_effects">do_self_spell_effects</a></th><td>Called when (user) hits themselves with (target).</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#proc/on_dropped">on_dropped</a></th><td>Signal proc for <a href="code/__DEFINES/dcs/signals/signals_object.html#define/COMSIG_ITEM_DROPPED" title="COMSIG_ITEM_DROPPED">COMSIG_ITEM_DROPPED</a></td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#proc/on_equipped">on_equipped</a></th><td>Signal proc for <a href="code/__DEFINES/dcs/signals/signals_object.html#define/COMSIG_ITEM_EQUIPPED" title="COMSIG_ITEM_EQUIPPED">COMSIG_ITEM_EQUIPPED</a>
+Un-invokes the spell when the item is equipped (picked up) by a non-cultist.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#proc/on_examine">on_examine</a></th><td>Signal proc for <a href="code/__DEFINES/dcs/signals/signals_atom/signals_atom_main.html#define/COMSIG_ATOM_EXAMINE" title="COMSIG_ATOM_EXAMINE">COMSIG_ATOM_EXAMINE</a>.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#proc/on_item_update_overlays">on_item_update_overlays</a></th><td>Signal proc for <a href="code/__DEFINES/dcs/signals/signals_atom/signals_atom_main.html#define/COMSIG_ATOM_UPDATE_OVERLAYS" title="COMSIG_ATOM_UPDATE_OVERLAYS">COMSIG_ATOM_UPDATE_OVERLAYS</a>, for the slab itself.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#proc/on_mob_update_overlays">on_mob_update_overlays</a></th><td>Signal proc for <a href="code/__DEFINES/dcs/signals/signals_atom/signals_atom_main.html#define/COMSIG_ATOM_UPDATE_OVERLAYS" title="COMSIG_ATOM_UPDATE_OVERLAYS">COMSIG_ATOM_UPDATE_OVERLAYS</a>, for the mob holding the slab.</td></tr>
+            <tr><th><a href="datum/action/item_action/cult.html#proc/try_spell_effects">try_spell_effects</a></th><td>Signal proc for <a href="code/__DEFINES/dcs/signals/signals_object.html#define/COMSIG_ITEM_PRE_ATTACK" title="COMSIG_ITEM_PRE_ATTACK">COMSIG_ITEM_PRE_ATTACK</a>.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/active"><aside class="declaration">var </aside>active
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L6">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 6"/></a></h3>
+        <p>Whether this spell is invoked / active.</p><h3 id="var/active_overlay_file"><aside class="declaration">var </aside>active_overlay_file
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L16">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 16"/></a></h3>
+        <p>The file the overlay is made from.</p><h3 id="var/active_overlay_held_name"><aside class="declaration">var </aside>active_overlay_held_name
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L18">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 18"/></a></h3>
+        <p>The overlay that is shown in hand invoked.</p><h3 id="var/active_overlay_lhand_file"><aside class="declaration">var </aside>active_overlay_lhand_file
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L20">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 20"/></a></h3>
+        <p>The file that the left hand overlay takes from.</p><h3 id="var/active_overlay_name"><aside class="declaration">var </aside>active_overlay_name
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L14">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 14"/></a></h3>
+        <p>The overlay that is shown when invoked.</p><h3 id="var/active_overlay_rhand_file"><aside class="declaration">var </aside>active_overlay_rhand_file
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L22">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 22"/></a></h3>
+        <p>The file that the right hand overlay takes from.</p><h3 id="var/base_desc"><aside class="declaration">var </aside>base_desc
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L12">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 12"/></a></h3>
+        <p>The base description, so we can edit it.</p><h3 id="var/charges"><aside class="declaration">var </aside>charges
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L10">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 10"/></a></h3>
+        <p>The amount of charges of this spell.</p><h3 id="var/examine_hint"><aside class="declaration">var </aside>examine_hint
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L4">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 4"/></a></h3>
+        <p>Text displayed when examining the item while this spell is invoked.</p><h3 id="var/invocation"><aside class="declaration">var </aside>invocation
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L8">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 8"/></a></h3>
+        <p>The invocation said after a successful cast.</p><h3 id="var/magic_source"><aside class="declaration">var </aside>magic_source
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/action.html">action</a>/<a href="datum/action/innate.html">innate</a>/<a href="datum/action/innate/cult.html">cult</a>/blood_magic</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L29">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 29"/></a></h3>
+        <p>The blood magic ability that created this spell</p><h3 id="var/manually_handle_charges"><aside class="declaration">var </aside>manually_handle_charges
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L25">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 25"/></a></h3>
+        <p>If FALSE, after_successful_spell() will be called automatically after a spell is used.
+If set to TRUE, you will need to handle saying the invocation and reducing the charges manually.</p><h2 id="proc">Proc Details</h2><h3 id="proc/activate"><aside class="declaration">proc </aside>activate<aside>(silent) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L62">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 62"/></a></aside>
+        </h3>
+        <p>Activate the spell, registering signals to make it function.</p><h3 id="proc/after_successful_spell"><aside class="declaration">proc </aside>after_successful_spell<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L236">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 236"/></a></aside>
+        </h3>
+        <p>Called after a spell is successfuly cast.
+Forces the user to say the invocation,
+Reduces the amount of charges,
+and updates the description if there are charges remaining.</p><h3 id="proc/deactivate"><aside class="declaration">proc </aside>deactivate<aside>(silent) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L90">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 90"/></a></aside>
+        </h3>
+        <p>Deactivate the spell, unregistering all the signals.</p><h3 id="proc/do_atom_spell_effects"><aside class="declaration">proc </aside>do_atom_spell_effects<aside>(/<a href="atom.html">atom</a>/hit, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L228">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 228"/></a></aside>
+        </h3>
+        <p>Called when (user) hits (hit) with (target).</p>
+<p>Return TRUE to return COMPONENT_NO_AFTERATTACK.</p><h3 id="proc/do_hit_spell_effects"><aside class="declaration">proc </aside>do_hit_spell_effects<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/victim, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L221">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 221"/></a></aside>
+        </h3>
+        <p>Called when (user) hits (victim) with (target).</p>
+<p>Return TRUE to return COMPONENT_NO_AFTERATTACK.</p><h3 id="proc/do_self_spell_effects"><aside class="declaration">proc </aside>do_self_spell_effects<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L214">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 214"/></a></aside>
+        </h3>
+        <p>Called when (user) hits themselves with (target).</p>
+<p>Return TRUE to return COMPONENT_NO_AFTERATTACK.</p><h3 id="proc/on_dropped"><aside class="declaration">proc </aside>on_dropped<aside>(/<a href="datum.html">datum</a>/source, /<a href="mob.html">mob</a>/user) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L170">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 170"/></a></aside>
+        </h3>
+        <p>Signal proc for <a href="code/__DEFINES/dcs/signals/signals_object.html#define/COMSIG_ITEM_DROPPED" title="COMSIG_ITEM_DROPPED">COMSIG_ITEM_DROPPED</a></p><h3 id="proc/on_equipped"><aside class="declaration">proc </aside>on_equipped<aside>(/<a href="datum.html">datum</a>/source, /<a href="mob.html">mob</a>/grabber) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L158">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 158"/></a></aside>
+        </h3>
+        <p>Signal proc for <a href="code/__DEFINES/dcs/signals/signals_object.html#define/COMSIG_ITEM_EQUIPPED" title="COMSIG_ITEM_EQUIPPED">COMSIG_ITEM_EQUIPPED</a>
+Un-invokes the spell when the item is equipped (picked up) by a non-cultist.</p><h3 id="proc/on_examine"><aside class="declaration">proc </aside>on_examine<aside>(/<a href="datum.html">datum</a>/source, /<a href="mob.html">mob</a>/user, /list/examine_list) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L114">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 114"/></a></aside>
+        </h3>
+        <p>Signal proc for <a href="code/__DEFINES/dcs/signals/signals_atom/signals_atom_main.html#define/COMSIG_ATOM_EXAMINE" title="COMSIG_ATOM_EXAMINE">COMSIG_ATOM_EXAMINE</a>.</p><h3 id="proc/on_item_update_overlays"><aside class="declaration">proc </aside>on_item_update_overlays<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/source, /list/overlays) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L125">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 125"/></a></aside>
+        </h3>
+        <p>Signal proc for <a href="code/__DEFINES/dcs/signals/signals_atom/signals_atom_main.html#define/COMSIG_ATOM_UPDATE_OVERLAYS" title="COMSIG_ATOM_UPDATE_OVERLAYS">COMSIG_ATOM_UPDATE_OVERLAYS</a>, for the slab itself.</p><h3 id="proc/on_mob_update_overlays"><aside class="declaration">proc </aside>on_mob_update_overlays<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/source, /list/overlays) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L136">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 136"/></a></aside>
+        </h3>
+        <p>Signal proc for <a href="code/__DEFINES/dcs/signals/signals_atom/signals_atom_main.html#define/COMSIG_ATOM_UPDATE_OVERLAYS" title="COMSIG_ATOM_UPDATE_OVERLAYS">COMSIG_ATOM_UPDATE_OVERLAYS</a>, for the mob holding the slab.</p><h3 id="proc/try_spell_effects"><aside class="declaration">proc </aside>try_spell_effects<aside>(/<a href="datum.html">datum</a>/source, /<a href="atom.html">atom</a>/hit, /<a href="mob.html">mob</a>/user, params) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/clock_cult/magic/clock_magic.dm#L185">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;clock_cult&#x2F;magic&#x2F;clock_magic.dm 185"/></a></aside>
+        </h3>
+        <p>Signal proc for <a href="code/__DEFINES/dcs/signals/signals_object.html#define/COMSIG_ITEM_PRE_ATTACK" title="COMSIG_ITEM_PRE_ATTACK">COMSIG_ITEM_PRE_ATTACK</a>.</p>
+<p>Calls do_self_spell_effects() if (user) hits themselves with (target).
+Calls do_hit_spell_effects() if (user) hits (a mob, hit) with (target).
+Calls do_atom_spell_effects() if (user) hits (a non-mob atom, hit) with (target).</p>
+<p>If either return TRUE, and manually_handle_charges is FALSE,
+then we call after_successful_spell().</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;spellbook_item_customization_menu - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/spellbook_item_customization_menu.html#var">Var Details</a> - <a href="datum/spellbook_item_customization_menu.html#proc">Proc Details</a></header>
+<main>
+<h1>spellbook_item_customization_menu <aside>/<a href="datum.html">datum</a>/<a href="datum/spellbook_item_customization_menu.html">spellbook_item_customization_menu</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L114">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 114"/></a></h1>
+
+<p>The TGUI manager for the spellbook item customization menu.</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/spellbook_item_customization_menu.html#var/item">item</a></th><td>The spellbook item we are modifying the params for.</td></tr>
+            <tr><th><a href="datum/spellbook_item_customization_menu.html#var/manager">manager</a></th><td>The manager that summoned us for easy access</td></tr>
+            <tr><th><a href="datum/spellbook_item_customization_menu.html#var/owner">owner</a></th><td>The client of the person customizing the item.</td></tr>
+            <tr><th><a href="datum/spellbook_item_customization_menu.html#var/params">params</a></th><td>Assoc list of (key: String -&gt; spellbook_customization_entry instance)</td></tr>
+            <tr><th><a href="datum/spellbook_item_customization_menu.html#var/preference">preference</a></th><td>Spellbook preference singleton for easy access</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/spellbook_item_customization_menu.html#proc/change_value">change_value</a></th><td>Simple wrapper for entry.change_value()</td></tr>
+            <tr><th><a href="datum/spellbook_item_customization_menu.html#proc/serialize">serialize</a></th><td>Transform the values of our entries into data we can store in association with item.type.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/item"><aside class="declaration">var </aside>item
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/spellbook_item.html">spellbook_item</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L118">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 118"/></a></h3>
+        <p>The spellbook item we are modifying the params for.</p><h3 id="var/manager"><aside class="declaration">var </aside>manager
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/spellbook_manager.html">spellbook_manager</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L122">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 122"/></a></h3>
+        <p>The manager that summoned us for easy access</p><h3 id="var/owner"><aside class="declaration">var </aside>owner
+            <aside>&ndash; /<a href="client.html">client</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L120">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 120"/></a></h3>
+        <p>The client of the person customizing the item.</p><h3 id="var/params"><aside class="declaration">var </aside>params
+            <aside>&ndash; /list/datum/spellbook_customization_entry</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L116">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 116"/></a></h3>
+        <p>Assoc list of (key: String -&gt; spellbook_customization_entry instance)</p><h3 id="var/preference"><aside class="declaration">var </aside>preference
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/preference.html">preference</a>/spellbook</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L127">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 127"/></a></h3>
+        <p>Spellbook preference singleton for easy access</p><h2 id="proc">Proc Details</h2><h3 id="proc/change_value"><aside class="declaration">proc </aside>change_value<aside>(key, new_value) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L157">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 157"/></a></aside>
+        </h3>
+        <p>Simple wrapper for entry.change_value()</p><h3 id="proc/serialize"><aside class="declaration">proc </aside>serialize<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/client/preferences/spellbook/spellbook_item_customization_menu.dm#L189">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;client&#x2F;preferences&#x2F;spellbook&#x2F;spellbook_item_customization_menu.dm 189"/></a></aside>
+        </h3>
+        <p>Transform the values of our entries into data we can store in association with item.type.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>

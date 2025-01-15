@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;datum&#x2F;cult_theme - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="datum/cult_theme.html#var">Var Details</a> - <a href="datum/cult_theme.html#proc">Proc Details</a></header>
+<main>
+<h1>cult_theme <aside>/<a href="datum.html">datum</a>/<a href="datum/cult_theme.html">cult_theme</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L10">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 10"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/allowed_runes">allowed_runes</a></th><td>List of runes this cult theme can invoke.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/cultist_hud_icon">cultist_hud_icon</a></th><td>The icon file we grab our hud from</td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/cultist_hud_name">cultist_hud_name</a></th><td>The name of the hud applied by this theme.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/cultist_lead_hud_name">cultist_lead_hud_name</a></th><td>The name of the hud applied to the cult master by this theme.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/default_deity">default_deity</a></th><td>Default deity of the theme.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/faction">faction</a></th><td>The faction this cult gives.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/language">language</a></th><td>The language this cult gives. Typepath.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/magic_subtypes">magic_subtypes</a></th><td>The parent paths of magic spells we can invoke. Typepath.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/magic_type">magic_type</a></th><td>The type of magic invoker we give to cultists. Typepath.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/name">name</a></th><td>The name of the theme. Something like &quot;Nar'sian cult&quot;.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/on_gain_sound">on_gain_sound</a></th><td>The sound effect that is played when someone joins the cult.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/ritual_item">ritual_item</a></th><td>The item this cult uses to make rituals. Typepath.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/ritual_materials">ritual_materials</a></th><td>The materials this cult uses to make things. Typepath.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/scribe_sound">scribe_sound</a></th><td>Sound that plays when this cult draws a rune</td></tr>
+            <tr><th><a href="datum/cult_theme.html#var/scribing_takes_blood">scribing_takes_blood</a></th><td>Whether scribing a rune takes blood / causes damage.</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="datum/cult_theme.html#proc/equip_cultist">equip_cultist</a></th><td>Equips a cultist with a set of ritual items.
+Called whenever a new cult team is made, giving the leader their initial tools.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#proc/get_allowed_runes">get_allowed_runes</a></th><td>Get a list of all runes a cultist of this theme can make.
+Called when a cultist scribes a rune.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#proc/get_end_invoking_magic_text">get_end_invoking_magic_text</a></th><td>Get the text displayed when a [cultist] of this theme finishes invoking magic.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#proc/get_end_making_rune_text">get_end_making_rune_text</a></th><td>Get the text displayed when a [cultist] of this theme finishes making a rune.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#proc/get_start_invoking_magic_text">get_start_invoking_magic_text</a></th><td>Get the text displayed when a [cultist] of this theme starts invoking magic.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#proc/get_start_making_rune_text">get_start_making_rune_text</a></th><td>Get the text displayed when a [cultist] of this theme starts to make a rune.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#proc/give_spells">give_spells</a></th><td>Gives a cultist of this theme their corresponding spell creator action and initalizes it.
+Sets the allowed spell list and such here.
+Called when a cultist is made.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#proc/on_chose_breakdown">on_chose_breakdown</a></th><td>Called when the cult theme is chosen in the UI.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#proc/on_cultist_lost">on_cultist_lost</a></th><td>Called when a cultist of this theme is deconverted.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#proc/on_cultist_made">on_cultist_made</a></th><td>Called when a new cultist is made of this theme.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#proc/on_cultist_team_made">on_cultist_team_made</a></th><td>Called when a new cult team is made by a cultist of this theme.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#proc/our_cult_span">our_cult_span</a></th><td>Helper proc to use that gets a fitting span for the cult theme.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#proc/pick_deconversion_line">pick_deconversion_line</a></th><td>Get the text displayed to a [cultist] of this theme is being deconverted.</td></tr>
+            <tr><th><a href="datum/cult_theme.html#proc/pick_god_shame_line">pick_god_shame_line</a></th><td>Get the text displayed to a [cultist] of this theme is being deconverted, and is shamed by their god.</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/allowed_runes"><aside class="declaration">var </aside>allowed_runes
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L42">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 42"/></a></h3>
+        <p>List of runes this cult theme can invoke.</p><h3 id="var/cultist_hud_icon"><aside class="declaration">var </aside>cultist_hud_icon
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L26">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 26"/></a></h3>
+        <p>The icon file we grab our hud from</p><h3 id="var/cultist_hud_name"><aside class="declaration">var </aside>cultist_hud_name
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L22">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 22"/></a></h3>
+        <p>The name of the hud applied by this theme.</p><h3 id="var/cultist_lead_hud_name"><aside class="declaration">var </aside>cultist_lead_hud_name
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L24">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 24"/></a></h3>
+        <p>The name of the hud applied to the cult master by this theme.</p><h3 id="var/default_deity"><aside class="declaration">var </aside>default_deity
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L14">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 14"/></a></h3>
+        <p>Default deity of the theme.</p><h3 id="var/faction"><aside class="declaration">var </aside>faction
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L20">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 20"/></a></h3>
+        <p>The faction this cult gives.</p><h3 id="var/language"><aside class="declaration">var </aside>language
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/language.html">language</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L28">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 28"/></a></h3>
+        <p>The language this cult gives. Typepath.</p><h3 id="var/magic_subtypes"><aside class="declaration">var </aside>magic_subtypes
+            <aside>&ndash; /list/datum/action</aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L34">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 34"/></a></h3>
+        <p>The parent paths of magic spells we can invoke. Typepath.</p><h3 id="var/magic_type"><aside class="declaration">var </aside>magic_type
+            <aside>&ndash; /<a href="datum.html">datum</a>/<a href="datum/action.html">action</a>/<a href="datum/action/innate.html">innate</a>/<a href="datum/action/innate/cult.html">cult</a>/<a href="datum/action/innate/cult/blood_magic/advanced.html">blood_magic/advanced</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L32">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 32"/></a></h3>
+        <p>The type of magic invoker we give to cultists. Typepath.</p><h3 id="var/name"><aside class="declaration">var </aside>name
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L12">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 12"/></a></h3>
+        <p>The name of the theme. Something like &quot;Nar'sian cult&quot;.</p><h3 id="var/on_gain_sound"><aside class="declaration">var </aside>on_gain_sound
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L30">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 30"/></a></h3>
+        <p>The sound effect that is played when someone joins the cult.</p><h3 id="var/ritual_item"><aside class="declaration">var </aside>ritual_item
+            <aside>&ndash; /<a href="obj.html">obj</a>/<a href="obj/item.html">item</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L36">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 36"/></a></h3>
+        <p>The item this cult uses to make rituals. Typepath.</p><h3 id="var/ritual_materials"><aside class="declaration">var </aside>ritual_materials
+            <aside>&ndash; /<a href="obj.html">obj</a>/<a href="obj/item.html">item</a></aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L38">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 38"/></a></h3>
+        <p>The materials this cult uses to make things. Typepath.</p><h3 id="var/scribe_sound"><aside class="declaration">var </aside>scribe_sound
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L18">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 18"/></a></h3>
+        <p>Sound that plays when this cult draws a rune</p><h3 id="var/scribing_takes_blood"><aside class="declaration">var </aside>scribing_takes_blood
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L16">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 16"/></a></h3>
+        <p>Whether scribing a rune takes blood / causes damage.</p><h2 id="proc">Proc Details</h2><h3 id="proc/equip_cultist"><aside class="declaration">proc </aside>equip_cultist<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/cultist) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L123">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 123"/></a></aside>
+        </h3>
+        <p>Equips a cultist with a set of ritual items.
+Called whenever a new cult team is made, giving the leader their initial tools.</p>
+<p>cultist - the team leader, being equipped with ritual items</p><h3 id="proc/get_allowed_runes"><aside class="declaration">proc </aside>get_allowed_runes<aside>(/<a href="datum.html">datum</a>/<a href="datum/antagonist.html">antagonist</a>/<a href="datum/antagonist/advanced_cult.html">advanced_cult</a>/cultist_datum) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L178">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 178"/></a></aside>
+        </h3>
+        <p>Get a list of all runes a cultist of this theme can make.
+Called when a cultist scribes a rune.</p>
+<p>Returns a new instance of a list.</p>
+<p>cultist_datum - the antag datum of the cultist making the rune</p><h3 id="proc/get_end_invoking_magic_text"><aside class="declaration">proc </aside>get_end_invoking_magic_text<aside>(added_magic, /<a href="atom.html">atom</a>/target) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L208">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 208"/></a></aside>
+        </h3>
+        <p>Get the text displayed when a [cultist] of this theme finishes invoking magic.</p><h3 id="proc/get_end_making_rune_text"><aside class="declaration">proc </aside>get_end_making_rune_text<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/cultist) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L194">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 194"/></a></aside>
+        </h3>
+        <p>Get the text displayed when a [cultist] of this theme finishes making a rune.</p><h3 id="proc/get_start_invoking_magic_text"><aside class="declaration">proc </aside>get_start_invoking_magic_text<aside>(added_magic, /<a href="atom.html">atom</a>/target) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L201">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 201"/></a></aside>
+        </h3>
+        <p>Get the text displayed when a [cultist] of this theme starts invoking magic.</p><h3 id="proc/get_start_making_rune_text"><aside class="declaration">proc </aside>get_start_making_rune_text<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/cultist) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L187">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 187"/></a></aside>
+        </h3>
+        <p>Get the text displayed when a [cultist] of this theme starts to make a rune.</p><h3 id="proc/give_spells"><aside class="declaration">proc </aside>give_spells<aside>(/<a href="datum.html">datum</a>/<a href="datum/antagonist.html">antagonist</a>/<a href="datum/antagonist/advanced_cult.html">advanced_cult</a>/cultist_datum, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/cultist) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L156">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 156"/></a></aside>
+        </h3>
+        <p>Gives a cultist of this theme their corresponding spell creator action and initalizes it.
+Sets the allowed spell list and such here.
+Called when a cultist is made.</p>
+<p>cultist_datum - the antag datum of the cultist getting the magic
+cultist - the mob of the cultist getting the magic</p><h3 id="proc/on_chose_breakdown"><aside class="declaration">proc </aside>on_chose_breakdown<aside>(/<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/cultist) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L47">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 47"/></a></aside>
+        </h3>
+        <p>Called when the cult theme is chosen in the UI.</p>
+<p>Gives a short explanantion of the cult type.</p><h3 id="proc/on_cultist_lost"><aside class="declaration">proc </aside>on_cultist_lost<aside>(/<a href="datum.html">datum</a>/<a href="datum/antagonist.html">antagonist</a>/<a href="datum/antagonist/advanced_cult.html">advanced_cult</a>/cultist_datum, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/cultist) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L109">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 109"/></a></aside>
+        </h3>
+        <p>Called when a cultist of this theme is deconverted.</p>
+<p>cultist_datum - the antag datum of the cultist being deconverted. Deleted after this proc (but not by this proc)
+cultist - the mob of the cultist deconverted</p><h3 id="proc/on_cultist_made"><aside class="declaration">proc </aside>on_cultist_made<aside>(/<a href="datum.html">datum</a>/<a href="datum/antagonist.html">antagonist</a>/<a href="datum/antagonist/advanced_cult.html">advanced_cult</a>/cultist_datum, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/cultist) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L72">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 72"/></a></aside>
+        </h3>
+        <p>Called when a new cultist is made of this theme.</p>
+<p>cultist_datum - the antag datum of the cultist created
+cultist - the mob of the cultist created</p><h3 id="proc/on_cultist_team_made"><aside class="declaration">proc </aside>on_cultist_team_made<aside>(/<a href="datum.html">datum</a>/<a href="datum/team.html">team</a>/<a href="datum/team/advanced_cult.html">advanced_cult</a>/cult_team, /<a href="datum.html">datum</a>/<a href="datum/mind.html">mind</a>/lead_cultist) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L95">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 95"/></a></aside>
+        </h3>
+        <p>Called when a new cult team is made by a cultist of this theme.</p>
+<p>cult_team - the team that was created
+lead_cultist - the mind of the cultist who leads the new team</p><h3 id="proc/our_cult_span"><aside class="declaration">proc </aside>our_cult_span<aside>(message, bold, italics, large) 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L62">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 62"/></a></aside>
+        </h3>
+        <p>Helper proc to use that gets a fitting span for the cult theme.</p>
+<p>Returns the message passed in, with the cult span applied.</p>
+<p>message - the message being passed
+bold - whether it should be bold
+italics - whether it should be italicized
+large - whether it should be largetext</p><h3 id="proc/pick_deconversion_line"><aside class="declaration">proc </aside>pick_deconversion_line<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L215">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 215"/></a></aside>
+        </h3>
+        <p>Get the text displayed to a [cultist] of this theme is being deconverted.</p><h3 id="proc/pick_god_shame_line"><aside class="declaration">proc </aside>pick_god_shame_line<aside>() 
+        
+    
+            <a href="https://github.com/MrMelbert/MapleStationCode/blob/d21a5b853d728789abc26e8353ffc462c4c7ea8e/maplestation_modules/code/modules/antagonists/advanced_cult/cult_themes.dm#L222">
+        <img src="git.png" width="16" height="16" title="maplestation_modules&#x2F;code&#x2F;modules&#x2F;antagonists&#x2F;advanced_cult&#x2F;cult_themes.dm 222"/></a></aside>
+        </h3>
+        <p>Get the text displayed to a [cultist] of this theme is being deconverted, and is shamed by their god.</p></main>
+<footer>
+    maplestation.dme
+    <a href="https://github.com/MrMelbert/MapleStationCode/tree/d21a5b853d728789abc26e8353ffc462c4c7ea8e">d21a5b8</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.8.0</a></footer>
+</body>
+</html>
