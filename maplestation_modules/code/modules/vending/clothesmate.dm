@@ -8,6 +8,13 @@
 		),
 
 		list(
+			"name" = "Accessories",
+			"products" = list(
+				/obj/item/umbrella = 5,
+			),
+		),
+
+		list(
 			"name" = "Under",
 			"products" = list(
 				/obj/item/clothing/under/color/greyscale = 5,

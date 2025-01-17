@@ -113,7 +113,7 @@
 
 	if (light_amount < SHADOW_SPECIES_LIGHT_THRESHOLD) //heal in the dark
 		owner.apply_status_effect(applied_status)
-	if (!owner.has_status_effect(applied_status))
+	if (!owner.has_status_effect(applied_status) && !HAS_TRAIT(owner, TRAIT_SHADED))
 		owner.take_overall_damage(brute = 0.5 * seconds_per_tick, burn = 0.5 * seconds_per_tick, required_bodytype = BODYTYPE_ORGANIC)
 
 /// Heal in darkness and potentially trigger other effects, persists for a short duration after leaving
