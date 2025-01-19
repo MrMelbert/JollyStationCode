@@ -1,0 +1,3 @@
+godslayer.ogg, warp.ogg, and supercharge.ogg are samples taken from Xtrullor's Supernova under CC BY 3.0.
+
+techblaster.ogg, techexplosion.ogg, techpowerup.ogg, beep.ogg, coilshoot.ogg, and coilbang.ogg are sound effects taken from the Terraria Calamity mod under CC BY-NC-SA 3.0.

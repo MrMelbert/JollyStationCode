@@ -8,3 +8,7 @@ All individual pieces of story-only content are to be stored in their own folder
 
 - FILE - PROC/TYPE - RELATED STORY
 - code\game\objects\effects\contraband.dm - proc/randomise(base_type) - Modular posters in general
+- code\modules\admin\admin_verbs.dm - admin_verbs_fun - Adds the Warfare GUI to the admin panel
+- code\modules\meteors\meteor_types.dm - obj/effect/meteor - Changes meteor spinning and achievement
+- code\modules\meteors\meteor_types.dm - obj/effect/meteor/Initialize(mapload, turf/target) - Changes meteor spinning and fixes the destination code
+- code\modules\meteors\meteor_types.dm - obj/effect/meteor/examine(mob/user) - Changes meteor achievement

@@ -13,6 +13,7 @@
 
 	if(!length(C.parallax_layers_cached))
 		C.parallax_layers_cached = list()
+		C.parallax_layers_cached += new /atom/movable/screen/parallax_layer/planet/unbidden(null, src) // NON-MODULE CHANGE
 		C.parallax_layers_cached += new /atom/movable/screen/parallax_layer/layer_1(null, src)
 		C.parallax_layers_cached += new /atom/movable/screen/parallax_layer/layer_2(null, src)
 		C.parallax_layers_cached += new /atom/movable/screen/parallax_layer/planet(null, src)
@@ -22,7 +23,7 @@
 
 	C.parallax_layers = C.parallax_layers_cached.Copy()
 
-	if (length(C.parallax_layers) > C.parallax_layers_max)
+	if (length(C.parallax_layers) > C.parallax_layers_max + 1) // NON-MODULE CHANGE
 		C.parallax_layers.len = C.parallax_layers_max
 
 	C.screen |= (C.parallax_layers)
