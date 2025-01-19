@@ -36,13 +36,9 @@
 
 // Sanitize on load to ensure no invalid paths from older saves get in
 /datum/preference/loadout/deserialize(input, datum/preferences/preferences)
-	// Sanitize on load to ensure no invalid paths from older saves get in
-	var/slot = preferences.read_preference(/datum/preference/numeric/active_loadout)
-
 	for(var/i in 1 to length(input))
 		if(islist(input[i]))
-			// Pass in the prefernce owner so they can get feedback messages on stuff that failed to load (if they exist)
-			input[i] = sanitize_loadout_list(input[i], preferences.parent?.mob, slot)
+			input[i] = sanitize_loadout_list(input[i])
 
 	return input
 
@@ -52,25 +48,14 @@
  *
  * Returns a list, or null if empty
  */
-/datum/preference/loadout/proc/sanitize_loadout_list(list/passed_list, mob/optional_loadout_owner) as /list
+/datum/preference/loadout/proc/sanitize_loadout_list(list/passed_list) as /list
 	var/list/sanitized_list
 	for(var/path in passed_list)
 		// Loading from json has each path in the list as a string that we need to convert back to typepath
 		var/obj/item/real_path = istext(path) ? text2path(path) : path
 		if(!ispath(real_path, /obj/item))
-			if(optional_loadout_owner)
-				to_chat(optional_loadout_owner, span_boldnotice("The following invalid item path was found \
-					in your character loadout: [real_path || "null"]. \
-					It has been removed, renamed, or is otherwise missing - \
-					You may want to check your loadout settings."))
 			continue
-
-		else if(!istype(GLOB.all_loadout_datums[real_path], /datum/loadout_item))
-			if(optional_loadout_owner)
-				to_chat(optional_loadout_owner, span_boldnotice("The following invalid loadout item was found \
-					in your character loadout: [real_path || "null"]. \
-					It has been removed, renamed, or is otherwise missing - \
-					You may want to check your loadout settings."))
+		if(!istype(GLOB.all_loadout_datums[real_path], /datum/loadout_item))
 			continue
 
 		// Set into sanitize list using converted path key

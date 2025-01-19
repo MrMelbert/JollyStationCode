@@ -2,6 +2,8 @@
 	name = "shorts"
 	desc = "A pair of comfy shorts."
 	icon_state = "shorts"
+	icon_preview = 'icons/obj/clothing/under/shorts_pants_shirts.dmi'
+	icon_state_preview = "shorts"
 	greyscale_config = /datum/greyscale_config/shorts
 	greyscale_config_worn = /datum/greyscale_config/shorts/worn
 	greyscale_colors = "#575757#3E3E3E#75634F"

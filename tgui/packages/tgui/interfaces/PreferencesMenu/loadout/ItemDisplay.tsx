@@ -60,6 +60,7 @@ export const ItemDisplay = (props: {
       style={{ textTransform: 'capitalize', zIndex: '1' }}
       tooltip={item.name}
       tooltipPosition={'bottom'}
+      disabled={item.disabled}
       onClick={() =>
         act('select_item', {
           path: item.path,
@@ -78,7 +79,7 @@ export const ItemDisplay = (props: {
                 height="9px"
                 key={info}
                 fontSize="9px"
-                textColor={'darkgray'}
+                textColor={item.disabled ? 'darkred' : 'darkgray'}
                 bold
               >
                 {info}

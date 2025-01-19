@@ -268,3 +268,8 @@
 	name = "Violet Nurse Cap"
 	item_path = /obj/item/clothing/head/costume/vince
 	additional_displayed_text = list("Character Item")
+
+/datum/loadout_item/head/santa
+	name = "Santa Hat"
+	item_path = /obj/item/clothing/head/costume/santa/gags
+	required_holiday = FESTIVE_SEASON

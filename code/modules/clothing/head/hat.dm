@@ -187,6 +187,7 @@
 	name = "santa hat"
 	desc = "On the first day of christmas my employer gave to me!"
 	icon_state = "santa_hat"
+	icon_state_preview = "santahatnorm"
 	greyscale_colors = "#cc0000#f8f8f8"
 	greyscale_config = /datum/greyscale_config/santa_hat
 	greyscale_config_worn = /datum/greyscale_config/santa_hat/worn

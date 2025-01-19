@@ -55,6 +55,8 @@
 	name = "turtleneck skirt"
 	desc = "A casual turtleneck skirt."
 	icon_state = "turtleskirt"
+	icon_preview = 'icons/obj/clothing/under/dress.dmi'
+	icon_state_preview = "turtleskirt_top"
 	custom_price = PAYCHECK_CREW
 	greyscale_colors = "#cc0000#5f5f5f"
 	greyscale_config = /datum/greyscale_config/turtleskirt
@@ -65,6 +67,8 @@
 	name = "tango dress"
 	desc = "Filled with Latin fire."
 	icon_state = "tango"
+	icon_preview = 'icons/obj/clothing/under/dress.dmi'
+	icon_state_preview = "tango_base"
 	custom_price = PAYCHECK_CREW
 	greyscale_colors = "#ff0000#1c1c1c"
 	greyscale_config = /datum/greyscale_config/tango
@@ -75,6 +79,8 @@
 	name = "sundress"
 	desc = "Makes you want to frolic in a field of daisies."
 	icon_state = "sundress"
+	icon_preview = 'icons/obj/clothing/under/dress.dmi'
+	icon_state_preview = "sundress_base"
 	custom_price = PAYCHECK_CREW
 	greyscale_colors = "#FFE60F#9194A5#1F243C"
 	greyscale_config = /datum/greyscale_config/sundress

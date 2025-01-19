@@ -36,6 +36,8 @@
 	icon = 'maplestation_modules/icons/obj/clothing/under/spacer_turtleneck.dmi'
 	worn_icon = 'maplestation_modules/icons/mob/clothing/under/spacer_turtleneck.dmi'
 	icon_state = "turtleneck"
+	icon_preview = 'maplestation_modules/icons/obj/clothing/under/spacer_turtleneck.dmi'
+	icon_state_preview = "greyscale_sweater"
 	greyscale_config = /datum/greyscale_config/spacer_turtleneck
 	greyscale_config_worn = /datum/greyscale_config/spacer_turtleneck_worn
 	greyscale_colors = "#5e483c#1c1c1c#4fb4e6"
@@ -46,6 +48,7 @@
 	name = "spacer's uniform"
 	desc = "An old ship uniform from the days of spacefarers past. In the old days, engineering wore red and command wore gold."
 	icon_state = "turtlefool"
+	icon_state_preview = "greyscale_shirt"
 
 /obj/item/clothing/under/spacer_turtleneck/skirt
 	name = "spacer's skirtleneck"
@@ -59,6 +62,7 @@
 	name = "spacer's skirt"
 	desc = "An old ship uniform from the days of spacefarers past. In the old days, engineering wore red and command wore gold. And women wore less."
 	icon_state = "turtlefool_skirt"
+	icon_state_preview = "greyscale_shirt"
 
 /obj/item/clothing/under/arbitersuit
 	name = "arbiter's suit"

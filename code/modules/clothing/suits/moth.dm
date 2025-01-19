@@ -2,6 +2,8 @@
 	name = "mothic flightsuit"
 	desc = "This peculiar utility harness is a common sight among the moth fleet's crews due to its ability to fasten the wings to the body without impacting mobility inside cramped ship interiors. It looks somewhat crude yet it's surprisingly comfortable."
 	icon_state = "mothcoat"
+	icon_preview = 'icons/obj/clothing/suits/moth.dmi'
+	icon_state_preview = "mothcoat"
 	greyscale_config = /datum/greyscale_config/mothcoat
 	greyscale_config_worn = /datum/greyscale_config/mothcoat/worn
 	greyscale_colors = "#eaeaea"
@@ -23,6 +25,7 @@
 	name = "mothic mantella"
 	desc = "A thick garment that keeps warm and protects those precious wings from harsh weather, also commonly used during festivities. Feels much heavier than it looks."
 	icon_state = "mothcoat_winter"
+	icon_state_preview = "mothcoat_mantle_top"
 	greyscale_config = /datum/greyscale_config/mothcoat_winter
 	greyscale_config_worn = /datum/greyscale_config/mothcoat_winter/worn
 	greyscale_colors = "#557979#795e55"

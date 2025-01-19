@@ -44,6 +44,7 @@
 	name = "kitsune mask"
 	desc = "Porcelain mask made in the style of the Sol-3 region. It is painted to look like a kitsune."
 	icon_state = "kitsune"
+	icon_state_preview = "kitsune_base"
 	inhand_icon_state = null
 	w_class = WEIGHT_CLASS_SMALL
 	adjusted_flags = ITEM_SLOT_HEAD

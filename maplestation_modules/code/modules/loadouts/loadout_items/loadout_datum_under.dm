@@ -48,7 +48,7 @@
 	mob/living/carbon/human/equipper,
 	visuals_only = FALSE,
 )
-	return NONE
+	return NONE // acts funky
 
 /datum/loadout_item/under/jumpsuit/random/skirt
 	name = "Random Jumpskirt"
@@ -187,11 +187,11 @@
 	item_path = /obj/item/clothing/under/rank/civilian/lawyer/black/skirt
 
 /datum/loadout_item/under/formal/blue_suit
-	name = "Blue Suit"
+	name = "Blue Button Down with Slacks"
 	item_path = /obj/item/clothing/under/rank/civilian/lawyer/bluesuit
 
 /datum/loadout_item/under/formal/blue_suitskirt
-	name = "Blue Suitskirt"
+	name = "Blue Button Down with Skirt"
 	item_path = /obj/item/clothing/under/rank/civilian/lawyer/bluesuit/skirt
 
 /datum/loadout_item/under/formal/blue_lawyer_suit
@@ -262,7 +262,7 @@
 	name = "Purple Suitskirt"
 	item_path = /obj/item/clothing/under/rank/civilian/lawyer/purpsuit/skirt
 
-/datum/loadout_item/under/formal/red_lawyer_skirt
+/datum/loadout_item/under/formal/red_lawyer
 	name = "Red Lawyer Suit"
 	item_path = /obj/item/clothing/under/rank/civilian/lawyer/red
 

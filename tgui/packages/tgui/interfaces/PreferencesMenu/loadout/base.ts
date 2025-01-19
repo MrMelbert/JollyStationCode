@@ -31,6 +31,7 @@ export type LoadoutItem = {
   buttons: LoadoutButton[];
   reskins: ReskinOption[] | null;
   information: string[];
+  disabled: BooleanLike;
 };
 
 // Category of items in the loadout

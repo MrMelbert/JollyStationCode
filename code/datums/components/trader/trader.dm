@@ -174,7 +174,7 @@ Can accept both a type path, and an instance of a datum. Type path has priority.
 		display_names["[initial(thing.name)]"] = thing
 
 		if(!radial_icons_cache[thing])
-			radial_icons_cache[thing] = image(icon = initial(thing.icon), icon_state = initial(thing.icon_state_preview) ? initial(thing.icon_state_preview) : initial(thing.icon_state))
+			radial_icons_cache[thing] = image(icon = initial(thing.icon), icon_state = initial(thing.icon_state_preview) || initial(thing.icon_state))
 
 		var/image/item_image = radial_icons_cache[thing]
 		product_info = products[thing]
