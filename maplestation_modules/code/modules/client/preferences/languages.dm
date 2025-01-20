@@ -39,7 +39,6 @@
 	can_randomize = FALSE
 
 	/// List of languages you can pick.
-	/// You only need to add languagues here that are not spoken by selectable roundstart species.
 	var/list/selectable_languages = list(
 		/datum/language/common,
 		/datum/language/impdraconic,

@@ -12,13 +12,15 @@
 	var/independent = FALSE
 	/// What channels does this encryption key grant to the parent headset.
 	var/list/channels = list()
-	var/datum/language/translated_language
+	/// Assoc list of language to how well understood it is. 0 is invalid, 100 is perfect.
+	var/list/language_data
+
 	greyscale_config = /datum/greyscale_config/encryptionkey_basic
 	greyscale_colors = "#820a16#3758c4"
 
 /obj/item/encryptionkey/examine(mob/user)
 	. = ..()
-	if(LAZYLEN(channels) || translate_binary)
+	if(LAZYLEN(channels) || translate_binary || LAZYLEN(language_data))
 		var/list/examine_text_list = list()
 		for(var/i in channels)
 			examine_text_list += "[GLOB.channel_tokens[i]] - [lowertext(i)]"
@@ -26,7 +28,24 @@
 		if(translate_binary)
 			examine_text_list += "[GLOB.channel_tokens[MODE_BINARY]] - [MODE_BINARY]"
 
-		. += span_notice("It can access the following channels; [jointext(examine_text_list, ", ")].")
+		if(length(examine_text_list))
+			. += span_notice("It can access the following channels; [jointext(examine_text_list, ", ")].")
+
+		var/list/language_text_list = list()
+		for(var/lang in language_data)
+			var/langstring = "[GLOB.language_datum_instances[lang].name]"
+			switch(language_data[lang])
+				if(25 to 50)
+					langstring += " (poor)"
+				if(50 to 75)
+					langstring += " (average)"
+				if(75 to 100)
+					langstring += " (good)"
+			language_text_list += langstring
+
+		if(length(language_text_list))
+			. += span_notice("It can translate the following languages; [jointext(language_text_list, ", ")].")
+
 	else
 		. += span_warning("Has no special codes in it. You should probably tell a coder!")
 
@@ -42,7 +61,9 @@
 	name = "binary translator key"
 	icon_state = "cypherkey_basic"
 	translate_binary = TRUE
-	translated_language = /datum/language/machine
+	language_data = list(
+		/datum/language/machine = 100,
+	)
 	greyscale_config = /datum/greyscale_config/encryptionkey_basic
 	greyscale_colors = "#24a157#3758c4"
 
@@ -221,7 +242,9 @@
 		RADIO_CHANNEL_ENTERTAINMENT = 1,
 	)
 	translate_binary = TRUE
-	translated_language = /datum/language/machine
+	language_data = list(
+		/datum/language/machine = 100,
+	)
 
 /obj/item/encryptionkey/ai/evil //ported from NT, this goes 'inside' the AI.
 	name = "syndicate binary encryption key"
@@ -233,3 +256,94 @@
 
 /obj/item/encryptionkey/secbot
 	channels = list(RADIO_CHANNEL_AI_PRIVATE = 1, RADIO_CHANNEL_SECURITY = 1)
+
+// This is used for cargo goodies
+/obj/item/encryptionkey/language
+	desc = "An encryption key that automatically translate some language into some other language you can hopefully understand."
+	icon_state = "cypherkey_cube"
+	greyscale_config = /datum/greyscale_config/encryptionkey_cube
+	greyscale_colors = "#339900#246202"
+
+// Thsese are just for admins - the cargo goodies automatically generate these
+/obj/item/encryptionkey/language/moth
+	name = "\improper Moffic translation key"
+	language_data = list(
+		/datum/language/moffic = 100,
+	)
+
+/obj/item/encryptionkey/language/moth/budget
+	name = "budget Moffic translation key"
+	language_data = list(
+		/datum/language/moffic = 50,
+	)
+
+/obj/item/encryptionkey/language/draconic
+	name = "\improper Draconic translation key"
+	language_data = list(
+		/datum/language/draconic = 100,
+	)
+
+/obj/item/encryptionkey/language/draconic/budget
+	name = "budget Draconic translation key"
+	language_data = list(
+		/datum/language/draconic = 50,
+	)
+
+/obj/item/encryptionkey/language/plasmaman
+	name = "\improper Calcic translation key"
+	language_data = list(
+		/datum/language/calcic = 100,
+	)
+
+/obj/item/encryptionkey/language/plasmaman/budget
+	name = "budget Calcic translation key"
+	language_data = list(
+		/datum/language/calcic = 50,
+	)
+
+/obj/item/encryptionkey/language/ethereal
+	name = "\improper Ethereal translation key"
+	language_data = list(
+		/datum/language/voltaic = 100,
+	)
+
+/obj/item/encryptionkey/language/ethereal/budget
+	name = "budget Ethereal translation key"
+	language_data = list(
+		/datum/language/voltaic = 50,
+	)
+
+/obj/item/encryptionkey/language/felinid
+	name = "\improper Felinid translation key"
+	language_data = list(
+		/datum/language/nekomimetic = 100,
+	)
+
+/obj/item/encryptionkey/language/felinid/budget
+	name = "budget Felinid translation key"
+	language_data = list(
+		/datum/language/nekomimetic = 50,
+	)
+
+/obj/item/encryptionkey/language/uncommon
+	name = "\improper Uncommon translation key"
+	language_data = list(
+		/datum/language/uncommon = 100,
+	)
+
+/obj/item/encryptionkey/language/uncommon/budget
+	name = "budget Uncommon translation key"
+	language_data = list(
+		/datum/language/uncommon = 75, // better than average because common can already partially understand it
+	)
+
+// This one is used in cargo
+/obj/item/encryptionkey/language/all_crew
+	name = "crew cohesion translation key"
+	desc = "An encryption key that'll translate a little bit of a lot of languages. Might give you a hint of what's going on, maybe."
+
+/obj/item/encryptionkey/language/all_crew/Initialize(mapload)
+	. = ..()
+	language_data = list()
+	for(var/lang in GLOB.uncommon_roundstart_languages)
+		language_data[lang] = 20

@@ -190,11 +190,10 @@
 	generateManifest(crate, account_holder, pack, pack.cost)
 	return crate
 
-/datum/supply_order/proc/generateCombo(miscbox, misc_own, misc_contents, misc_cost)
-	for (var/I in misc_contents)
-		new I(miscbox)
+/datum/supply_order/proc/generateCombo(obj/miscbox, misc_own, list/datum/supply_pack/misc_contents, misc_cost)
+	for (var/datum/supply_pack/pack as anything in misc_contents)
+		pack.fill(miscbox)
 	generateManifest(miscbox, misc_own, "", misc_cost)
-	return
 
 /datum/supply_order/proc/append_order(list/new_contents, cost_increase)
 	for(var/i as anything in new_contents)
