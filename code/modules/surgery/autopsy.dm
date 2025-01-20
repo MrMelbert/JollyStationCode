@@ -31,7 +31,6 @@
 		span_notice("[user] uses [tool] to perform an autopsy on [target]."),
 		span_notice("[user] uses [tool] on [target]'s chest."),
 	)
-	display_pain(target, "You feel a burning sensation in your chest!", target_zone = target_zone) // NON-MODULE CHANGE
 
 /datum/surgery_step/autopsy/success(mob/user, mob/living/carbon/target, target_zone, obj/item/autopsy_scanner/tool, datum/surgery/surgery, default_display_results = FALSE)
 	ADD_TRAIT(target, TRAIT_DISSECTED, AUTOPSY_TRAIT)

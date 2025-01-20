@@ -2,7 +2,7 @@
 	name = "energy netting"
 	icon_state = "e_netting"
 	damage = 10
-	damage_type = STAMINA
+	damage_type = PAIN
 	hitsound = 'sound/weapons/taserhit.ogg'
 	range = 10
 

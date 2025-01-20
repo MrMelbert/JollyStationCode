@@ -108,3 +108,12 @@
 	category = PREFERENCE_CATEGORY_GAME_PREFERENCES
 	savefile_key = "sound_elevator"
 	savefile_identifier = PREFERENCE_PLAYER
+
+/datum/preference/toggle/heartbeat
+	category = PREFERENCE_CATEGORY_GAME_PREFERENCES
+	savefile_key = "sound_heartbeat"
+	savefile_identifier = PREFERENCE_PLAYER
+
+/datum/preference/toggle/heartbeat/apply_to_client_updated(client/client, value)
+	if(!value)
+		client.mob.stop_sound_channel(CHANNEL_HEARTBEAT)

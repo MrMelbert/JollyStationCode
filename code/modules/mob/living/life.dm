@@ -67,7 +67,8 @@
 	if(stat != DEAD)
 		body_temperature_alerts()
 	handle_wounds(seconds_per_tick, times_fired)
-
+	if(staminaloss)
+		adjustStaminaLoss(-1 * (stat == DEAD ? 100 : 2.5) * seconds_per_tick)
 	if(machine)
 		machine.check_eye(src)
 
@@ -96,10 +97,14 @@
 		var/burn_damage = HEAT_DAMAGE
 		if(effective_temp > heat_threshold_high)
 			burn_damage *= 8
+			// melbert todo : status effects should handle the damage, not the proc
+			apply_status_effect(/datum/status_effect/thermia/hyper/three)
 		else if(effective_temp > heat_threshold_medium)
 			burn_damage *= 4
+			apply_status_effect(/datum/status_effect/thermia/hyper/two)
 		else if(effective_temp > heat_threshold_low)
 			burn_damage *= 2
+			apply_status_effect(/datum/status_effect/thermia/hyper/one)
 
 		if(temperature_burns(burn_damage * seconds_per_tick) > 0 && SPT_PROB(10, seconds_per_tick) && !temperature_insulation && !on_fire)
 			var/expected_temp = get_temperature(loc?.return_air())
@@ -123,10 +128,14 @@
 		var/cold_damage = COLD_DAMAGE
 		if(body_temperature < cold_threshold_high)
 			cold_damage *= 8
+			// melbert todo : status effects should handle the damage, not the proc
+			apply_status_effect(/datum/status_effect/thermia/hypo/three)
 		else if(body_temperature < cold_threshold_medium)
 			cold_damage *= 4
+			apply_status_effect(/datum/status_effect/thermia/hypo/two)
 		else if(body_temperature < cold_threshold_low)
 			cold_damage *= 2
+			apply_status_effect(/datum/status_effect/thermia/hypo/one)
 
 		if(temperature_cold_damage(cold_damage * seconds_per_tick) > 0 && SPT_PROB(10, seconds_per_tick) && !temperature_insulation)
 			var/expected_temp = get_temperature(loc?.return_air())
@@ -330,8 +339,6 @@
 /mob/living/proc/has_reagent(reagent, amount = -1, needs_metabolizing = FALSE)
 	return reagents.has_reagent(reagent, amount, needs_metabolizing)
 
-/mob/living/proc/update_damage_hud()
-	return
 
 /mob/living/proc/handle_gravity(seconds_per_tick, times_fired)
 	if(gravity_state > STANDARD_GRAVITY)

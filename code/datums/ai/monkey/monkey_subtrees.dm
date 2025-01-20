@@ -28,7 +28,7 @@
 	var/mob/living/living_pawn = controller.pawn
 	var/list/enemies = controller.blackboard[BB_MONKEY_ENEMIES]
 
-	if((HAS_TRAIT(controller.pawn, TRAIT_PACIFISM)) || (!length(enemies) && !controller.blackboard[BB_MONKEY_AGGRESSIVE])) //Pacifist, or we have no enemies and we're not pissed
+	if(HAS_TRAIT(controller.pawn, TRAIT_PACIFISM) || (!length(enemies) && !controller.blackboard[BB_MONKEY_AGGRESSIVE])) //Pacifist, or we have no enemies and we're not pissed
 		living_pawn.set_combat_mode(FALSE)
 		return
 
@@ -43,9 +43,9 @@
 		living_pawn.set_combat_mode(FALSE)
 		return
 
-	if(!selected_enemy.stat) //He's up, get him!
-		if(living_pawn.health < MONKEY_FLEE_HEALTH) //Time to skeddadle
-			controller.queue_behavior(/datum/ai_behavior/monkey_flee)
+	if(selected_enemy.stat <= SOFT_CRIT) //He's up, get him!
+		if(living_pawn.consciousness < MONKEY_FLEE_HEALTH) //Time to skeddadle
+			controller.queue_behavior(/datum/ai_behavior/run_away_from_target/monkey, BB_MONKEY_CURRENT_ATTACK_TARGET)
 			return SUBTREE_RETURN_FINISH_PLANNING //I'm running fuck you guys
 
 		if(controller.TryFindWeapon()) //Getting a weapon is higher priority if im not fleeing.

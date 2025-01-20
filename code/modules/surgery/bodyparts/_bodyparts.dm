@@ -78,8 +78,6 @@
 	var/disabling_threshold_percentage = 0
 
 	// Damage variables
-	///A mutiplication of the burn and brute damage that the limb's stored damage contributes to its attached mob's overall wellbeing.
-	var/body_damage_coeff = LIMB_BODY_DAMAGE_COEFFICIENT_TOTAL
 	///The current amount of brute damage the limb has
 	var/brute_dam = 0
 	///The current amount of burn damage the limb has
@@ -144,6 +142,8 @@
 
 	/// This number is subtracted from all wound rolls on this bodypart, higher numbers mean more defense, negative means easier to wound
 	var/wound_resistance = 0
+	/// This number is a multiplier applied on incoming "effective damage" for wound calculations.
+	var/wound_modifier = 1
 	/// When this bodypart hits max damage, this number is added to all wound rolls. Obviously only relevant for bodyparts that have damage caps.
 	var/disabled_wound_penalty = 15
 
@@ -152,9 +152,9 @@
 	/// So we know if we need to scream if this limb hits max damage
 	var/last_maxed
 	/// Our current bleed rate. Cached, update with refresh_bleed_rate()
-	var/cached_bleed_rate = 0
+	VAR_PRIVATE/cached_bleed_rate = 0
 	/// How much generic bleedstacks we have on this bodypart
-	var/generic_bleedstacks
+	var/generic_bleedstacks = 0
 	/// If we have a gauze wrapping currently applied (not including splints)
 	var/obj/item/stack/medical/gauze/current_gauze
 	/// If something is currently grasping this bodypart and trying to staunch bleeding (see [/obj/item/hand_item/self_grasp])
@@ -190,13 +190,9 @@
 
 	/// In the case we dont have dismemberable features, or literally cant get wounds, we will use this percent to determine when we can be dismembered.
 	/// Compared to our ABSOLUTE maximum. Stored in decimal; 0.8 = 80%.
-	var/hp_percent_to_dismemberable = 0.8
+	var/hp_percent_to_dismemberable = 0.66
 	/// If true, we will use [hp_percent_to_dismemberable] even if we are dismemberable via wounds. Useful for things with extreme wound resistance.
-	var/use_alternate_dismemberment_calc_even_if_mangleable = FALSE
-	/// If false, no wound that can be applied to us can mangle our exterior. Used for determining if we should use [hp_percent_to_dismemberable] instead of normal dismemberment.
-	var/any_existing_wound_can_mangle_our_exterior
-	/// If false, no wound that can be applied to us can mangle our interior. Used for determining if we should use [hp_percent_to_dismemberable] instead of normal dismemberment.
-	var/any_existing_wound_can_mangle_our_interior
+	var/dismember_by_hp = FALSE
 	/// get_damage() / total_damage must surpass this to allow our limb to be disabled, even temporarily, by an EMP.
 	var/robotic_emp_paralyze_damage_percent_threshold = 0.3
 
@@ -344,25 +340,32 @@
 		else
 			is_disabled += " and"
 
-	check_list += "\t <span class='[no_damage ? "notice" : "warning"]'>Your [name][is_disabled][self_aware ? " has " : " is "][status].</span>"
+	// melbert todo : if you have clothes covering, it's harder to diagnose
+	check_list += "\t<span class='[no_damage ? "notice" : "warning"]'>Your [name][is_disabled][self_aware ? " has " : " is "][status].</span>"
 
 	for(var/datum/wound/wound as anything in wounds)
-		switch(wound.severity)
-			if(WOUND_SEVERITY_TRIVIAL)
-				check_list += "\t [span_danger("Your [name] is suffering [wound.a_or_from] [lowertext(wound.name)].")]"
-			if(WOUND_SEVERITY_MODERATE)
-				check_list += "\t [span_warning("Your [name] is suffering [wound.a_or_from] [lowertext(wound.name)]!")]"
-			if(WOUND_SEVERITY_SEVERE)
-				check_list += "\t [span_boldwarning("Your [name] is suffering [wound.a_or_from] [lowertext(wound.name)]!!")]"
-			if(WOUND_SEVERITY_CRITICAL)
-				check_list += "\t [span_boldwarning("Your [name] is suffering [wound.a_or_from] [lowertext(wound.name)]!!!")]"
+		var/wound_desc = wound.get_self_check_description(src, examiner)
+		if(wound_desc)
+			check_list += "\t\t[wound_desc]"
 
-	for(var/obj/item/embedded_thing in embedded_objects)
-		var/stuck_word = embedded_thing.isEmbedHarmless() ? "stuck" : "embedded"
-		check_list += "\t <a href='?src=[REF(examiner)];embedded_object=[REF(embedded_thing)];embedded_limb=[REF(src)]' class='warning'>There is \a [embedded_thing] [stuck_word] in your [name]!</a>"
+	for(var/obj/item/embedded_thing as anything in embedded_objects)
+		if(embedded_thing.get_embed().hidden_embed)
+			continue
+		var/stuck_word = embedded_thing.is_embed_harmless() ? "stuck" : "embedded"
+		check_list += "\t\t<a href='?src=[REF(examiner)];embedded_object=[REF(embedded_thing)];embedded_limb=[REF(src)]' class='warning'>There is \a [embedded_thing] [stuck_word] in it!</a>"
 
 	if(current_gauze)
-		check_list += span_notice("\t There is some <a href='?src=[REF(examiner)];gauze_limb=[REF(src)]'>[current_gauze.name]</a> wrapped around your [name].")
+		check_list += span_notice("\t\tThere is some <a href='?src=[REF(examiner)];gauze_limb=[REF(src)]'>[current_gauze.name]</a> wrapped around it.")
+	else if(can_bleed())
+		switch(get_modified_bleed_rate())
+			if(0.2 to 1)
+				check_list += span_warning("\t\tIt's lightly bleeding.")
+			if(1 to 2)
+				check_list += span_warning("\t\tIt's bleeding.")
+			if(3 to 4)
+				check_list += span_warning("\t\tIt's bleeding heavily!")
+			if(4 to INFINITY)
+				check_list += span_warning("\t\tIt's bleeding profusely!")
 
 /obj/item/bodypart/blob_act()
 	receive_damage(max_damage, wound_bonus = CANT_WOUND)
@@ -482,9 +485,8 @@
 		if(required_bodytype && !(bodytype & required_bodytype))
 			return FALSE
 
-	var/dmg_multi = CONFIG_GET(number/damage_multiplier) * hit_percent
-	brute = round(max(brute * dmg_multi * brute_modifier, 0), DAMAGE_PRECISION)
-	burn = round(max(burn * dmg_multi * burn_modifier, 0), DAMAGE_PRECISION)
+	brute = round(max(brute * hit_percent * brute_modifier, 0), DAMAGE_PRECISION)
+	burn = round(max(burn * hit_percent * burn_modifier, 0), DAMAGE_PRECISION)
 
 	if(!brute && !burn)
 		return FALSE
@@ -492,63 +494,18 @@
 	brute *= wound_damage_multiplier
 	burn *= wound_damage_multiplier
 
-	if(bodytype & (BODYTYPE_ALIEN|BODYTYPE_LARVA_PLACEHOLDER)) //aliens take double burn //nothing can burn with so much snowflake code around
-		burn *= 2
-
-	/*
 	// START WOUND HANDLING
-	*/
 
 	// what kind of wounds we're gonna roll for, take the greater between brute and burn, then if it's brute, we subdivide based on sharpness
 	var/wounding_type = (brute > burn ? WOUND_BLUNT : WOUND_BURN)
-	var/wounding_dmg = max(brute, burn)
+	var/wounding_dmg = max(brute, burn) * wound_modifier
 
-	if(wounding_type == WOUND_BLUNT && sharpness)
-		if(sharpness & SHARP_EDGED)
-			wounding_type = WOUND_SLASH
-		else if (sharpness & SHARP_POINTY)
-			wounding_type = WOUND_PIERCE
-
-	if(owner) // i tried to modularize the below, but the modifications to wounding_dmg and wounding_type cant be extracted to a proc
-		var/mangled_state = get_mangled_state()
-		var/easy_dismember = HAS_TRAIT(owner, TRAIT_EASYDISMEMBER) // if we have easydismember, we don't reduce damage when redirecting damage to different types (slashing weapons on mangled/skinless limbs attack at 100% instead of 50%)
-
-		var/bio_status = get_bio_state_status()
-
-		var/has_exterior = ((bio_status & ANATOMY_EXTERIOR))
-		var/has_interior = ((bio_status & ANATOMY_INTERIOR))
-
-		var/exterior_ready_to_dismember = (!has_exterior || ((mangled_state & BODYPART_MANGLED_EXTERIOR)))
-
-		// if we're bone only, all cutting attacks go straight to the bone
-		if(!has_exterior && has_interior)
-			if(wounding_type == WOUND_SLASH)
-				wounding_type = WOUND_BLUNT
-				wounding_dmg *= (easy_dismember ? 1 : 0.6)
-			else if(wounding_type == WOUND_PIERCE)
-				wounding_type = WOUND_BLUNT
-				wounding_dmg *= (easy_dismember ? 1 : 0.75)
-		else
-			// if we've already mangled the skin (critical slash or piercing wound), then the bone is exposed, and we can damage it with sharp weapons at a reduced rate
-			// So a big sharp weapon is still all you need to destroy a limb
-			if(has_interior && exterior_ready_to_dismember && !(mangled_state & BODYPART_MANGLED_INTERIOR) && sharpness)
-				if(wounding_type == WOUND_SLASH && !easy_dismember)
-					wounding_dmg *= 0.6 // edged weapons pass along 60% of their wounding damage to the bone since the power is spread out over a larger area
-				if(wounding_type == WOUND_PIERCE && !easy_dismember)
-					wounding_dmg *= 0.75 // piercing weapons pass along 75% of their wounding damage to the bone since it's more concentrated
-				wounding_type = WOUND_BLUNT
-		if ((dismemberable_by_wound() || dismemberable_by_total_damage()) && try_dismember(wounding_type, wounding_dmg, wound_bonus, bare_wound_bonus))
-			return
-		// now we have our wounding_type and are ready to carry on with wounds and dealing the actual damage
-		if(wounding_dmg >= WOUND_MINIMUM_DAMAGE && wound_bonus != CANT_WOUND)
-			check_wounding(wounding_type, wounding_dmg, wound_bonus, bare_wound_bonus, attack_direction, damage_source = damage_source)
+	check_wounding(wounding_type, wounding_dmg, wound_bonus, bare_wound_bonus, attack_direction, damage_source, sharpness)
 
 	for(var/datum/wound/iter_wound as anything in wounds)
 		iter_wound.receive_damage(wounding_type, wounding_dmg, wound_bonus, damage_source)
 
-	/*
 	// END WOUND HANDLING
-	*/
 
 	//back to our regularly scheduled program, we now actually apply damage if there's room below limb damage cap
 	var/can_inflict = max_damage - get_damage()
@@ -594,59 +551,48 @@
 	return bio_status
 
 /// Returns if our current mangling status allows us to be dismembered. Requires both no exterior/mangled exterior and no interior/mangled interior.
-/obj/item/bodypart/proc/dismemberable_by_wound()
+/**
+ * Checks if the bodypart is in a state ready to be dismembered
+ *
+ * Differs from can_dismember in that this says "we can be dismembered, just not right now"
+ */
+/obj/item/bodypart/proc/in_dismemberable_state()
 	SHOULD_BE_PURE(TRUE)
 
 	var/mangled_state = get_mangled_state()
-
 	var/bio_status = get_bio_state_status()
 
-	var/has_exterior = ((bio_status & ANATOMY_EXTERIOR))
-	var/has_interior = ((bio_status & ANATOMY_INTERIOR))
+	var/has_exterior = (bio_status & ANATOMY_EXTERIOR)
+	var/has_interior = (bio_status & ANATOMY_INTERIOR)
 
-	var/exterior_ready_to_dismember = (!has_exterior || ((mangled_state & BODYPART_MANGLED_EXTERIOR)))
-	var/interior_ready_to_dismember = (!has_interior || ((mangled_state & BODYPART_MANGLED_INTERIOR)))
+	var/exterior_ready_to_dismember = (!has_exterior || (mangled_state & BODYPART_MANGLED_EXTERIOR))
+	var/interior_ready_to_dismember = (!has_interior || (mangled_state & BODYPART_MANGLED_INTERIOR))
+	if(exterior_ready_to_dismember && interior_ready_to_dismember)
+		return TRUE
+	if(!dismember_by_hp)
+		return FALSE
 
-	return (exterior_ready_to_dismember && interior_ready_to_dismember)
+	// beyond this point, basically we're checking
+	// "we aren't currently wounded, but theoretically if we were... would we be dismembered by this point?"
+	var/interior_mangleable = FALSE
+	var/exterior_mangleable = FALSE
+	// we need to check if gaining any wound would cause us to be dismembered
+	for(var/datum/wound/wound_type as anything in GLOB.all_wound_pregen_data)
+		var/datum/wound_pregen_data/pregen_data = GLOB.all_wound_pregen_data[wound_type]
+		if(!pregen_data.can_be_applied_to(src, random_roll = TRUE)) // we only consider randoms because non-randoms are usually really specific
+			continue
+		if(initial(pregen_data.wound_path_to_generate.wound_flags) & MANGLES_EXTERIOR)
+			interior_mangleable = TRUE
+		if(initial(pregen_data.wound_path_to_generate.wound_flags) & MANGLES_INTERIOR)
+			exterior_mangleable = TRUE
 
-/// Returns TRUE if our total percent damage is more or equal to our dismemberable percentage, but FALSE if a wound can cause us to be dismembered.
-/obj/item/bodypart/proc/dismemberable_by_total_damage()
+		if(exterior_mangleable && interior_mangleable)
+			break
 
-	update_wound_theory()
-
-	var/bio_status = get_bio_state_status()
-
-	var/has_interior = ((bio_status & ANATOMY_INTERIOR))
-	var/can_theoretically_be_dismembered_by_wound = (any_existing_wound_can_mangle_our_interior || (any_existing_wound_can_mangle_our_exterior && has_interior))
-
-	var/wound_dismemberable = dismemberable_by_wound()
-	var/ready_to_use_alternate_formula = (use_alternate_dismemberment_calc_even_if_mangleable || (!wound_dismemberable && !can_theoretically_be_dismembered_by_wound))
-
-	if (ready_to_use_alternate_formula)
-		var/percent_to_total_max = (get_damage() / max_damage)
-		if (percent_to_total_max >= hp_percent_to_dismemberable)
-			return TRUE
+	if(interior_mangleable || (exterior_mangleable && has_interior))
+		return (get_damage() / max_damage) >= hp_percent_to_dismemberable
 
 	return FALSE
-
-/// Updates our "can be theoretically dismembered by wounds" variables by iterating through all wound static data.
-/obj/item/bodypart/proc/update_wound_theory()
-	// We put this here so we dont increase init time by doing this all at once on initialization
-	// Effectively, we "lazy load"
-	if (isnull(any_existing_wound_can_mangle_our_interior) || isnull(any_existing_wound_can_mangle_our_exterior))
-		any_existing_wound_can_mangle_our_interior = FALSE
-		any_existing_wound_can_mangle_our_exterior = FALSE
-		for (var/datum/wound/wound_type as anything in GLOB.all_wound_pregen_data)
-			var/datum/wound_pregen_data/pregen_data = GLOB.all_wound_pregen_data[wound_type]
-			if (!pregen_data.can_be_applied_to(src, random_roll = TRUE)) // we only consider randoms because non-randoms are usually really specific
-				continue
-			if (initial(pregen_data.wound_path_to_generate.wound_flags) & MANGLES_EXTERIOR)
-				any_existing_wound_can_mangle_our_exterior = TRUE
-			if (initial(pregen_data.wound_path_to_generate.wound_flags) & MANGLES_INTERIOR)
-				any_existing_wound_can_mangle_our_interior = TRUE
-
-			if (any_existing_wound_can_mangle_our_interior && any_existing_wound_can_mangle_our_exterior)
-				break
 
 //Heals brute and burn damage for the organ. Returns 1 if the damage-icon states changed at all.
 //Damage cannot go below zero.
@@ -1108,7 +1054,7 @@
 		aux_emissive.dir = image_dir
 		. += aux_emissive
 	// NON-MODULE CHANGE END
-	
+
 	//No need to handle leg layering if dropped, we only face south anyways
 	if(!dropped && ((body_zone == BODY_ZONE_R_LEG) || (body_zone == BODY_ZONE_L_LEG)))
 		//Legs are a bit goofy in regards to layering, and we will need two images instead of one to fix that
@@ -1165,15 +1111,15 @@
 	if(embed in embedded_objects) // go away
 		return
 	// We don't need to do anything with projectile embedding, because it will never reach this point
-	RegisterSignal(embed, COMSIG_ITEM_EMBEDDING_UPDATE, PROC_REF(embedded_object_changed))
 	embedded_objects += embed
+	RegisterSignal(embed, COMSIG_ITEM_EMBEDDING_UPDATE, PROC_REF(embedded_object_changed))
 	refresh_bleed_rate()
 
 /// INTERNAL PROC, DO NOT USE
 /// Cleans up any attachment we have to the embedded object, removes it from our list
 /obj/item/bodypart/proc/_unembed_object(obj/item/unembed)
-	UnregisterSignal(unembed, COMSIG_ITEM_EMBEDDING_UPDATE)
 	embedded_objects -= unembed
+	UnregisterSignal(unembed, COMSIG_ITEM_EMBEDDING_UPDATE)
 	refresh_bleed_rate()
 
 /obj/item/bodypart/proc/embedded_object_changed(obj/item/embedded_source)
@@ -1188,7 +1134,7 @@
 
 /// Modifies our generic bleedstacks. You must use this to change the variable
 /// Takes the amount to adjust by, and the lowest amount we're allowed to have post adjust
-/obj/item/bodypart/proc/adjustBleedStacks(adjust_by, minimum = -INFINITY)
+/obj/item/bodypart/proc/adjustBleedStacks(adjust_by, minimum = 0)
 	if(!adjust_by)
 		return
 	var/old_bleedstacks = generic_bleedstacks
@@ -1223,11 +1169,12 @@
 		return
 
 	if(generic_bleedstacks > 0)
-		cached_bleed_rate += 0.5
+		cached_bleed_rate += 1
 
 	for(var/obj/item/embeddies in embedded_objects)
-		if(!embeddies.isEmbedHarmless())
-			cached_bleed_rate += 0.25
+		if(embeddies.is_embed_harmless())
+			continue
+		cached_bleed_rate += embeddies.embed_data.blood_loss
 
 	for(var/datum/wound/iter_wound as anything in wounds)
 		cached_bleed_rate += iter_wound.blood_flow
@@ -1238,14 +1185,22 @@
 
 	return cached_bleed_rate
 
+/// Flat multiplier applied to bleed rate
+/// I did this rather than tweak existing bleed rates because
+/// 1. laziness
+/// 2. so blood wounds could take longer to decay without killing you faster
+#define TOTAL_BLEED_RATE_MOD 0.5
+
 /// Returns our bleed rate, taking into account laying down and grabbing the limb
 /obj/item/bodypart/proc/get_modified_bleed_rate()
-	var/bleed_rate = cached_bleed_rate
+	var/bleed_rate = cached_bleed_rate * TOTAL_BLEED_RATE_MOD
 	if(owner.body_position == LYING_DOWN)
 		bleed_rate *= 0.75
 	if(grasped_by)
 		bleed_rate *= 0.7
 	return bleed_rate
+
+#undef TOTAL_BLEED_RATE_MOD
 
 // how much blood the limb needs to be losing per tick (not counting laying down/self grasping modifiers) to get the different bleed icons
 #define BLEED_OVERLAY_LOW 0.5
@@ -1261,7 +1216,7 @@
 			owner.update_wound_overlays()
 		return FALSE
 
-	var/bleed_rate = cached_bleed_rate
+	var/bleed_rate = get_modified_bleed_rate()
 	var/new_bleed_icon = null
 
 	switch(bleed_rate)
@@ -1386,3 +1341,13 @@
 		return "metal"
 
 	return "error"
+
+/// Returns what message is displayed when the bodypart is on the cusp of being dismembered.
+/obj/item/bodypart/proc/get_soon_dismember_message()
+	return ", threatening to sever it entirely"
+
+/obj/item/bodypart/chest/get_soon_dismember_message()
+	return ", threatening to split it open" // we don't sever, we dump organs when "dismembered"
+
+/obj/item/bodypart/head/get_soon_dismember_message()
+	return ", threatening to split it open" // we don't sever, we cranial fissure when "dismembered" // we also don't dismember i think

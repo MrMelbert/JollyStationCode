@@ -94,7 +94,7 @@
 	caster_mob.forceMove(former_loc) // This is to avoid crushing our former cockroach body
 
 	if(kill_caster_after)
-		caster_mob.death()
+		caster_mob.death(null, "magic")
 
 	after_unchange()
 
@@ -136,7 +136,7 @@
 
 	// Otherwise our caster died, just make our mob die
 	else
-		owner.death()
+		owner.death(null, "magic")
 
 /// Signal proc for [COMSIG_QDELETING] from our caster, delete us / our owner if we get deleted
 /datum/status_effect/shapechange_mob/proc/on_caster_deleted(datum/source)

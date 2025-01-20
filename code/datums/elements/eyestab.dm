@@ -70,7 +70,7 @@
 	if (target_limb)
 		target.apply_damage(damage, BRUTE, target_limb, attacking_item = item)
 	else
-		target.take_bodypart_damage(damage)
+		target.damage_random_bodypart(damage)
 
 	target.add_mood_event("eye_stab", /datum/mood_event/eye_stab)
 	log_combat(user, target, "attacked", "[item.name]", "(Combat mode: [user.combat_mode ? "On" : "Off"])")

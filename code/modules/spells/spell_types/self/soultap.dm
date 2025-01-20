@@ -53,7 +53,7 @@
 
 		cast_on.visible_message(span_danger("[cast_on] suddenly dies!"), ignored_mobs = cast_on)
 		cast_on.investigate_log("has been killed by soul tap.", INVESTIGATE_DEATHS)
-		cast_on.death()
+		cast_on.death(null, "having your soul consumed")
 
 	// If the next tap will kill us, give us a heads-up
 	else if(cast_on.maxHealth - tap_health_taken <= 0)

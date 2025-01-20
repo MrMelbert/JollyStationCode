@@ -48,3 +48,10 @@
 				if(H.age > 21)
 					H.age = 21
 					to_chat(H, span_notice("You feel like you can take on the world!"))
+				H.set_pain_mod(name, 0.9)
+
+/datum/symptom/youth/End(datum/disease/advance/A)
+	. = ..()
+	if(!.)
+		return
+	A.affected_mob.unset_pain_mod(name)

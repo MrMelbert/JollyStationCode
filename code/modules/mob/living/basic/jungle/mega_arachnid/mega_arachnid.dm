@@ -31,6 +31,8 @@
 	speak_emote = list("chitters")
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	attack_vis_effect = ATTACK_EFFECT_SLASH
+	sharpness = SHARP_EDGED
+	wound_bonus = 0
 	ai_controller = /datum/ai_controller/basic_controller/mega_arachnid
 	alpha = 40
 

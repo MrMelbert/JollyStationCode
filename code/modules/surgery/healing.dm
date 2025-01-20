@@ -34,6 +34,7 @@
 	implements = list(
 		TOOL_HEMOSTAT = 100,
 		TOOL_SCREWDRIVER = 65,
+		TOOL_WIRECUTTER = 65,
 		/obj/item/pen = 55)
 	repeatable = TRUE
 	time = 25
@@ -48,6 +49,23 @@
 /datum/surgery_step/heal/proc/get_progress(mob/user, mob/living/carbon/target, brute_healed, burn_healed)
 	return
 
+/datum/surgery_step/heal/proc/get_perfect_information(mob/user, mob/target)
+	if(issilicon(user))
+		return TRUE
+	if(user.is_holding_item_of_type(/obj/item/healthanalyzer))
+		return TRUE
+	for(var/obj/machinery/computer/puter in range(2, target))
+		if(istype(puter, /obj/machinery/computer/operating))
+			var/obj/machinery/computer/operating/op_comp = puter
+			if(op_comp.table?.patient == target)
+				return TRUE
+		if(istype(puter, /obj/machinery/computer/vitals_reader))
+			var/obj/machinery/computer/vitals_reader/vr_comp = puter
+			if(vr_comp.patient == target)
+				return TRUE
+	// melbert todo : add modsuit health analyzer to this
+	return FALSE
+
 /datum/surgery_step/heal/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	var/woundtype
 	if(brutehealing && burnhealing)
@@ -56,7 +74,6 @@
 		woundtype = "bruises"
 	else //why are you trying to 0,0...?
 		woundtype = "burns"
-		pain_type = BURN // NON-MODULE CHANGE
 
 	if(istype(surgery,/datum/surgery/healing))
 		var/datum/surgery/healing/the_surgery = surgery
@@ -68,7 +85,13 @@
 				span_notice("[user] attempts to patch some of [target]'s [woundtype]."),
 				span_notice("[user] attempts to patch some of [target]'s [woundtype]."),
 			)
-		display_pain(target, "Your [woundtype] sting like hell!", target_zone = target_zone) // NON-MODULE CHANGE
+		display_pain(
+			target = target,
+			target_zone = target_zone,
+			pain_message = "Your [woundtype] sting like hell!",
+			pain_amount = SURGERY_PAIN_TRIVIAL,
+			pain_type = burnhealing ? BURN : BRUTE,
+		)
 
 /datum/surgery_step/heal/initiate(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, try_to_fail = FALSE)
 	if(!..())
@@ -129,7 +152,8 @@
 	var/burn_dealt = burnhealing * 0.8
 	brute_dealt += round((target.getBruteLoss() * (brute_multiplier * 0.5)),0.1)
 	burn_dealt += round((target.getFireLoss() * (burn_multiplier * 0.5)),0.1)
-	target.take_bodypart_damage(brute_dealt, burn_dealt, wound_bonus=CANT_WOUND)
+	target.damage_random_bodypart(brute_dealt, BRUTE, wound_bonus = CANT_WOUND)
+	target.damage_random_bodypart(burn_dealt, BURN, wound_bonus = CANT_WOUND)
 	return FALSE
 
 /***************************BRUTE***************************/
@@ -164,7 +188,7 @@
 	var/estimated_remaining_steps = target.getBruteLoss() / brute_healed
 	var/progress_text
 
-	if(locate(/obj/item/healthanalyzer) in user.held_items)
+	if(get_perfect_information(user, target))
 		progress_text = ". Remaining brute: <font color='#ff3333'>[target.getBruteLoss()]</font>"
 	else
 		switch(estimated_remaining_steps)
@@ -229,7 +253,7 @@
 	var/estimated_remaining_steps = target.getFireLoss() / burn_healed
 	var/progress_text
 
-	if(locate(/obj/item/healthanalyzer) in user.held_items)
+	if(get_perfect_information(user, target))
 		progress_text = ". Remaining burn: <font color='#ff9933'>[target.getFireLoss()]</font>"
 	else
 		switch(estimated_remaining_steps)
@@ -297,7 +321,7 @@
 
 	var/progress_text
 
-	if(locate(/obj/item/healthanalyzer) in user.held_items)
+	if(get_perfect_information(user, target))
 		if(target.getBruteLoss())
 			progress_text = ". Remaining brute: <font color='#ff3333'>[target.getBruteLoss()]</font>"
 		if(target.getFireLoss())
@@ -350,4 +374,5 @@
 		span_notice("[user] fixes some of [target]'s wounds."),
 		target_detailed = TRUE,
 	)
-	target.take_bodypart_damage(5,5)
+	target.damage_random_bodypart(5, BRUTE)
+	target.damage_random_bodypart(5, BURN)

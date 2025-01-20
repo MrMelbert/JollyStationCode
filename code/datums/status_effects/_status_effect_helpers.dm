@@ -37,6 +37,11 @@
 				if(STATUS_EFFECT_REFRESH)
 					existing_effect.refresh(arglist(arguments))
 					return
+				// Replace but only if the type differs
+				if(STATUS_EFFECT_LOOSE_REPLACE)
+					if(existing_effect.type == new_effect)
+						return
+					existing_effect.be_replaced()
 
 	// Create the status effect with our mob + our arguments
 	var/datum/status_effect/new_instance = new new_effect(arguments)
@@ -56,7 +61,7 @@
 
 	. = FALSE
 	for(var/datum/status_effect/existing_effect as anything in status_effects)
-		if(existing_effect.id == initial(removed_effect.id) && existing_effect.before_remove(arglist(arguments))) // melbert todo : major bug upstream later
+		if(existing_effect.id == initial(removed_effect.id) && existing_effect.before_remove(arglist(arguments)))
 			qdel(existing_effect)
 			. = TRUE
 

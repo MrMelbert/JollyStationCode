@@ -23,5 +23,4 @@
 	var/area/scrubber_area = get_area(src)
 	if(is_type_in_typecache(scrubber_area, scrub_nitrous_by_default_areas))
 		filter_types |= /datum/gas/nitrous_oxide
-		widenet = TRUE
-		update_appearance(UPDATE_ICON_STATE)
+		set_widenet(TRUE)

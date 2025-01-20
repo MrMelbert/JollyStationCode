@@ -70,7 +70,7 @@
 	if(!iscarbon(user))
 		return .
 	var/mob/living/carbon/thrower = user
-	thrower.toggle_throw_mode()
+	thrower.throw_mode_off(THROW_MODE_TOGGLE)
 	return TRUE
 
 /obj/item/restraints/legcuffs/bola/proc/begin_spinning(mob/living/carbon/spinner)

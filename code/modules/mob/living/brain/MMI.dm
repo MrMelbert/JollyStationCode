@@ -84,14 +84,14 @@
 		brainmob.forceMove(src)
 		brainmob.container = src
 		var/fubar_brain = newbrain.suicided || HAS_TRAIT(brainmob, TRAIT_SUICIDED) //brain is from a suicider
-		if(!fubar_brain && !(newbrain.organ_flags & ORGAN_FAILING)) // the brain organ hasn't been beaten to death, nor was from a suicider.
-			brainmob.set_stat(CONSCIOUS) //we manually revive the brain mob
-		else if(!fubar_brain && newbrain.organ_flags & ORGAN_FAILING) // the brain is damaged, but not from a suicider
-			to_chat(user, span_warning("[src]'s indicator light turns yellow and its brain integrity alarm beeps softly. Perhaps you should check [newbrain] for damage."))
-			playsound(src, 'sound/machines/synth_no.ogg', 5, TRUE)
-		else
+		if(fubar_brain)
 			to_chat(user, span_warning("[src]'s indicator light turns red and its brainwave activity alarm beeps softly. Perhaps you should check [newbrain] again."))
 			playsound(src, 'sound/machines/triple_beep.ogg', 5, TRUE)
+		else if(brainmob.revive())
+			playsound(src, 'sound/machines/synth_yes.ogg', 5, TRUE)
+		else // the brain is damaged, but not from a suicider
+			to_chat(user, span_warning("[src]'s indicator light turns yellow and its brain integrity alarm beeps softly. Perhaps you should check [newbrain] for damage."))
+			playsound(src, 'sound/machines/synth_no.ogg', 5, TRUE)
 
 		brainmob.reset_perspective()
 		brain = newbrain
@@ -142,17 +142,13 @@
 
 	var/mob/living/brain/new_brain_brainmob = new_brain.brainmob
 	if(!new_brain_brainmob.key && !new_brain.decoy_override)
-		new_brain_brainmob.notify_revival("Someone has put your brain in a MMI!", source = src)
+		new_brain_brainmob.notify_revival("Someone has put your brain in a MMI[brainmob.can_be_revived() ? "!" : ", though too damaged to speak."]", source = src)
 
 	set_brainmob(new_brain_brainmob)
 	new_brain.brainmob = null
 	brainmob.forceMove(src)
 	brainmob.container = src
-
-	var/fubar_brain = new_brain.suicided || HAS_TRAIT(brainmob, TRAIT_SUICIDED)
-	if(!fubar_brain && !(new_brain.organ_flags & ORGAN_FAILING))
-		brainmob.set_stat(CONSCIOUS)
-
+	brainmob.revive()
 	brainmob.reset_perspective()
 	brain = new_brain
 	brain.organ_flags |= ORGAN_FROZEN
@@ -183,7 +179,7 @@
 	if(brainmob)
 		brainmob.container = null //Reset brainmob mmi var.
 		brainmob.forceMove(brain) //Throw mob into brain.
-		brainmob.set_stat(DEAD)
+		brainmob.death()
 		brainmob.emp_damage = 0
 		brainmob.reset_perspective() //so the brainmob follows the brain organ instead of the mmi. And to update our vision
 		brain.brainmob = brainmob //Set the brain to use the brainmob

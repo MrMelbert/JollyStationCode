@@ -2,15 +2,15 @@
 	findQueen()
 	return..()
 
-/mob/living/carbon/alien/check_breath(datum/gas_mixture/breath)
+/mob/living/carbon/alien/check_breath(datum/gas_mixture/breath, skip_breath = FALSE)
 	if(status_flags & GODMODE)
 		return
 
-	if(!breath || (breath.total_moles() == 0))
+	if(!breath || skip_breath || (breath.total_moles() == 0))
 		//Aliens breathe in vaccuum
 		return 0
 
-	if(health <= HEALTH_THRESHOLD_CRIT)
+	if(health <= 0)
 		adjustOxyLoss(2)
 
 	var/plasma_used = 0
@@ -40,6 +40,7 @@
 
 	//BREATH TEMPERATURE
 	handle_breath_temperature(breath)
+	return TRUE
 
 /mob/living/carbon/alien/adult/Life(seconds_per_tick, times_fired)
 	. = ..()

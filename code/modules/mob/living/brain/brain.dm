@@ -67,7 +67,12 @@
 	return // no eyes, no flashing
 
 /mob/living/brain/can_be_revived()
-	if(!container || health <= HEALTH_THRESHOLD_DEAD)
+	if(health <= -maxHealth)
+		return FALSE
+	var/obj/item/organ/internal/brain/brain_real = container?.brain || loc
+	if(!istype(brain_real))
+		return FALSE
+	if(brain_real.organ_flags & ORGAN_FAILING)
 		return FALSE
 	return TRUE
 

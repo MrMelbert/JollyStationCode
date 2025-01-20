@@ -34,7 +34,13 @@
 		span_notice("[user] begins to tinker with [target]'s brain..."),
 		span_notice("[user] begins to perform surgery on [target]'s brain."),
 	)
-	display_pain(target, "Your head pounds with unimaginable pain!", target_zone = target_zone) // NON-MODULE CHANGE // Same message as other brain surgeries
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "Your head pounds with unimaginable pain!",
+		pain_amount = SURGERY_PAIN_CRITICAL,
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
 
 /datum/surgery_step/bionecrosis/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	display_results(
@@ -44,7 +50,13 @@
 		span_notice("[user] successfully grows a romerol tumor on [target]'s brain!"),
 		span_notice("[user] completes the surgery on [target]'s brain."),
 	)
-	display_pain(target, "Your head goes totally numb for a moment, the pain is overwhelming!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "Your head goes totally numb for a moment, the pain is overwhelming!",
+		pain_amount = SURGERY_PAIN_CRITICAL,
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
 	if(!target.get_organ_slot(ORGAN_SLOT_ZOMBIE))
 		var/obj/item/organ/internal/zombie_infection/z_infection = new()
 		z_infection.Insert(target)

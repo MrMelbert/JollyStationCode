@@ -1,3 +1,11 @@
+//for determining which type of heartbeat sound is playing
+///Heartbeat is beating fast for hard crit
+#define BEAT_FAST 1
+///Heartbeat is beating slow for soft crit
+#define BEAT_SLOW 2
+///Heartbeat is gone... He's dead Jim :(
+#define BEAT_NONE 0
+
 /obj/item/organ/internal/heart
 	name = "heart"
 	desc = "I feel bad for the heartless bastard who lost this."
@@ -23,9 +31,8 @@
 	/// Whether the heart is currently beating.
 	/// Do not set this directly. Use Restart() and Stop() instead.
 	VAR_PRIVATE/beating = TRUE
-
-	/// is this mob having a heatbeat sound played? if so, which?
-	var/beat = BEAT_NONE
+	/// Tracks what sfx is currently playing
+	var/playing_heartbeat_sfx = BEAT_SLOW
 	/// whether the heart's been operated on to fix some of its damages
 	var/operated = FALSE
 
@@ -37,7 +44,7 @@
 	. = ..()
 	if(!special)
 		addtimer(CALLBACK(src, PROC_REF(stop_if_unowned)), 12 SECONDS)
-	beat = BEAT_NONE
+	playing_heartbeat_sfx = BEAT_NONE
 	owner?.stop_sound_channel(CHANNEL_HEARTBEAT)
 
 /obj/item/organ/internal/heart/proc/stop_if_unowned()
@@ -68,8 +75,11 @@
 
 	beating = FALSE
 	update_appearance()
-	beat = BEAT_NONE
-	owner?.stop_sound_channel(CHANNEL_HEARTBEAT)
+	playing_heartbeat_sfx = BEAT_NONE
+	if(!isnull(owner))
+		owner.stop_sound_channel(CHANNEL_HEARTBEAT)
+		owner.apply_status_effect(/datum/status_effect/heart_attack)
+		SShealth_updates.queue_update(owner, UPDATE_MEDHUD_STATUS|UPDATE_MEDHUD_HEALTH)
 	return TRUE
 
 /obj/item/organ/internal/heart/proc/Restart()
@@ -78,6 +88,9 @@
 
 	beating = TRUE
 	update_appearance()
+	if(!isnull(owner))
+		owner.remove_status_effect(/datum/status_effect/heart_attack)
+		SShealth_updates.queue_update(owner, UPDATE_MEDHUD_STATUS|UPDATE_MEDHUD_HEALTH)
 	return TRUE
 
 /obj/item/organ/internal/heart/OnEatFrom(eater, feeder)
@@ -99,7 +112,7 @@
 	return ..() || owner.needs_heart()
 
 /obj/item/organ/internal/heart/on_life(seconds_per_tick, times_fired)
-	..()
+	. = ..()
 
 	// If the owner doesn't need a heart, we don't need to do anything with it.
 	if(!owner.needs_heart())
@@ -108,32 +121,68 @@
 	// Handle "sudden" heart attack
 	if(!beating || (organ_flags & ORGAN_FAILING))
 		if(owner.can_heartattack() && Stop())
-			if(owner.stat == CONSCIOUS)
+			if(owner.stat <= SOFT_CRIT && !owner.incapacitated(IGNORE_RESTRAINTS|IGNORE_GRAB))
 				owner.visible_message(span_danger("[owner] clutches at [owner.p_their()] chest as if [owner.p_their()] heart is stopping!"))
 			to_chat(owner, span_userdanger("You feel a terrible pain in your chest, as if your heart has stopped!"))
 		return
 
-	// Beyond deals with sound effects, so nothing needs to be done if no client
-	if(isnull(owner.client))
+	if(!owner.client?.prefs.read_preference(/datum/preference/toggle/heartbeat))
 		return
 
-	if(owner.stat == SOFT_CRIT)
-		if(beat != BEAT_SLOW)
-			beat = BEAT_SLOW
-			to_chat(owner, span_notice("You feel your heart slow down..."))
-			SEND_SOUND(owner, sound('sound/health/slowbeat.ogg', repeat = TRUE, channel = CHANNEL_HEARTBEAT, volume = 40))
-
-	else if(owner.stat == HARD_CRIT)
-		if(beat != BEAT_FAST && owner.has_status_effect(/datum/status_effect/jitter))
-			SEND_SOUND(owner, sound('sound/health/fastbeat.ogg', repeat = TRUE, channel = CHANNEL_HEARTBEAT, volume = 40))
-			beat = BEAT_FAST
-
-	else if(beat != BEAT_NONE)
-		owner.stop_sound_channel(CHANNEL_HEARTBEAT)
-		beat = BEAT_NONE
+	var/heartrate = get_heart_rate()
+	switch(heartrate)
+		if(1 to 6)
+			if(playing_heartbeat_sfx != BEAT_SLOW)
+				playing_heartbeat_sfx = BEAT_SLOW
+				SEND_SOUND(owner, sound('sound/health/slowbeat.ogg', repeat = TRUE, channel = CHANNEL_HEARTBEAT, volume = 40))
+		if(0, 6 to 11)
+			if(playing_heartbeat_sfx != BEAT_NONE)
+				playing_heartbeat_sfx = BEAT_NONE
+				owner.stop_sound_channel(CHANNEL_HEARTBEAT)
+		if(11 to INFINITY)
+			if(playing_heartbeat_sfx != BEAT_FAST)
+				playing_heartbeat_sfx = BEAT_FAST
+				SEND_SOUND(owner, sound('sound/health/fastbeat.ogg', repeat = TRUE, channel = CHANNEL_HEARTBEAT, volume = 40))
 
 /obj/item/organ/internal/heart/get_availability(datum/species/owner_species, mob/living/owner_mob)
 	return owner_species.mutantheart
+
+/// Gets the mob's heart rate scaled from 0 to 20(+)
+/mob/living/proc/get_heart_rate()
+	if(stat == DEAD)
+		return 0
+
+	return rand(7, 9)
+
+/// Gets the mob's heart rate as bpm
+/mob/living/proc/get_bpm()
+	return get_heart_rate() * 10 + rand(-10, 10)
+
+/mob/living/carbon/human/get_heart_rate()
+	if(stat == DEAD)
+		return 0
+
+	var/obj/item/organ/internal/heart/heart = get_organ_slot(ORGAN_SLOT_HEART)
+	return heart?.get_heart_rate() || 0
+
+/mob/living/carbon/human/get_bpm()
+	return get_heart_rate() * 10 + rand(-10, 15)
+
+/// Gets the heart rate of the heart, scaled from 0 to 20(+)
+/obj/item/organ/internal/heart/proc/get_heart_rate()
+	if(!is_beating() || isnull(owner))
+		return 0
+
+	var/base_amount = 8
+	base_amount += COUNT_TRAIT_SOURCES(owner, TRAIT_HEART_RATE_BOOST)
+	base_amount -= COUNT_TRAIT_SOURCES(owner, TRAIT_HEART_RATE_SLOW)
+	base_amount += round(owner.getOxyLoss() / 50, 0.5)
+	base_amount += round(owner.pain_controller?.get_total_pain() / 50, 0.5)
+	base_amount += round(owner.pain_controller?.traumatic_shock / 25, 0.5)
+	base_amount += round((BLOOD_VOLUME_NORMAL - owner.blood_volume) / 250, 0.5)
+	var/damage_multiplier = clamp(1.5 * ((maxHealth - damage) / maxHealth), 0.5, 1)
+
+	return round(base_amount * damage_multiplier, 0.5)
 
 /obj/item/organ/internal/heart/cursed
 	name = "cursed heart"
@@ -203,7 +252,7 @@
 
 /obj/item/organ/internal/heart/cybernetic/on_life(seconds_per_tick, times_fired)
 	. = ..()
-	if(dose_available && owner.health <= owner.crit_threshold && !owner.reagents.has_reagent(rid))
+	if(dose_available && owner.health <= 0 && !owner.reagents.has_reagent(rid))
 		used_dose()
 
 /obj/item/organ/internal/heart/cybernetic/proc/used_dose()

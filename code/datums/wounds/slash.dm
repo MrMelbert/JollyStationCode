@@ -5,6 +5,7 @@
 
 /datum/wound/slash
 	name = "Slashing (Cut) Wound"
+	undiagnosed_name = "Cut"
 	sound_effect = 'sound/weapons/slice.ogg'
 
 /datum/wound/slash/wound_injury(datum/wound/old_wound, attack_direction)
@@ -28,7 +29,7 @@
 	treatable_by_grabbed = list(/obj/item/gun/energy/laser)
 	treatable_tools = list(TOOL_CAUTERY)
 	base_treat_time = 3 SECONDS
-	wound_flags = (ACCEPTS_GAUZE|CAN_BE_GRASPED)
+	wound_flags = parent_type::wound_flags | CAN_BE_GRASPED
 
 	default_scar_file = FLESH_SCAR_FILE
 
@@ -108,7 +109,7 @@
 	return "<B>[msg.Join()]</B>"
 
 /datum/wound/slash/flesh/receive_damage(wounding_type, wounding_dmg, wound_bonus)
-	if (!victim) // if we are dismembered, we can still take damage, its fine to check here
+	if(isnull(victim)) // if we are dismembered, we can still take damage, its fine to check here
 		return
 
 	if(victim.stat != DEAD && wound_bonus != CANT_WOUND && wounding_type == WOUND_SLASH) // can't stab dead bodies to make it bleed faster this way
@@ -154,29 +155,14 @@
 	if(limb.current_gauze)
 		if(clot_rate > 0)
 			adjust_blood_flow(-clot_rate * seconds_per_tick)
-		adjust_blood_flow(-limb.current_gauze.absorption_rate * seconds_per_tick)
 		limb.seep_gauze(limb.current_gauze.absorption_rate * seconds_per_tick)
+		adjust_blood_flow(-limb.current_gauze.absorption_rate * seconds_per_tick)
 	//otherwise, only clot if it's a bleeder
 	else if(limb.can_bleed())
 		adjust_blood_flow(-clot_rate * seconds_per_tick)
 
 	if(blood_flow > highest_flow)
 		highest_flow = blood_flow
-
-	if(blood_flow < minimum_flow)
-		if(demotes_to)
-			replace_wound(new demotes_to)
-		else
-			to_chat(victim, span_green("The cut on your [limb.plaintext_zone] has [!limb.can_bleed() ? "healed up" : "stopped bleeding"]!"))
-			qdel(src)
-
-/datum/wound/slash/flesh/on_stasis(seconds_per_tick, times_fired)
-	if(blood_flow >= minimum_flow)
-		return
-	if(demotes_to)
-		replace_wound(new demotes_to)
-		return
-	qdel(src)
 
 /* BEWARE, THE BELOW NONSENSE IS MADNESS. bones.dm looks more like what I have in mind and is sufficiently clean, don't pay attention to this messiness */
 
@@ -191,8 +177,6 @@
 		return las_cauterize(I, user)
 	else if(I.tool_behaviour == TOOL_CAUTERY || I.get_temperature())
 		return tool_cauterize(I, user)
-	else if(istype(I, /obj/item/stack/medical/suture))
-		return suture(I, user)
 
 /datum/wound/slash/flesh/try_handling(mob/living/carbon/human/user)
 	if(user.pulling != victim || user.zone_selected != limb.body_zone || !isfelinid(user) || !victim.try_inject(user, injection_flags = INJECT_TRY_SHOW_ERROR_MESSAGE))
@@ -226,18 +210,27 @@
 
 	user.visible_message(span_notice("[user] licks the wounds on [victim]'s [limb.plaintext_zone]."), span_notice("You lick some of the wounds on [victim]'s [limb.plaintext_zone]"), ignored_mobs=victim)
 	to_chat(victim, span_green("[user] licks the wounds on your [limb.plaintext_zone]!"))
+
+	var/mob/victim_stored = victim
 	adjust_blood_flow(-0.5)
 
 	if(blood_flow > minimum_flow)
 		try_handling(user)
 	else if(demotes_to)
-		to_chat(user, span_green("You successfully lower the severity of [victim]'s cuts."))
+		to_chat(user, span_green("You successfully lower the severity of [user == victim_stored ? "your" : "[victim_stored]'s"] cuts."))
+
+/datum/wound/slash/flesh/adjust_blood_flow(adjust_by, minimum)
+	. = ..()
+	if(blood_flow < minimum_flow && !QDELETED(src))
+		if(demotes_to)
+			replace_wound(new demotes_to)
+		else
+			to_chat(victim, span_green("The cut on your [limb.plaintext_zone] has [!limb.can_bleed() ? "healed up" : "stopped bleeding"]!"))
+			qdel(src)
 
 /datum/wound/slash/flesh/on_xadone(power)
 	. = ..()
-
-	if (limb) // parent can cause us to be removed, so its reasonable to check if we're still applied
-		adjust_blood_flow(-0.03 * power) // i think it's like a minimum of 3 power, so .09 blood_flow reduction per tick is pretty good for 0 effort
+	adjust_blood_flow(-0.03 * power) // i think it's like a minimum of 3 power, so .09 blood_flow reduction per tick is pretty good for 0 effort
 
 /datum/wound/slash/flesh/on_synthflesh(reac_volume)
 	. = ..()
@@ -254,7 +247,7 @@
 	lasgun.chambered.loaded_projectile.damage *= self_penalty_mult
 	if(!lasgun.process_fire(victim, victim, TRUE, null, limb.body_zone))
 		return
-	victim.emote("scream")
+	victim.pain_emote("scream")
 	adjust_blood_flow(-1 * (damage / (5 * self_penalty_mult))) // 20 / 5 = 4 bloodflow removed, p good
 	victim.visible_message(span_warning("The cuts on [victim]'s [limb.plaintext_zone] scar over!"))
 	return TRUE
@@ -272,49 +265,26 @@
 	else
 		user.visible_message(span_danger("[user] begins cauterizing [victim]'s [limb.plaintext_zone] with [I]..."), span_warning("You begin cauterizing [user == victim ? "your" : "[victim]'s"] [limb.plaintext_zone] with [I]..."))
 
+	playsound(user, 'sound/surgery/cautery1.ogg', 75, TRUE)
+
 	if(!do_after(user, treatment_delay, target = victim, extra_checks = CALLBACK(src, PROC_REF(still_exists))))
 		return
+
+	playsound(user, 'sound/surgery/cautery2.ogg', 75, TRUE)
+
 	var/bleeding_wording = (!limb.can_bleed() ? "cuts" : "bleeding")
 	user.visible_message(span_green("[user] cauterizes some of the [bleeding_wording] on [victim]."), span_green("You cauterize some of the [bleeding_wording] on [victim]."))
-	limb.receive_damage(burn = 2 + severity, wound_bonus = CANT_WOUND)
-	if(prob(30))
-		victim.emote("scream")
+	victim.apply_damage(2 + severity, BURN, limb, wound_bonus = CANT_WOUND)
 	var/blood_cauterized = (0.6 / (self_penalty_mult * improv_penalty_mult))
+	var/mob/victim_stored = victim
 	adjust_blood_flow(-blood_cauterized)
 
 	if(blood_flow > minimum_flow)
 		return try_treating(I, user)
 	else if(demotes_to)
-		to_chat(user, span_green("You successfully lower the severity of [user == victim ? "your" : "[victim]'s"] cuts."))
+		to_chat(user, span_green("You successfully lower the severity of [user == victim_stored ? "your" : "[victim_stored]'s"] cuts."))
 		return TRUE
 	return FALSE
-
-/// If someone is using a suture to close this cut
-/datum/wound/slash/flesh/proc/suture(obj/item/stack/medical/suture/I, mob/user)
-	var/self_penalty_mult = (user == victim ? 1.4 : 1)
-	var/treatment_delay = base_treat_time * self_penalty_mult
-
-	if(HAS_TRAIT(src, TRAIT_WOUND_SCANNED))
-		treatment_delay *= 0.5
-		user.visible_message(span_notice("[user] begins expertly stitching [victim]'s [limb.plaintext_zone] with [I]..."), span_notice("You begin stitching [user == victim ? "your" : "[victim]'s"] [limb.plaintext_zone] with [I], keeping the holo-image information in mind..."))
-	else
-		user.visible_message(span_notice("[user] begins stitching [victim]'s [limb.plaintext_zone] with [I]..."), span_notice("You begin stitching [user == victim ? "your" : "[victim]'s"] [limb.plaintext_zone] with [I]..."))
-
-	if(!do_after(user, treatment_delay, target = victim, extra_checks = CALLBACK(src, PROC_REF(still_exists))))
-		return TRUE
-	var/bleeding_wording = (!limb.can_bleed() ? "cuts" : "bleeding")
-	user.visible_message(span_green("[user] stitches up some of the [bleeding_wording] on [victim]."), span_green("You stitch up some of the [bleeding_wording] on [user == victim ? "yourself" : "[victim]"]."))
-	var/blood_sutured = I.stop_bleeding / self_penalty_mult
-	adjust_blood_flow(-blood_sutured)
-	limb.heal_damage(I.heal_brute, I.heal_burn)
-	I.use(1)
-
-	if(blood_flow > minimum_flow)
-		return try_treating(I, user)
-	else if(demotes_to)
-		to_chat(user, span_green("You successfully lower the severity of [user == victim ? "your" : "[victim]'s"] cuts."))
-		return TRUE
-	return TRUE
 
 /datum/wound/slash/get_limb_examine_description()
 	return span_warning("The flesh on this limb appears badly lacerated.")
@@ -401,7 +371,7 @@
 	demotes_to = /datum/wound/slash/flesh/severe
 	status_effect_type = /datum/status_effect/wound/slash/flesh/critical
 	scar_keyword = "slashcritical"
-	wound_flags = (ACCEPTS_GAUZE | MANGLES_EXTERIOR | CAN_BE_GRASPED)
+	wound_flags = parent_type::wound_flags | MANGLES_EXTERIOR
 	simple_treat_text = "<b>Bandaging</b> the wound is of utmost importance, as is seeking direct medical attention - <b>Death</b> will ensue if treatment is delayed whatsoever, with lack of <b>oxygen</b> killing the patient, thus <b>Food, Iron, and saline solution</b> is always recommended after treatment. This wound will not naturally seal itself."
 	homemade_treat_text = "Bed sheets can be ripped up to make <b>makeshift gauze</b>. <b>Flour, salt, and saltwater</b> topically applied will help. Dropping to the ground and grabbing your wound will reduce blood flow."
 

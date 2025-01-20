@@ -186,8 +186,13 @@
 			span_notice("[user] begins to insert [tool] into [target]'s [parse_zone(target_zone)]."),
 			span_notice("[user] begins to insert something into [target]'s [parse_zone(target_zone)]."),
 		)
-		display_pain(target, "You can feel something being placed in your [parse_zone(target_zone)]!", target_zone = target_zone) // NON-MODULE CHANGE
-
+		display_pain(
+			target = target,
+			target_zone = target_zone,
+			pain_message = "You can feel something being placed in your [parse_zone(target_zone)]!",
+			pain_amount = SURGERY_PAIN_TRIVIAL,
+			surgery_moodlet = /datum/mood_event/surgery/major,
+		)
 
 	else if(implement_type in implements_extract)
 		current_type = "extract"
@@ -225,7 +230,13 @@
 					span_notice("[user] begins to extract [target_organ] from [target]'s [parse_zone(target_zone)]."),
 					span_notice("[user] begins to extract something from [target]'s [parse_zone(target_zone)]."),
 				)
-				display_pain(target, "You can feel your [target_organ.name] being removed from your [parse_zone(target_zone)]!", target_zone = target_zone) // NON-MODULE CHANGE
+				display_pain(
+					target = target,
+					target_zone = target_zone,
+					pain_message = "You can feel your [target_organ.name] being removed from your [parse_zone(target_zone)]!",
+					pain_amount = SURGERY_PAIN_MEDIUM,
+					surgery_moodlet = /datum/mood_event/surgery/major,
+				)
 			else
 				return SURGERY_STEP_FAIL
 
@@ -251,7 +262,13 @@
 				span_notice("[user] inserts [tool] into [target]'s [parse_zone(target_zone)]!"),
 				span_notice("[user] inserts something into [target]'s [parse_zone(target_zone)]!"),
 			)
-			display_pain(target, "Your [parse_zone(target_zone)] throbs with pain as your new [tool.name] comes to life!", target_zone = target_zone) // NON-MODULE CHANGE
+			display_pain(
+				target = target,
+				target_zone = target_zone,
+				pain_message = "Your [parse_zone(target_zone)] throbs with pain as your new [tool.name] comes to life!",
+				pain_amount = SURGERY_PAIN_TRIVIAL,
+				surgery_moodlet = /datum/mood_event/surgery/major,
+			)
 		else
 			target_organ.forceMove(target.loc)
 
@@ -264,7 +281,13 @@
 				span_notice("[user] successfully extracts [target_organ] from [target]'s [parse_zone(target_zone)]!"),
 				span_notice("[user] successfully extracts something from [target]'s [parse_zone(target_zone)]!"),
 			)
-			display_pain(target, "Your [parse_zone(target_zone)] throbs with pain, you can't feel your [target_organ.name] anymore!", target_zone = target_zone) // NON-MODULE CHANGE
+			display_pain(
+				target = target,
+				target_zone = target_zone,
+				pain_message = "Your [parse_zone(target_zone)] throbs with pain, you can't feel your [target_organ.name] anymore!",
+				pain_amount = SURGERY_PAIN_LOW,
+				surgery_moodlet = /datum/mood_event/surgery/major,
+			)
 			log_combat(user, target, "surgically removed [target_organ.name] from", addition="COMBAT MODE: [uppertext(user.combat_mode)]")
 			target_organ.Remove(target)
 			target_organ.forceMove(get_turf(target))

@@ -27,85 +27,46 @@
 	dupe_mode = COMPONENT_DUPE_ALLOWED
 	var/obj/item/bodypart/limb
 	var/obj/item/weapon
-
-	// all of this stuff is explained in _DEFINES/combat.dm
-	var/embed_chance // not like we really need it once we're already stuck in but hey
-	var/fall_chance
-	var/pain_chance
-	var/pain_mult
-	var/impact_pain_mult
-	var/remove_pain_mult
-	var/rip_time
-	var/ignore_throwspeed_threshold
-	var/jostle_chance
-	var/jostle_pain_mult
-	var/pain_stam_pct
-
 	///if both our pain multiplier and jostle pain multiplier are 0, we're harmless and can omit most of the damage related stuff
 	var/harmful
+	/// MELBERT TODO refactor this later
+	var/fall_chance_mod = 0
 
-/datum/component/embedded/Initialize(obj/item/I,
-			datum/thrownthing/throwingdatum,
-			obj/item/bodypart/part,
-			embed_chance = EMBED_CHANCE,
-			fall_chance = EMBEDDED_ITEM_FALLOUT,
-			pain_chance = EMBEDDED_PAIN_CHANCE,
-			pain_mult = EMBEDDED_PAIN_MULTIPLIER,
-			remove_pain_mult = EMBEDDED_UNSAFE_REMOVAL_PAIN_MULTIPLIER,
-			impact_pain_mult = EMBEDDED_IMPACT_PAIN_MULTIPLIER,
-			rip_time = EMBEDDED_UNSAFE_REMOVAL_TIME,
-			ignore_throwspeed_threshold = FALSE,
-			jostle_chance = EMBEDDED_JOSTLE_CHANCE,
-			jostle_pain_mult = EMBEDDED_JOSTLE_PAIN_MULTIPLIER,
-			pain_stam_pct = EMBEDDED_PAIN_STAM_PCT)
+/datum/component/embedded/Initialize(
+	obj/item/weapon,
+	datum/thrownthing/throwingdatum,
+	obj/item/bodypart/part,
+)
 
-	if(!iscarbon(parent) || !isitem(I))
+	if(!iscarbon(parent) || !isitem(weapon))
 		return COMPONENT_INCOMPATIBLE
 
-	if(QDELETED(I))
-		stack_trace("QDELETING item [I] trying to embedded!")
-		return COMPONENT_INCOMPATIBLE
-
-	if(part)
-		limb = part
-	src.embed_chance = embed_chance
-	src.fall_chance = fall_chance
-	src.pain_chance = pain_chance
-	src.pain_mult = pain_mult
-	src.remove_pain_mult = remove_pain_mult
-	src.rip_time = rip_time
-	src.impact_pain_mult = impact_pain_mult
-	src.ignore_throwspeed_threshold = ignore_throwspeed_threshold
-	src.jostle_chance = jostle_chance
-	src.jostle_pain_mult = jostle_pain_mult
-	src.pain_stam_pct = pain_stam_pct
-	src.weapon = I
-
-	if(!weapon.isEmbedHarmless())
-		harmful = TRUE
+	src.weapon = weapon
+	src.limb = part
+	src.harmful = !weapon.is_embed_harmless()
 
 	weapon.embedded(parent, part)
 	START_PROCESSING(SSdcs, src)
 	var/mob/living/carbon/victim = parent
-
+	var/datum/embed_data/embed_data = weapon.get_embed()
 	limb._embed_object(weapon) // on the inside... on the inside...
 	weapon.forceMove(victim)
 	RegisterSignals(weapon, list(COMSIG_MOVABLE_MOVED, COMSIG_QDELETING), PROC_REF(weaponDeleted))
-	victim.visible_message(span_danger("[weapon] [harmful ? "embeds" : "sticks"] itself [harmful ? "in" : "to"] [victim]'s [limb.plaintext_zone]!"), span_userdanger("[weapon] [harmful ? "embeds" : "sticks"] itself [harmful ? "in" : "to"] your [limb.plaintext_zone]!"))
+	embed_data.on_embed(victim, part, weapon, harmful)
 
 	var/damage = weapon.throwforce
 	if(harmful)
-		victim.throw_alert(ALERT_EMBEDDED_OBJECT, /atom/movable/screen/alert/embeddedobject)
-		playsound(victim,'sound/weapons/bladeslice.ogg', 40)
-		if (limb.can_bleed())
+		if(!embed_data.hidden_embed)
+			victim.throw_alert(ALERT_EMBEDDED_OBJECT, /atom/movable/screen/alert/embeddedobject)
+			victim.add_mood_event("embedded", /datum/mood_event/embedded)
+		if(limb.can_bleed())
 			weapon.add_mob_blood(victim)//it embedded itself in you, of course it's bloody!
-		damage += weapon.w_class * impact_pain_mult
-		victim.add_mood_event("embedded", /datum/mood_event/embedded)
+		damage += weapon.w_class * embed_data.impact_pain_mult
 
 	if(damage > 0)
-		var/armor = victim.run_armor_check(limb.body_zone, MELEE, "Your armor has protected your [limb.plaintext_zone].", "Your armor has softened a hit to your [limb.plaintext_zone].",I.armour_penetration, weak_against_armour = I.weak_against_armour)
-		limb.receive_damage(brute=(1-pain_stam_pct) * damage, blocked=armor, wound_bonus = I.wound_bonus, bare_wound_bonus = I.bare_wound_bonus, sharpness = I.get_sharpness())
-		victim.adjustStaminaLoss(pain_stam_pct * damage)
+		var/armor = victim.run_armor_check(limb.body_zone, MELEE, "Your armor has protected your [limb.plaintext_zone].", "Your armor has softened a hit to your [limb.plaintext_zone].", weapon.armour_penetration, weak_against_armour = weapon.weak_against_armour)
+		victim.apply_damage((1 - embed_data.pain_stam_pct) * damage, BRUTE, limb, blocked = armor, wound_bonus = weapon.wound_bonus, bare_wound_bonus = weapon.bare_wound_bonus, sharpness = weapon.get_sharpness(), attacking_item = weapon)
+		victim.apply_damage(embed_data.pain_stam_pct * damage, PAIN, limb)
 
 /datum/component/embedded/Destroy()
 	var/mob/living/carbon/victim = parent
@@ -131,7 +92,7 @@
 /datum/component/embedded/process(seconds_per_tick)
 	var/mob/living/carbon/victim = parent
 
-	if(!victim || !limb) // in case the victim and/or their limbs exploded (say, due to a sticky bomb)
+	if(QDELETED(victim) || QDELETED(limb)) // in case the victim and/or their limbs exploded (say, due to a sticky bomb)
 		weapon.forceMove(get_turf(weapon))
 		qdel(src)
 		return
@@ -139,24 +100,26 @@
 	if(victim.stat == DEAD)
 		return
 
-	var/damage = weapon.w_class * pain_mult
-	var/pain_chance_current = SPT_PROB_RATE(pain_chance / 100, seconds_per_tick) * 100
-	if(pain_stam_pct && HAS_TRAIT_FROM(victim, TRAIT_INCAPACITATED, STAMINA)) //if it's a less-lethal embed, give them a break if they're already stamcritted
-		pain_chance_current *= 0.2
-		damage *= 0.5
-	else if(victim.body_position == LYING_DOWN)
+	var/datum/embed_data/embed_data = weapon.get_embed()
+	var/damage = weapon.w_class * embed_data.pain_mult
+	var/pain_chance_current = harmful ? embed_data.pain_chance : 0
+	if(victim.body_position == LYING_DOWN)
 		pain_chance_current *= 0.2
 
-	if(harmful && prob(pain_chance_current))
-		limb.receive_damage(brute=(1-pain_stam_pct) * damage, wound_bonus = CANT_WOUND)
-		victim.adjustStaminaLoss(pain_stam_pct * damage)
-		to_chat(victim, span_userdanger("[weapon] embedded in your [limb.plaintext_zone] hurts!"))
+	if(SPT_PROB(pain_chance_current, seconds_per_tick))
+		victim.apply_damage((1 - embed_data.pain_stam_pct) * damage, BRUTE, limb, wound_bonus = CANT_WOUND)
+		if(CAN_FEEL_PAIN(victim))
+			victim.apply_damage(embed_data.pain_stam_pct * damage, PAIN, limb)
+			if(embed_data.hidden_embed)
+				to_chat(victim, span_danger("Something in your [limb.plaintext_zone] hurts!"))
+			else
+				to_chat(victim, span_userdanger("[weapon] embedded in your [limb.plaintext_zone] hurts!"))
 
-	var/fall_chance_current = SPT_PROB_RATE(fall_chance / 100, seconds_per_tick) * 100
+	var/fall_chance_current = embed_data.fall_chance + fall_chance_mod
 	if(victim.body_position == LYING_DOWN)
 		fall_chance_current *= 0.2
 
-	if(prob(fall_chance_current))
+	if(SPT_PROB(fall_chance_current, seconds_per_tick))
 		fallOut()
 
 ////////////////////////////////////////
@@ -169,25 +132,40 @@
 	SIGNAL_HANDLER
 
 	var/mob/living/carbon/victim = parent
-	var/chance = jostle_chance
-	if(victim.move_intent == MOVE_INTENT_WALK || victim.body_position == LYING_DOWN)
+	var/datum/embed_data/embed_data = weapon.get_embed()
+	var/chance = harmful ? embed_data.jostle_chance : 0
+	if(victim.move_intent == MOVE_INTENT_SNEAK || victim.body_position == LYING_DOWN)
 		chance *= 0.5
+	else if(victim.move_intent == MOVE_INTENT_RUN)
+		chance *= 1.5
 
-	if(harmful && prob(chance))
-		var/damage = weapon.w_class * jostle_pain_mult
-		limb.receive_damage(brute=(1-pain_stam_pct) * damage, wound_bonus = CANT_WOUND)
-		victim.adjustStaminaLoss(pain_stam_pct * damage)
-		to_chat(victim, span_userdanger("[weapon] embedded in your [limb.plaintext_zone] jostles and stings!"))
+	if(!prob(chance))
+		return
 
+	var/damage = weapon.w_class * embed_data.jostle_pain_mult
+	victim.apply_damage((1 -  embed_data.pain_stam_pct) * damage, BRUTE, limb, wound_bonus = CANT_WOUND)
+	if(CAN_FEEL_PAIN(victim))
+		victim.apply_damage( embed_data.pain_stam_pct * damage, PAIN, limb)
+		if(embed_data.hidden_embed)
+			to_chat(victim, span_danger("Something in your [limb.plaintext_zone] jostles and stings!"))
+		else
+			to_chat(victim, span_userdanger("[weapon] embedded in your [limb.plaintext_zone] jostles and stings!"))
+	else
+		if(embed_data.hidden_embed)
+			to_chat(victim, span_danger("Something in your [limb.plaintext_zone] jostles!"))
+		else
+			to_chat(victim, span_danger("[weapon] embedded in your [limb.plaintext_zone] jostles!"))
 
 /// Called when then item randomly falls out of a carbon. This handles the damage and descriptors, then calls safe_remove()
 /datum/component/embedded/proc/fallOut()
 	var/mob/living/carbon/victim = parent
+	var/datum/embed_data/embed_data = weapon.get_embed()
 
 	if(harmful)
-		var/damage = weapon.w_class * remove_pain_mult
-		limb.receive_damage(brute=(1-pain_stam_pct) * damage, wound_bonus = CANT_WOUND)
-		victim.adjustStaminaLoss(pain_stam_pct * damage)
+		var/damage = weapon.w_class *  embed_data.remove_pain_mult
+		victim.apply_damage((1 -  embed_data.pain_stam_pct) * damage, BRUTE, limb, wound_bonus = CANT_WOUND)
+		victim.apply_damage( embed_data.pain_stam_pct * damage, PAIN, limb)
+
 	victim.visible_message(span_danger("[weapon] falls [harmful ? "out" : "off"] of [victim.name]'s [limb.plaintext_zone]!"), span_userdanger("[weapon] falls [harmful ? "out" : "off"] of your [limb.plaintext_zone]!"))
 	safeRemove()
 
@@ -199,7 +177,8 @@
 	if(I != weapon || src.limb != limb)
 		return
 	var/mob/living/carbon/victim = parent
-	var/time_taken = rip_time * weapon.w_class
+	var/datum/embed_data/embed_data = weapon.get_embed()
+	var/time_taken = embed_data.rip_time * weapon.w_class * 2 // melbert todo : remove this *2 when other people can rip out things from you
 	INVOKE_ASYNC(src, PROC_REF(complete_rip_out), victim, I, limb, time_taken)
 
 /// everything async that ripOut used to do
@@ -218,10 +197,11 @@
 
 /// Proc that actually does the damage associated with ripping something out of yourself. Call this before safeRemove.
 /datum/component/embedded/proc/damaging_removal(mob/living/carbon/victim, obj/item/removed, obj/item/bodypart/limb, ouch_multiplier = 1)
-	var/damage = weapon.w_class * remove_pain_mult * ouch_multiplier
-	limb.receive_damage(brute=(1-pain_stam_pct) * damage, sharpness=SHARP_EDGED) //It hurts to rip it out, get surgery you dingus. unlike the others, this CAN wound + increase slash bloodflow
-	victim.adjustStaminaLoss(pain_stam_pct * damage)
-	victim.emote("scream")
+	var/datum/embed_data/embed_data = weapon.get_embed()
+	var/damage = weapon.w_class * embed_data.remove_pain_mult * ouch_multiplier
+	victim.apply_damage((1 - embed_data.pain_stam_pct) * damage, BRUTE, limb, sharpness = SHARP_EDGED) //It hurts to rip it out, get surgery you dingus. unlike the others, this CAN wound + increase slash bloodflow
+	victim.apply_damage(embed_data.pain_stam_pct * damage, PAIN, limb)
+	victim.pain_emote("scream")
 
 /// This proc handles the final step and actual removal of an embedded/stuck item from a carbon, whether or not it was actually removed safely.
 /// If you want the thing to go into someone's hands rather than the floor, pass them in to_hands
@@ -250,7 +230,7 @@
 	limb._unembed_object(weapon)
 
 	if(victim)
-		to_chat(victim, span_userdanger("\The [weapon] that was embedded in your [limb.plaintext_zone] disappears!"))
+		to_chat(victim, span_danger("[weapon] that was embedded in your [limb.plaintext_zone] disappears!"))
 
 	qdel(src)
 
@@ -275,35 +255,41 @@
 /// The actual action for pulling out an embedded object with a hemostat
 /datum/component/embedded/proc/tweezePluck(obj/item/possible_tweezers, mob/user)
 	var/mob/living/carbon/victim = parent
+	var/datum/embed_data/embed_data = weapon.get_embed()
 	var/self_pluck = (user == victim)
 	// quality of the tool we're using
 	var/tweezer_speed = possible_tweezers.toolspeed
 	// is this an actual piece of medical equipment
 	var/tweezer_safe = (possible_tweezers.tool_behaviour == TOOL_HEMOSTAT)
-	var/pluck_time = rip_time * (weapon.w_class * 0.3) * (self_pluck ? 1.5 : 1) * tweezer_speed * (tweezer_safe ? 1 : 1.5)
+	var/pluck_time = embed_data.rip_time * (weapon.w_class * 0.3) * (self_pluck ? 1.5 : 1) * tweezer_speed * (tweezer_safe ? 1 : 1.5)
 
-	if(self_pluck)
-		user.visible_message(span_danger("[user] begins plucking [weapon] from [user.p_their()] [limb.plaintext_zone] with [possible_tweezers]..."), span_notice("You start plucking [weapon] from your [limb.plaintext_zone] with [possible_tweezers]... (It will take [DisplayTimeText(pluck_time)])"),\
-			vision_distance=COMBAT_MESSAGE_RANGE, ignored_mobs=victim)
-	else
-		user.visible_message(span_danger("[user] begins plucking [weapon] from [victim]'s [limb.plaintext_zone] with [possible_tweezers]..."),span_notice("You start plucking [weapon] from [victim]'s [limb.plaintext_zone] with [possible_tweezers]... (It will take [DisplayTimeText(pluck_time)])"), \
-			vision_distance=COMBAT_MESSAGE_RANGE, ignored_mobs=victim)
-		to_chat(victim, span_userdanger("[user] begins plucking [weapon] from your [limb.plaintext_zone] with [possible_tweezers]... (It will take [DisplayTimeText(pluck_time)])"))
+	user.visible_message(
+		span_danger("[user] begins plucking [weapon] from [user == victim ? user.p_their() : "[victim]'s"] [limb.plaintext_zone] with [possible_tweezers]..."),
+		span_notice("You start plucking [weapon] from [user == victim ? "your" : "[victim]'s"] [limb.plaintext_zone] with [possible_tweezers]... (It will take [DisplayTimeText(pluck_time)].)"),
+		vision_distance = COMBAT_MESSAGE_RANGE
+	)
 
+	playsound(user, 'sound/surgery/hemostat1.ogg', 50, TRUE, falloff_exponent = 12, falloff_distance = 1)
 	if(!do_after(user, pluck_time, victim))
-		if(self_pluck)
-			to_chat(user, span_danger("You fail to pluck [weapon] from your [limb.plaintext_zone]."))
-		else
-			to_chat(user, span_danger("You fail to pluck [weapon] from [victim]'s [limb.plaintext_zone]."))
-			to_chat(victim, span_danger("[user] fails to pluck [weapon] from your [limb.plaintext_zone]."))
+		return
+	if(QDELETED(src))
 		return
 
-	to_chat(user, span_notice("You successfully pluck [weapon] from [victim]'s [limb.plaintext_zone][tweezer_safe ? "." : ", but hurt [victim.p_them()] in the process."]"))
-	to_chat(victim, span_notice("[user] plucks [weapon] from your [limb.plaintext_zone][tweezer_safe ? "." : ", but it's not perfect."]"))
+	user.visible_message(
+		span_danger("[user] plucks [weapon] from [victim]'s [limb.plaintext_zone][tweezer_safe ? "." : ", but hurt [victim.p_them()] in the process."]"),
+		span_notice("You pluck [weapon] from [victim]'s [limb.plaintext_zone][tweezer_safe ? "." : ", but it's not perfect."]"),
+		vision_distance = COMBAT_MESSAGE_RANGE,
+	)
+
+	var/obj/item/bodypart/our_limb = limb // because we null after removing
+
 	if(!tweezer_safe)
 		// sure it still hurts but it sucks less
 		damaging_removal(victim, weapon, limb, (0.4 * possible_tweezers.w_class))
 	safeRemove(user)
+
+	if(length(our_limb.embedded_objects))
+		victim.attackby(possible_tweezers, user) // loop if we can
 
 /// Called when an object is ripped out of someone's body by magic or other abnormal means
 /datum/component/embedded/proc/magic_pull(datum/source, mob/living/caster, obj/marked_item)
@@ -317,11 +303,13 @@
 	if(!harmful)
 		victim.visible_message(span_danger("[marked_item] vanishes from [victim.name]'s [limb.plaintext_zone]!"), span_userdanger("[weapon] vanishes from [limb.plaintext_zone]!"))
 		return
-	var/damage = weapon.w_class * remove_pain_mult
-	limb.receive_damage(brute=(1-pain_stam_pct) * damage * 1.5, sharpness=SHARP_EDGED) // Performs exit wounds and flings the user to the caster if nearby
+	var/datum/embed_data/embed_data = weapon.get_embed()
+	var/damage = weapon.w_class * embed_data.remove_pain_mult
 	victim.cause_wound_of_type_and_severity(WOUND_PIERCE, limb, WOUND_SEVERITY_MODERATE)
-	victim.adjustStaminaLoss(pain_stam_pct * damage)
-	playsound(get_turf(victim), 'sound/effects/wounds/blood2.ogg', 50, TRUE)
+	victim.apply_damage((1 - embed_data.pain_stam_pct) * damage * 1.5, BRUTE, limb, sharpness = SHARP_EDGED) // Performs exit wounds and flings the user to the caster if nearby
+	victim.apply_damage(embed_data.pain_stam_pct * damage, PAIN, limb)
+
+	playsound(victim, 'sound/effects/wounds/blood2.ogg', 50, TRUE)
 
 	var/dist = get_dist(caster, victim) //Check if the caster is close enough to yank them in
 	if(dist < 7)

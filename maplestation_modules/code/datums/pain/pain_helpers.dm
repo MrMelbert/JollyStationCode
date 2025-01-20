@@ -81,27 +81,13 @@
 	return pain_controller?.unset_pain_modifier(id)
 
 /**
- * Checks if this mob can feel pain.
- *
- * By default mobs cannot feel pain if they have a pain modifier of 0.5 or less.
- */
-/mob/living/proc/can_feel_pain()
-	return pain_controller?.pain_modifier > 0.5 && !HAS_TRAIT(src, TRAIT_NO_PAIN_EFFECTS)
-
-/**
  * Adjusts the progress of pain shock on the current mob.
  *
  * * amount - the number of ticks of progress to remove. Note that one tick = two seconds for pain.
  * * down_to - the minimum amount of pain shock the mob can have. Defaults to -30, giving the mob a buffer against shock.
  */
-/mob/living/proc/adjust_pain_shock(amount, down_to = -30)
-	if(isnull(pain_controller))
-		return
-	if(amount > 0 && HAS_TRAIT(src, TRAIT_NO_SHOCK_BUILDUP))
-		return
-
-	ASSERT(isnum(amount))
-	pain_controller.shock_buildup = max(pain_controller.shock_buildup + amount, down_to)
+/mob/living/proc/adjust_traumatic_shock(amount, down_to = -20)
+	pain_controller?.adjust_traumatic_shock(amount, down_to)
 
 /**
  * Cause [amount] of [dam_type] sharp pain to [target_zones].
@@ -111,17 +97,14 @@
  * * amount - how much sharp pain to inflict
  * * dam_type - the type of sharp pain to inflict. Only [BRUTE] and [BURN] really matters.
  * * duration - how long the sharp pain lasts for
+ * * return_mod - how much of the sharp pain is healed when the effect ends
  */
-/mob/living/proc/sharp_pain(target_zones, amount, dam_type = BRUTE, duration = 1 MINUTES)
+/mob/living/proc/sharp_pain(target_zones, amount, dam_type = BRUTE, duration = 1 MINUTES, return_mod = 0.33)
 	if(isnull(pain_controller))
 		return
 	ASSERT(!isnull(target_zones))
 	ASSERT(isnum(amount))
-
-	if(!islist(target_zones))
-		target_zones = list(target_zones)
-	for(var/zone in target_zones)
-		apply_status_effect(/datum/status_effect/sharp_pain, zone, amount, dam_type, duration)
+	apply_status_effect(/datum/status_effect/sharp_pain, target_zones, amount, dam_type, duration, return_mod)
 
 /**
  * Set [id] pain modifier to [amount], and
@@ -147,7 +130,7 @@
 /mob/living/proc/get_bodypart_pain(target_zone, get_modified = FALSE)
 	ASSERT(!isnull(target_zone))
 
-	var/obj/item/bodypart/checked_bodypart = pain_controller?.body_zones[target_zone]
+	var/obj/item/bodypart/checked_bodypart = get_bodypart(target_zone)
 	if(isnull(checked_bodypart))
 		return 0
 

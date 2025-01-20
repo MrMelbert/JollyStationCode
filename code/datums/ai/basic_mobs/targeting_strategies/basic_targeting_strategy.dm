@@ -57,7 +57,7 @@
 		var/mob/living/living_target = the_target
 		if(faction_check(our_controller, living_mob, living_target))
 			return FALSE
-		if(living_target.stat > our_controller.blackboard[minimum_stat_key])
+		if(living_target.stat > (our_controller.blackboard[minimum_stat_key] || SOFT_CRIT))
 			return FALSE
 		if(target_wounded_key && our_controller.blackboard[target_wounded_key] && living_target.health == living_target.maxHealth)
 			return FALSE

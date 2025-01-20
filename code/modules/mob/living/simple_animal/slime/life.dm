@@ -124,7 +124,7 @@
 		stop_feeding(FALSE, FALSE)
 		return
 
-	add_nutrition((rand(7, 15) * 0.5 * seconds_per_tick * CONFIG_GET(number/damage_multiplier)))
+	add_nutrition((rand(7, 15) * 0.5 * seconds_per_tick))
 
 	//Heal yourself.
 	adjustBruteLoss(-1.5 * seconds_per_tick)

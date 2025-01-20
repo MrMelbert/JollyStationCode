@@ -27,8 +27,15 @@
 		span_notice("[user] starts splicing together [target]'s nerves."),
 		span_notice("[user] starts manipulating [target]'s nervous system."),
 	)
-	display_pain(target, "Your entire body goes numb!", target_zone = target_zone) // NON-MODULE CHANGE
-	target.cause_pain(BODY_ZONES_ALL, 15, BURN) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = BODY_ZONES_ALL,
+		pain_message = "Your entire body goes numb!",
+		pain_amount = SURGERY_PAIN_HIGH,
+		pain_type = BURN,
+		pain_overlay_severity = 2,
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
 
 /datum/surgery_step/splice_nerves/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	display_results(
@@ -38,7 +45,13 @@
 		span_notice("[user] successfully splices [target]'s nervous system!"),
 		span_notice("[user] finishes manipulating [target]'s nervous system."),
 	)
-	display_pain(target, "You regain feeling in your body; It feels like everything's happening around you in slow motion!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = BODY_ZONES_ALL,
+		pain_message = "You regain feeling in your body; It feels like everything's happening around you in slow motion!",
+		pain_amount = -0.5 * SURGERY_PAIN_HIGH,
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
 	new /datum/bioware/spliced_nerves(target)
 	if(target.ckey)
 		SSblackbox.record_feedback("nested tally", "nerve_splicing", 1, list("[target.ckey]", "got"))

@@ -20,12 +20,20 @@
 		/datum/surgery_step/close,
 	)
 
-/datum/surgery/repair_bone_hairline/can_start(mob/living/user, mob/living/carbon/target)
-	. = ..()
-	if(.)
-		var/obj/item/bodypart/targeted_bodypart = target.get_bodypart(user.zone_selected)
-		return(targeted_bodypart.get_wound_type(targetable_wound))
-
+/datum/surgery/repair_broken_rib
+	name = "Repair fractured rib (hairline)"
+	surgery_flags = SURGERY_REQUIRE_RESTING | SURGERY_REQUIRE_LIMB | SURGERY_REQUIRES_REAL_LIMB
+	targetable_wound = /datum/wound/blunt/bone/rib_break
+	possible_locs = list(
+		BODY_ZONE_CHEST,
+	)
+	steps = list(
+		/datum/surgery_step/incise,
+		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/repair_bone_hairline,
+		/datum/surgery_step/close,
+	)
 
 ///// Repair Compound Fracture (Critical)
 /datum/surgery/repair_bone_compound
@@ -49,12 +57,6 @@
 		/datum/surgery_step/close,
 	)
 
-/datum/surgery/repair_bone_compound/can_start(mob/living/user, mob/living/carbon/target)
-	. = ..()
-	if(.)
-		var/obj/item/bodypart/targeted_bodypart = target.get_bodypart(user.zone_selected)
-		return(targeted_bodypart.get_wound_type(targetable_wound))
-
 //SURGERY STEPS
 
 ///// Repair Hairline Fracture (Severe)
@@ -73,13 +75,21 @@
 		display_results(
 			user,
 			target,
-			span_notice("You begin to repair the fracture in [target]'s [parse_zone(user.zone_selected)]..."),
-			span_notice("[user] begins to repair the fracture in [target]'s [parse_zone(user.zone_selected)] with [tool]."),
-			span_notice("[user] begins to repair the fracture in [target]'s [parse_zone(user.zone_selected)]."),
+			span_notice("You begin to repair the fracture in [target]'s [parse_zone(target_zone)]..."),
+			span_notice("[user] begins to repair the fracture in [target]'s [parse_zone(target_zone)] with [tool]."),
+			span_notice("[user] begins to repair the fracture in [target]'s [parse_zone(target_zone)]."),
 		)
-		display_pain(target, "Your [parse_zone(user.zone_selected)] aches with pain!", target_zone = target_zone) // NON-MODULE CHANGE
+		display_pain(
+			target = target,
+			target_zone = target_zone,
+			pain_message = "Your [parse_zone(target_zone)] aches with pain!",
+			pain_amount = SURGERY_PAIN_MEDIUM,
+		)
 	else
-		user.visible_message(span_notice("[user] looks for [target]'s [parse_zone(user.zone_selected)]."), span_notice("You look for [target]'s [parse_zone(user.zone_selected)]..."))
+		user.visible_message(
+			span_notice("[user] looks for [target]'s [parse_zone(target_zone)]."),
+			span_notice("You look for [target]'s [parse_zone(target_zone)]..."),
+		)
 
 /datum/surgery_step/repair_bone_hairline/success(mob/living/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	if(surgery.operated_wound)
@@ -122,13 +132,21 @@
 		display_results(
 			user,
 			target,
-			span_notice("You begin to reset the bone in [target]'s [parse_zone(user.zone_selected)]..."),
-			span_notice("[user] begins to reset the bone in [target]'s [parse_zone(user.zone_selected)] with [tool]."),
-			span_notice("[user] begins to reset the bone in [target]'s [parse_zone(user.zone_selected)]."),
+			span_notice("You begin to reset the bone in [target]'s [parse_zone(target_zone)]..."),
+			span_notice("[user] begins to reset the bone in [target]'s [parse_zone(target_zone)] with [tool]."),
+			span_notice("[user] begins to reset the bone in [target]'s [parse_zone(target_zone)]."),
 		)
-		display_pain(target, "The aching pain in your [parse_zone(user.zone_selected)] is overwhelming!", target_zone = target_zone) // NON-MODULE CHANGE
+		display_pain(
+			target = target,
+			target_zone = target_zone,
+			pain_message = "The aching pain in your [parse_zone(target_zone)] is overwhelming!",
+			pain_amount = SURGERY_PAIN_HIGH,
+		)
 	else
-		user.visible_message(span_notice("[user] looks for [target]'s [parse_zone(user.zone_selected)]."), span_notice("You look for [target]'s [parse_zone(user.zone_selected)]..."))
+		user.visible_message(
+			span_notice("[user] looks for [target]'s [parse_zone(target_zone)]."),
+			span_notice("You look for [target]'s [parse_zone(target_zone)]..."),
+		)
 
 /datum/surgery_step/reset_compound_fracture/success(mob/living/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	if(surgery.operated_wound)
@@ -172,13 +190,21 @@
 		display_results(
 			user,
 			target,
-			span_notice("You begin to repair the fracture in [target]'s [parse_zone(user.zone_selected)]..."),
-			span_notice("[user] begins to repair the fracture in [target]'s [parse_zone(user.zone_selected)] with [tool]."),
-			span_notice("[user] begins to repair the fracture in [target]'s [parse_zone(user.zone_selected)]."),
+			span_notice("You begin to repair the fracture in [target]'s [parse_zone(target_zone)]..."),
+			span_notice("[user] begins to repair the fracture in [target]'s [parse_zone(target_zone)] with [tool]."),
+			span_notice("[user] begins to repair the fracture in [target]'s [parse_zone(target_zone)]."),
 		)
-		display_pain(target, "The aching pain in your [parse_zone(user.zone_selected)] is overwhelming!", target_zone = target_zone) // NON-MODULE CHANGE
+		display_pain(
+			target = target,
+			target_zone = target_zone,
+			pain_message = "The aching pain in your [parse_zone(target_zone)] is overwhelming!",
+			pain_amount = SURGERY_PAIN_HIGH,
+		)
 	else
-		user.visible_message(span_notice("[user] looks for [target]'s [parse_zone(user.zone_selected)]."), span_notice("You look for [target]'s [parse_zone(user.zone_selected)]..."))
+		user.visible_message(
+			span_notice("[user] looks for [target]'s [parse_zone(target_zone)]."),
+			span_notice("You look for [target]'s [parse_zone(target_zone)]..."),
+		)
 
 /datum/surgery_step/repair_bone_compound/success(mob/living/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	if(surgery.operated_wound)
@@ -217,14 +243,6 @@
 		/datum/surgery_step/repair_skull
 	)
 
-/datum/surgery/cranial_reconstruction/can_start(mob/living/user, mob/living/carbon/target)
-	. = ..()
-	if(!.)
-		return FALSE
-
-	var/obj/item/bodypart/targeted_bodypart = target.get_bodypart(user.zone_selected)
-	return !isnull(targeted_bodypart.get_wound_type(targetable_wound))
-
 /datum/surgery_step/clamp_bleeders/discard_skull_debris
 	name = "discard skull debris (hemostat)"
 	implements = list(
@@ -243,8 +261,12 @@
 		span_notice("[user] begins to discard the smaller skull debris in [target]'s [parse_zone(target_zone)]..."),
 		span_notice("[user] begins to poke around in [target]'s [parse_zone(target_zone)]..."),
 	)
-
-	display_pain(target, "Your brain feels like it's getting stabbed by little shards of glass!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "Your brain feels like it's getting stabbed by little shards of glass!",
+		pain_amount = SURGERY_PAIN_HIGH,
+	)
 
 /datum/surgery_step/repair_skull
 	name = "repair skull (bone gel/tape)"
@@ -261,8 +283,12 @@
 		span_notice("[user] begins to repair [target]'s skull with [tool]."),
 		span_notice("[user] begins to repair [target]'s skull."),
 	)
-
-	display_pain(target, "You can feel pieces of your skull rubbing against your brain!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "You can feel pieces of your skull rubbing against your brain!",
+		pain_amount = SURGERY_PAIN_LOW,
+	)
 
 /datum/surgery_step/repair_skull/success(mob/user, mob/living/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results)
 	if (isnull(surgery.operated_wound))

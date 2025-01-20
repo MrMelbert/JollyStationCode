@@ -4,9 +4,15 @@
 	taste_description = "bitterness"
 	var/trippy = TRUE //Does this drug make you trip?
 
+/datum/reagent/drug/on_mob_metabolize(mob/living/carbon/user)
+	. = ..()
+	ADD_TRAIT(user, TRAIT_HEART_RATE_BOOST, type)
+
 /datum/reagent/drug/on_mob_end_metabolize(mob/living/affected_mob)
+	. = ..()
 	if(trippy)
 		affected_mob.clear_mood_event("[type]_high")
+	REMOVE_TRAIT(affected_mob, TRAIT_HEART_RATE_BOOST, type)
 
 /datum/reagent/drug/space_drugs
 	name = "Space Drugs"
@@ -16,6 +22,7 @@
 	ph = 9
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	addiction_types = list(/datum/addiction/hallucinogens = 10) //4 per 2 seconds
+	pain_modifier = 0.8
 
 /datum/reagent/drug/space_drugs/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
 	. = ..()
@@ -44,6 +51,7 @@
 	ph = 6
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	metabolization_rate = 0.125 * REAGENTS_METABOLISM
+	pain_modifier = 0.8
 
 /datum/reagent/drug/cannabis/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
 	. = ..()
@@ -86,12 +94,20 @@
 		to_chat(affected_mob, span_notice("[smoke_message]"))
 	affected_mob.add_mood_event("smoked", /datum/mood_event/smoked)
 	affected_mob.remove_status_effect(/datum/status_effect/jitter)
-	affected_mob.AdjustStun(-50 * REM * seconds_per_tick)
-	affected_mob.AdjustKnockdown(-50 * REM * seconds_per_tick)
-	affected_mob.AdjustUnconscious(-50 * REM * seconds_per_tick)
-	affected_mob.AdjustParalyzed(-50 * REM * seconds_per_tick)
-	affected_mob.AdjustImmobilized(-50 * REM * seconds_per_tick)
+	affected_mob.AdjustStun(-5 SECONDS * REM * seconds_per_tick)
+	affected_mob.AdjustKnockdown(-5 SECONDS * REM * seconds_per_tick)
+	affected_mob.AdjustUnconscious(-5 SECONDS * REM * seconds_per_tick)
+	affected_mob.AdjustParalyzed(-5 SECONDS * REM * seconds_per_tick)
+	affected_mob.AdjustImmobilized(-5 SECONDS * REM * seconds_per_tick)
 	return UPDATE_MOB_HEALTH
+
+/datum/reagent/drug/nicotine/on_mob_metabolize(mob/living/carbon/user)
+	. = ..()
+	user.add_consciousness_modifier(type, 3)
+
+/datum/reagent/drug/nicotine/on_mob_end_metabolize(mob/living/affected_mob)
+	. = ..()
+	affected_mob.remove_consciousness_modifier(type)
 
 /datum/reagent/drug/nicotine/overdose_process(mob/living/affected_mob, seconds_per_tick, times_fired)
 	. = ..()
@@ -146,6 +162,7 @@
 	ph = 5
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	addiction_types = list(/datum/addiction/stimulants = 12) //4.8 per 2 seconds
+	pain_modifier = 0.8
 
 /datum/reagent/drug/methamphetamine/on_new(data)
 	. = ..()
@@ -217,6 +234,7 @@
 	var/datum/brain_trauma/special/psychotic_brawling/bath_salts/rage
 	ph = 8.2
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
+	pain_modifier = 0.5
 
 /datum/reagent/drug/bath_salts/on_mob_metabolize(mob/living/affected_mob)
 	. = ..()
@@ -266,6 +284,7 @@
 	color = "#78FFF0"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	addiction_types = list(/datum/addiction/stimulants = 8)
+	pain_modifier = 0.66
 
 /datum/reagent/drug/aranesp/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
 	. = ..()

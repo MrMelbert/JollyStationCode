@@ -168,7 +168,7 @@
 	. = ..()
 	carbon_mob.set_combat_mode(TRUE) // THE SUFFERING MUST FLOW
 
-	if(!HAS_TRAIT(carbon_mob, TRAIT_CRITICAL_CONDITION) && SPT_PROB(2, seconds_per_tick))
+	if(carbon_mob.stat <= SOFT_CRIT && !HAS_TRAIT(carbon_mob, TRAIT_KNOCKEDOUT) && SPT_PROB(2, seconds_per_tick))
 		playsound(carbon_mob, pick(spooks), 50, TRUE, 10)
 
 // Your skin falls off

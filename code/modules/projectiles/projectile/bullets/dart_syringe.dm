@@ -3,7 +3,7 @@
 	name = "dart"
 	icon_state = "cbbolt"
 	damage = 6
-	embedding = null
+	embed_type = null
 	shrapnel_type = null
 	range = 15
 	var/obj/item/syringe
@@ -50,22 +50,30 @@
 		return BULLET_ACT_BLOCK
 
 	syringe = null
-	target.AddComponent( \
-		/datum/component/embedded, \
-		I = syringe_ref, \
-		part = target.get_bodypart(real_zone), \
-		fall_chance = 0, \
-		pain_chance = 0, \
-		rip_time = 1.5 SECONDS, \
-		jostle_chance = 0, \
-	)
+	syringe_ref.tryEmbed(target, zone = real_zone, forced = TRUE)
 	return BULLET_ACT_HIT
 
 /obj/projectile/bullet/dart/syringe
 	name = "syringe"
 	icon_state = "syringeproj"
+	generic_name = "syringe"
 
 // Code to handle what happens when a syringe is embedded in a mob
+/obj/item/reagent_containers/syringe
+	embed_type = /datum/embed_data/syringe
+
+/datum/embed_data/syringe
+	embed_chance = 0 // only when forced
+	fall_chance = 0 // only when edited
+	rip_time = 1.5 SECONDS
+	pain_stam_pct = 0.75
+	impact_pain_mult = 8 // half this if syringe w class goes up.
+	remove_pain_mult = 8 // same
+	pain_chance = 20
+	pain_mult = 4 // same
+	jostle_chance = 3
+	jostle_pain_mult = 8 // same
+
 /obj/item/reagent_containers/syringe/embedded(mob/living/embedded_target, obj/item/bodypart/part)
 	. = ..()
 	if(!istype(embedded_target))
@@ -88,13 +96,16 @@
 	if(reagents.total_volume <= 1)
 		// More cringe. When we're done injecting add a chance to fall out moving forward
 		var/datum/component/embedded/embed_comp = embedded_target.GetComponent(/datum/component/embedded)
-		embed_comp?.fall_chance = 20
+		embed_comp?.fall_chance_mod = 20
 		update_appearance()
 		return
 
 	addtimer(CALLBACK(src, PROC_REF(inject_embedded_target), embedded_target, part), 2 SECONDS)
 
 // Code to handle what happens when a DNA injector is embedded in a mob
+/obj/item/dnainjector
+	embed_type = /datum/embed_data/syringe
+
 /obj/item/dnainjector/embedded(mob/living/embedded_target, obj/item/bodypart/part)
 	. = ..()
 	if(!istype(embedded_target))

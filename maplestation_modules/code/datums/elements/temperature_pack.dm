@@ -59,20 +59,16 @@
 	if(!target_mob.pain_controller)
 		return
 	if(target_mob.stat == DEAD)
-		to_chat(user, span_warning("[target_mob] is dead!"))
-		return
-	if(!target_mob.get_bodypart_pain(targeted_zone, TRUE))
-		to_chat(user, span_warning("That limb is not in pain."))
+		target_mob.balloon_alert(user, "[target_mob.p_theyre()] dead!")
 		return
 
 	. = SECONDARY_ATTACK_CONTINUE_CHAIN // Past this point, no afterattacks
 
 	for(var/datum/status_effect/temperature_pack/pre_existing_effect in target_mob.status_effects)
-		if(pre_existing_effect.targeted_zone == targeted_zone)
-			to_chat(user, span_warning("There is already something pressed against that limb."))
-			return
 		if(pre_existing_effect.pressed_item == source)
-			to_chat(user, span_warning("You are already pressing [source] onto another limb."))
+			return
+		if(pre_existing_effect.targeted_zone == targeted_zone)
+			target_mob.balloon_alert(user, "something's pressed there!")
 			return
 
 	. = SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN // And past THIS point, no attack
@@ -88,8 +84,8 @@
 
 	var/obj/item/bodypart/targeted_bodypart = target.get_bodypart(targeted_zone)
 	user.visible_message(
-		span_notice("[user] press [parent] against [target == user ? "their" : "[target]'s" ] [targeted_bodypart.name]."),
-		span_notice("You press [parent] against [target == user ? "your" : "[target]'s" ] [targeted_bodypart.name].")
+		span_notice("[user] press [parent] against [target == user ? "[target.p_their()]" : "[target]'s" ] [targeted_bodypart.plaintext_zone]."),
+		span_notice("You press [parent] against [target == user ? "your" : "[target]'s" ] [targeted_bodypart.plaintext_zone].")
 	)
 
 	var/selected_effect = temperature_change > 0 \

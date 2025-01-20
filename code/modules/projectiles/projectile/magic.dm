@@ -1,6 +1,7 @@
 /obj/projectile/magic
 	name = "bolt"
 	icon_state = "energy"
+	generic_name = "magical bolt"
 	damage = 0 // MOST magic projectiles pass the "not a hostile projectile" test, despite many having negative effects
 	damage_type = OXY
 	armour_penetration = 100
@@ -44,7 +45,7 @@
 				to_chat(victim, span_notice("You feel great!"))
 			return
 		victim.investigate_log("has been killed by a bolt of death.", INVESTIGATE_DEATHS)
-		victim.death()
+		victim.death(null, "magic")
 
 	if(istype(target, /obj/machinery/hydroponics))
 		var/obj/machinery/hydroponics/plant_tray = target
@@ -65,7 +66,7 @@
 
 		if(victim.mob_biotypes & MOB_UNDEAD) //positive energy harms the undead
 			victim.investigate_log("has been killed by a bolt of life.", INVESTIGATE_DEATHS)
-			victim.death()
+			victim.death(null, "magic")
 			return
 
 		if(victim.revive(ADMIN_HEAL_ALL, force_grab_ghost = TRUE)) // This heals suicides

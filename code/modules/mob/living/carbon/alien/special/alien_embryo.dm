@@ -48,7 +48,7 @@
 			if(SPT_PROB(2, seconds_per_tick))
 				to_chat(owner, span_danger("Your muscles ache."))
 				if(prob(20))
-					owner.take_bodypart_damage(1)
+					owner.damage_random_bodypart(1)
 			if(SPT_PROB(2, seconds_per_tick))
 				to_chat(owner, span_danger("Your stomach hurts."))
 				if(prob(20))

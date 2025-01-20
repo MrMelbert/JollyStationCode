@@ -1,5 +1,5 @@
 /datum/quirk/poor_aim
-	name = "Stormtrooper Aim"
+	name = "Poor Aim"
 	desc = "You've never hit anything you were aiming for in your life."
 	icon = FA_ICON_BULLSEYE
 	value = -4

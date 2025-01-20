@@ -17,6 +17,7 @@
 	attack_verb_simple = "slice"
 	attack_sound = 'sound/effects/supermatter.ogg'
 	attack_vis_effect = ATTACK_EFFECT_CLAW
+	sharpness = SHARP_EDGED
 
 	maxHealth = 10
 	health = 10

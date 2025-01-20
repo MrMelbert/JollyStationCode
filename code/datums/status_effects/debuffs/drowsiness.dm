@@ -15,10 +15,12 @@
 	if(issilicon(owner))
 		return FALSE
 
+	owner.set_pain_mod(id, 0.95)
 	RegisterSignal(owner, COMSIG_COMPONENT_CLEAN_FACE_ACT, PROC_REF(on_face_clean))
 	return TRUE
 
 /datum/status_effect/drowsiness/on_remove()
+	owner.unset_pain_mod(id)
 	UnregisterSignal(owner, COMSIG_COMPONENT_CLEAN_FACE_ACT)
 
 /// Signal proc for [COMSIG_COMPONENT_CLEAN_FACE_ACT]. When we wash our face, reduce drowsiness by a bit.

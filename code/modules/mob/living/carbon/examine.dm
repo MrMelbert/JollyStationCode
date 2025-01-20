@@ -67,17 +67,21 @@
 			disabled += body_part
 		missing -= body_part.body_zone
 		for(var/obj/item/embedded as anything in body_part.embedded_objects)
-			var/stuck_wordage = embedded.isEmbedHarmless() ? "stuck to" : "embedded in"
+			if(embedded.get_embed().hidden_embed)
+				continue
+			var/stuck_wordage = embedded.is_embed_harmless() ? "stuck to" : "embedded in"
 			. += span_boldwarning("[t_He] [t_has] [icon2html(embedded, user)] \a [embedded] [stuck_wordage] [t_his] [body_part.plaintext_zone]!")
 
 		if(body_part.current_gauze)
 			var/gauze_href = body_part.current_gauze.name
 			if(adjacent && isliving(user)) // only shows the href if we're adjacent
 				gauze_href = "<a href='?src=[REF(src)];gauze_limb=[REF(body_part)]'>[gauze_href]</a>"
-			. += span_notice("There is some [icon2html(body_part.current_gauze, user)] [gauze_href] wrapped around [t_his] [body_part.plaintext_zone].\n")
+			. += span_notice("There is some [icon2html(body_part.current_gauze, user)] [gauze_href] wrapped around [t_his] [body_part.plaintext_zone].")
 
 		for(var/datum/wound/iter_wound as anything in body_part.wounds)
-			. += span_danger(iter_wound.get_examine_description(user))
+			var/wound_msg = iter_wound.get_examine_description(user)
+			if(wound_msg)
+				. += span_danger("[wound_msg]")
 
 	for(var/obj/item/bodypart/body_part as anything in disabled)
 		var/damage_text
@@ -167,7 +171,7 @@
 		var/list/obj/item/bodypart/grasped_limbs = list()
 
 		for(var/obj/item/bodypart/body_part as anything in bodyparts)
-			if(body_part.get_modified_bleed_rate())
+			if(!body_part.current_gauze && body_part.get_modified_bleed_rate())
 				bleeding_limbs += body_part.plaintext_zone
 			if(body_part.grasped_by)
 				grasped_limbs += body_part.plaintext_zone
@@ -208,7 +212,7 @@
 			if(HAS_TRAIT(user, TRAIT_EMPATH))
 				if (combat_mode)
 					. += "[t_He] seem[p_s()] to be on guard."
-				if (getOxyLoss() >= 10)
+				if (getOxyLoss() >= 10 || getStaminaLoss() >= 25)
 					. += "[t_He] seem[p_s()] winded."
 				if (getToxLoss() >= 10)
 					. += "[t_He] seem[p_s()] sickly."

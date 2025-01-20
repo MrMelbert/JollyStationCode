@@ -13,15 +13,12 @@
 /mob/living/carbon/alien/larva/update_stat()
 	if(status_flags & GODMODE)
 		return
-	if(stat != DEAD)
-		if(health <= -maxHealth || !get_organ_by_type(/obj/item/organ/internal/brain))
-			death()
-			return
-		if((HAS_TRAIT(src, TRAIT_KNOCKEDOUT)))
-			set_stat(UNCONSCIOUS)
-		else
-			if(stat == UNCONSCIOUS)
-				set_resting(FALSE)
-			set_stat(CONSCIOUS)
-	update_damage_hud()
-	update_health_hud()
+	if(stat == DEAD)
+		return
+	if(health <= -maxHealth || !get_organ_by_type(/obj/item/organ/internal/brain))
+		death()
+		return
+	if(HAS_TRAIT(src, TRAIT_KNOCKEDOUT))
+		set_resting(TRUE)
+		return
+	set_stat(CONSCIOUS)

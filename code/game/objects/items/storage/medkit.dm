@@ -96,10 +96,11 @@
 		return
 	var/static/items_inside = list(
 		/obj/item/stack/medical/gauze = 1,
-		/obj/item/stack/medical/suture = 2,
+		/obj/item/stack/medical/bruise_pack = 1,
+		/obj/item/stack/medical/suture = 1,
 		/obj/item/stack/medical/mesh = 2,
 		/obj/item/reagent_containers/hypospray/medipen = 1,
-		/obj/item/healthanalyzer/simple = 1,
+		/obj/item/reagent_containers/hypospray/medipen/morphine = 1,
 	)
 	generate_items_inside(items_inside,src)
 
@@ -107,6 +108,12 @@
 	icon_state = "medbriefcase"
 	name = "emergency medkit"
 	desc = "A very simple first aid kit meant to secure and stabilize serious wounds for later treatment."
+
+/obj/item/storage/medkit/emergency/Initialize(mapload)
+	. = ..()
+	atom_storage.max_specific_storage = WEIGHT_CLASS_SMALL
+	atom_storage.max_slots = 12
+	atom_storage.max_total_storage = 16
 
 /obj/item/storage/medkit/emergency/PopulateContents()
 	if(empty)
@@ -117,7 +124,9 @@
 		/obj/item/stack/medical/suture/emergency = 1,
 		/obj/item/stack/medical/ointment = 1,
 		/obj/item/reagent_containers/hypospray/medipen/ekit = 2,
+		/obj/item/reagent_containers/hypospray/medipen/emergency_painkiller = 1,
 		/obj/item/storage/pill_bottle/iron = 1,
+		/obj/item/shock_blanket/emergency = 1,
 	)
 	generate_items_inside(items_inside,src)
 
@@ -181,11 +190,13 @@
 /obj/item/storage/medkit/fire/PopulateContents()
 	if(empty)
 		return
-	var/static/items_inside = list(
+	var/static/list/items_inside = list(
 		/obj/item/reagent_containers/pill/patch/aiuri = 3,
 		/obj/item/reagent_containers/spray/hercuri = 1,
+		/obj/item/stack/medical/ointment = 1,
 		/obj/item/reagent_containers/hypospray/medipen/oxandrolone = 1,
-		/obj/item/reagent_containers/hypospray/medipen = 1)
+		/obj/item/reagent_containers/hypospray/medipen/burn_painkiller = 1,
+	)
 	generate_items_inside(items_inside,src)
 
 /obj/item/storage/medkit/toxin
@@ -247,13 +258,13 @@
 /obj/item/storage/medkit/brute/PopulateContents()
 	if(empty)
 		return
-	var/static/items_inside = list(
+	var/static/list/items_inside = list(
 		/obj/item/reagent_containers/pill/patch/libital = 3,
 		/obj/item/stack/medical/gauze = 1,
 		/obj/item/storage/pill_bottle/probital = 1,
 		/obj/item/reagent_containers/hypospray/medipen/salacid = 1,
-		/obj/item/healthanalyzer/simple = 1,
-		)
+		/obj/item/reagent_containers/hypospray/medipen/brute_painkiller = 1,
+	)
 	generate_items_inside(items_inside,src)
 
 /obj/item/storage/medkit/advanced
@@ -264,14 +275,22 @@
 	custom_premium_price = PAYCHECK_COMMAND * 6
 	damagetype_healed = HEAL_ALL_DAMAGE
 
+/obj/item/storage/medkit/advanced/Initialize(mapload)
+	. = ..()
+	atom_storage.max_slots = 9
+	atom_storage.max_total_storage = 14
+
 /obj/item/storage/medkit/advanced/PopulateContents()
 	if(empty)
 		return
-	var/static/items_inside = list(
-		/obj/item/reagent_containers/pill/patch/synthflesh = 3,
+	var/static/list/items_inside = list(
 		/obj/item/reagent_containers/hypospray/medipen/atropine = 2,
+		/obj/item/reagent_containers/hypospray/medipen/blood_loss = 1,
+		/obj/item/reagent_containers/pill/patch/synthflesh = 3,
 		/obj/item/stack/medical/gauze = 1,
-		/obj/item/storage/pill_bottle/penacid = 1)
+		/obj/item/storage/pill_bottle/penacid = 1,
+		/obj/item/storage/pill_bottle/prescription/aspirin_para_coffee = 1,
+	)
 	generate_items_inside(items_inside,src)
 
 /obj/item/storage/medkit/tactical

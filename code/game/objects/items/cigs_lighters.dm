@@ -268,16 +268,13 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		to_chat(user, span_warning("There is nothing to smoke!"))
 
 /// Checks that we have enough air to smoke
-/obj/item/clothing/mask/cigarette/proc/check_oxygen(mob/user)
+/obj/item/clothing/mask/cigarette/proc/check_oxygen(mob/living/carbon/smoker)
 	if (reagents.has_reagent(/datum/reagent/oxygen))
 		return TRUE
 	var/datum/gas_mixture/air = return_air()
 	if (!isnull(air) && air.has_gas(/datum/gas/oxygen, 1))
 		return TRUE
-	if (!iscarbon(user))
-		return FALSE
-	var/mob/living/carbon/the_smoker = user
-	return the_smoker.can_breathe_helmet()
+	return istype(smoker) ? smoker.can_breathe_helmet() : FALSE
 
 /obj/item/clothing/mask/cigarette/afterattack(obj/item/reagent_containers/cup/glass, mob/user, proximity)
 	. = ..()
@@ -380,60 +377,53 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	update_particle_position(big_smoke, smoker.dir)
 	QDEL_IN(big_smoke, big_smoke.particles.lifespan)
 
-/// Handles processing the reagents in the cigarette.
-/obj/item/clothing/mask/cigarette/proc/handle_reagents(seconds_per_tick)
-	if(!reagents.total_volume)
-		return
-	reagents.expose_temperature(heat, 0.05)
-	if(!reagents.total_volume) //may have reacted and gone to 0 after expose_temperature
-		return
-	var/to_smoke = smoke_all ? (reagents.total_volume * (dragtime / smoketime)) : REAGENTS_METABOLISM
-	var/mob/living/carbon/smoker = loc
-	// These checks are a bit messy but at least they're fairly readable
-	// Check if the smoker is a carbon mob, since it needs to have wear_mask
+/// Checks if the passed mob with the passed lungs can smoke this cigarette.
+/obj/item/clothing/mask/cigarette/proc/can_be_smoked_by(mob/living/carbon/smoker)
 	if(!istype(smoker))
-		// If not, check if it's a gas mask
-		if(!istype(smoker, /obj/item/clothing/mask/gas))
-			reagents.remove_any(to_smoke)
-			return
+		return FALSE
+	if(isnull(smoker.get_organ_slot(ORGAN_SLOT_LUNGS)))
+		return FALSE
+	if(src != smoker.wear_mask && loc != smoker.wear_mask)
+		return FALSE
+	// Logically this makes sense but practically it's not fun
+	//if(HAS_TRAIT(smoker, TRAIT_NOBREATH))
+	//	return FALSE
+	return TRUE
 
-		smoker = smoker.loc
+/// Handles processing the reagents in the cigarette.
+/obj/item/clothing/mask/cigarette/proc/handle_reagents(mob/living/carbon/smoker, seconds_per_tick)
+	reagents.expose_temperature(heat, 0.05)
+	if(reagents.total_volume <= 0) //may have reacted and gone to 0 after expose_temperature
+		return
 
-		// If it is, check if that mask is on a carbon mob
-		if(!istype(smoker) || smoker.get_item_by_slot(ITEM_SLOT_MASK) != loc)
-			reagents.remove_any(to_smoke)
-			return
-	else
-		if(src != smoker.wear_mask)
-			reagents.remove_any(to_smoke)
-			return
+	var/to_smoke = smoke_all ? (reagents.total_volume * (dragtime / smoketime)) : REAGENTS_METABOLISM
+	// Check that we are worn by a carbon with lungs, and either in their mask slot or in the contents of their mask slot
+	// If all of those are true give them the reagents. If any fail just delete the reagents straight up.
+	if(!can_be_smoked_by(smoker) || !reagents.trans_to(smoker, to_smoke, methods = INGEST, ignore_stomach = TRUE))
+		reagents.remove_any(to_smoke)
+		return
 
 	how_long_have_we_been_smokin += seconds_per_tick * (1 SECONDS)
 	reagents.expose(smoker, INGEST, min(to_smoke / reagents.total_volume, 1))
-	var/obj/item/organ/internal/lungs/lungs = smoker.get_organ_slot(ORGAN_SLOT_LUNGS)
-	if(lungs && IS_ORGANIC_ORGAN(lungs))
-		var/smoker_resistance = HAS_TRAIT(smoker, TRAIT_SMOKER) ? 0.5 : 1
-		smoker.adjustOrganLoss(ORGAN_SLOT_LUNGS, lung_harm * smoker_resistance)
-	if(!reagents.trans_to(smoker, to_smoke, methods = INGEST, ignore_stomach = TRUE))
-		reagents.remove_any(to_smoke)
+	smoker.adjustOrganLoss(ORGAN_SLOT_LUNGS, lung_harm * (HAS_TRAIT(smoker, TRAIT_SMOKER) ? 0.5 : 1), required_organ_flag = ORGAN_ORGANIC)
 
 /obj/item/clothing/mask/cigarette/process(seconds_per_tick)
-	var/mob/living/user = isliving(loc) ? loc : null
-	user?.ignite_mob()
+	var/mob/living/carbon/smoker = get(src, /mob/living/carbon)
+	smoker?.ignite_mob()
 
-	if(!check_oxygen(user))
+	if(!check_oxygen(smoker))
 		extinguish()
 		return
 
 	smoketime -= seconds_per_tick * (1 SECONDS)
 	if(smoketime <= 0)
-		put_out(user)
+		put_out(smoker)
 		return
 
 	open_flame(heat)
-	if((reagents?.total_volume) && COOLDOWN_FINISHED(src, drag_cooldown))
+	if(reagents?.total_volume > 0 && COOLDOWN_FINISHED(src, drag_cooldown))
 		COOLDOWN_START(src, drag_cooldown, dragtime)
-		handle_reagents(seconds_per_tick)
+		handle_reagents(smoker, seconds_per_tick)
 
 /obj/item/clothing/mask/cigarette/attack_self(mob/user)
 	if(lit)
@@ -1266,12 +1256,8 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		reagents.flags |= NO_REACT
 		STOP_PROCESSING(SSobj, src)
 
-/obj/item/clothing/mask/vape/proc/handle_reagents()
-	if(!reagents.total_volume)
-		return
-
-	var/mob/living/carbon/vaper = loc
-	if(!iscarbon(vaper) || src != vaper.wear_mask)
+/obj/item/clothing/mask/vape/proc/handle_reagents(mob/living/carbon/vaper, seconds_per_tick)
+	if(!istype(vaper) || src != vaper.wear_mask)
 		reagents.remove_any(REAGENTS_METABOLISM)
 		return
 

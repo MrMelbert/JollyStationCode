@@ -32,6 +32,10 @@
 	armor_type = /datum/armor/toggle_labcoat
 	species_exception = list(/datum/species/golem)
 
+/obj/item/clothing/suit/toggle/labcoat/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/pat_out_fire)
+
 /obj/item/clothing/suit/toggle/labcoat/cmo
 	name = "chief medical officer's labcoat"
 	desc = "Bluer than the standard model."

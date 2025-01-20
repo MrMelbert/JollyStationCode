@@ -1,5 +1,6 @@
 /datum/wound/blunt
 	name = "Blunt Wound"
+	undiagnosed_name = "Painful Bruising"
 	sound_effect = 'sound/effects/wounds/crack1.ogg'
 
 /datum/wound/blunt/wound_injury(datum/wound/old_wound, attack_direction)

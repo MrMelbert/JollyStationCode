@@ -69,6 +69,8 @@
 /// Used to begin the recursive healing loop.
 /// Returns TRUE if we entered the loop, FALSE if we didn't
 /obj/item/stack/medical/proc/begin_heal_loop(mob/living/patient, mob/user)
+	if(DOING_INTERACTION_WITH_TARGET(user, patient))
+		return FALSE
 	if(!can_heal(patient, user))
 		return FALSE
 
@@ -80,14 +82,9 @@
 	return patient.try_inject(user, injection_flags = INJECT_TRY_SHOW_ERROR_MESSAGE)
 
 /// In which we print the message that we're starting to heal someone, then we try healing them. Does the do_after whether or not it can actually succeed on a targeted mob
-/obj/item/stack/medical/proc/try_heal(mob/living/patient, mob/user, silent = FALSE, looping = FALSE)
-	if(!try_heal_checks(patient, user, heal_brute, heal_burn, looping))
+/obj/item/stack/medical/proc/try_heal(mob/living/patient, mob/user, silent = FALSE)
+	if(!try_heal_checks(patient, user, heal_brute, heal_burn))
 		return
-	var/new_self_delay = self_delay
-	var/new_other_delay = other_delay
-	if(iscarbon(patient))
-		new_self_delay = looping ? clamp((self_delay - assessing_injury_delay), 0, self_delay) : self_delay
-		new_other_delay = looping ? clamp((other_delay - assessing_injury_delay), 0, other_delay) : other_delay
 	if(heal_sound)
 		playsound(patient, heal_sound, 33, FALSE)
 	if(patient == user)
@@ -98,7 +95,7 @@
 			)
 		if(!do_after(
 			user,
-			new_self_delay,
+			self_delay,
 			patient,
 			extra_checks = CALLBACK(src, PROC_REF(can_heal), patient, user),
 		))
@@ -112,43 +109,35 @@
 			)
 		if(!do_after(
 			user,
-			new_other_delay,
+			other_delay,
 			patient,
 			extra_checks = CALLBACK(src, PROC_REF(can_heal), patient, user),
 		))
 			return
 
-	if(!heal(patient, user))
+	if(!try_heal_checks(patient, user, heal_brute, heal_burn))
 		return
+	if(iscarbon(patient))
+		if(!heal_carbon(patient, user, heal_brute, heal_burn))
+			return
+	else if(isanimal_or_basicmob(patient))
+		if(!heal_simplemob(patient, user, heal_brute))
+			return
+	else
+		CRASH("Stack medical item healing a non-carbon, non-animal mob [patient] ([patient.type])")
+
 	log_combat(user, patient, "healed", name)
 	if(!use(1) || !repeating || amount <= 0)
 		return
 	if(!can_heal(patient, user))
 		return
-	try_heal(patient, user, silent = TRUE, looping = TRUE)
+	try_heal(patient, user, silent = TRUE)
 
-/// Apply the actual effects of the healing if it's a simple animal, goes to [/obj/item/stack/medical/proc/heal_carbon] if it's a carbon, returns TRUE if it works, FALSE if it doesn't
-/obj/item/stack/medical/proc/heal(mob/living/patient, mob/user)
+/obj/item/stack/medical/proc/try_heal_checks(mob/living/patient, mob/user, brute, burn)
 	if(patient.stat == DEAD)
 		patient.balloon_alert(user, "they're dead!")
 		return FALSE
 	if(iscarbon(patient))
-		return heal_carbon(patient, user, heal_brute, heal_burn)
-	else if(isanimal_or_basicmob(patient))
-		if(!try_heal_checks(patient, user, heal_brute, heal_burn))
-			return FALSE
-		if(patient.heal_bodypart_damage((heal_brute * patient.maxHealth/100)))
-			user.visible_message("<span class='infoplain'><span class='green'>[user] applies [src] on [patient].</span></span>", "<span class='infoplain'><span class='green'>You apply [src] on [patient].</span></span>")
-			return TRUE
-	patient.balloon_alert(user, "can't heal [patient]!")
-	return FALSE
-
-/obj/item/stack/medical/proc/try_heal_checks(mob/living/patient, mob/user, brute, burn, looping = FALSE)
-	if(iscarbon(patient))
-		if(looping)
-			balloon_alert(user, "assessing injuries...")
-			if(!do_after(user, assessing_injury_delay, patient))
-				return FALSE
 		var/mob/living/carbon/carbon_patient = patient
 		var/obj/item/bodypart/affecting = carbon_patient.get_bodypart(check_zone(user.zone_selected))
 		if(!affecting) //Missing limb?
@@ -157,18 +146,26 @@
 		if(!IS_ORGANIC_LIMB(affecting)) //Limb must be organic to be healed - RR
 			carbon_patient.balloon_alert(user, "[affecting.plaintext_zone] is not organic!")
 			return FALSE
-		if(!(affecting.brute_dam && brute) && !(affecting.burn_dam && burn))
-			if(!affecting.brute_dam && !affecting.burn_dam)
-				if(patient != user || !looping)
-					carbon_patient.balloon_alert(user, "[affecting.plaintext_zone] is not hurt!")
-			else
+
+		var/datum/wound/burn/flesh/any_burn_wound = locate() in affecting.wounds
+		var/can_heal_burn_wounds = (flesh_regeneration || sanitization) && any_burn_wound?.can_be_ointmented_or_meshed()
+		var/can_suture_bleeding = stop_bleeding && affecting.get_modified_bleed_rate() > 0
+		var/brute_to_heal = brute && affecting.brute_dam > 0
+		var/burn_to_heal = burn && affecting.burn_dam > 0
+
+		if(!brute_to_heal && !burn_to_heal && !can_heal_burn_wounds && !can_suture_bleeding)
+			if(!brute_to_heal && stop_bleeding) // no brute, no bleeding
+				carbon_patient.balloon_alert(user, "[affecting.plaintext_zone] is not bleeding!")
+			else if(!burn_to_heal && (flesh_regeneration || sanitization) && any_burn_wound) // no burns, existing burn wounds are treated
+				carbon_patient.balloon_alert(user, "[affecting.plaintext_zone] has been fully treated!")
+			else if(!affecting.brute_dam && !affecting.burn_dam) // not hurt at all
+				carbon_patient.balloon_alert(user, "[affecting.plaintext_zone] is not hurt!")
+			else // probably hurt in some way but we are not the right item for this
 				carbon_patient.balloon_alert(user, "can't heal [affecting.plaintext_zone] with [name]!")
 			return FALSE
 		return TRUE
+
 	if(isanimal_or_basicmob(patient))
-		if(patient.stat == DEAD)
-			patient.balloon_alert(user, "they're dead!")
-			return FALSE
 		if(!heal_brute) // only brute can heal
 			patient.balloon_alert(user, "can't heal with [name]!")
 			return FALSE
@@ -179,13 +176,11 @@
 			patient.balloon_alert(user, "not hurt!")
 			return FALSE
 		return TRUE
-
+	return FALSE
 
 /// The healing effects on a carbon patient. Since we have extra details for dealing with bodyparts, we get our own fancy proc. Still returns TRUE on success and FALSE on fail
 /obj/item/stack/medical/proc/heal_carbon(mob/living/carbon/patient, mob/user, brute, burn)
 	var/obj/item/bodypart/affecting = patient.get_bodypart(check_zone(user.zone_selected))
-	if(!try_heal_checks(patient, user, brute, burn))
-		return FALSE
 	user.visible_message(
 		span_infoplain(span_green("[user] applies [src] on [patient]'s [parse_zone(affecting.body_zone)].")),
 		span_infoplain(span_green("You apply [src] on [patient]'s [parse_zone(affecting.body_zone)]."))
@@ -193,7 +188,28 @@
 	var/previous_damage = affecting.get_damage()
 	if(affecting.heal_damage(brute, burn))
 		patient.update_damage_overlays()
+	if(stop_bleeding)
+		for(var/datum/wound/wound as anything in affecting.wounds)
+			if(wound.blood_flow)
+				wound.adjust_blood_flow(-1 * stop_bleeding * (user == patient ? 0.7 : 1))
+				break // one at a time
+		affecting.adjustBleedStacks(-1 * stop_bleeding)
+	if(flesh_regeneration || sanitization)
+		for(var/datum/wound/burn/flesh/wound as anything in affecting.wounds)
+			if(wound.can_be_ointmented_or_meshed())
+				wound.flesh_healing += flesh_regeneration
+				wound.sanitization += sanitization
+				break // one at a time (though i don't think you can get more than one burn wound on a limb)
+
 	post_heal_effects(max(previous_damage - affecting.get_damage(), 0), patient, user)
+	return TRUE
+
+/obj/item/stack/medical/proc/heal_simplemob(mob/living/patient, mob/user, brute)
+	patient.adjustBruteLoss(-1 * (heal_brute * patient.maxHealth / 100))
+	user.visible_message(
+		span_infoplain(span_green("[user] applies [src] on [patient].")),
+		span_infoplain(span_green("You apply [src] on [patient].")),
+	)
 	return TRUE
 
 ///Override this proc for special post heal effects.
@@ -278,19 +294,23 @@
 
 	return .
 
-// gauze is only relevant for wounds, which are handled in the wounds themselves
-/obj/item/stack/medical/gauze/try_heal(mob/living/patient, mob/user, silent, looping)
-
-	var/treatment_delay = (user == patient ? self_delay : other_delay)
-
+/obj/item/stack/medical/gauze/try_heal_checks(mob/living/patient, mob/user, brute, burn)
 	var/obj/item/bodypart/limb = patient.get_bodypart(check_zone(user.zone_selected))
 	if(!limb)
-		patient.balloon_alert(user, "no limb!")
-		return
-
+		patient.balloon_alert(user, "no [parse_zone(user.zone_selected)]!")
+		return FALSE
 	if(limb.current_gauze && (limb.current_gauze.absorption_capacity * 1.2 > absorption_capacity)) // ignore if our new wrap is < 20% better than the current one, so someone doesn't bandage it 5 times in a row
 		patient.balloon_alert(user, pick("already bandaged!", "bandage is clean!")) // good enough
+		return FALSE
+	return TRUE
+
+// gauze is only relevant for wounds, which are handled in the wounds themselves
+/obj/item/stack/medical/gauze/try_heal(mob/living/patient, mob/user, silent)
+	if(!try_heal_checks(patient, user, 0, 0))
 		return
+
+	var/treatment_delay = (user == patient ? self_delay : other_delay)
+	var/obj/item/bodypart/limb = patient.get_bodypart(check_zone(user.zone_selected))
 
 	var/boosted = FALSE
 	if(LAZYLEN(limb.wounds))
@@ -331,7 +351,7 @@
 	if(!do_after(user, treatment_delay, target = patient))
 		user.balloon_alert(user, "interrupted!")
 		return
-	if(limb.current_gauze && (limb.current_gauze.absorption_capacity * 1.2 > absorption_capacity)) // double check for sanity
+	if(!try_heal_checks(patient, user, 0, 0))
 		return
 	user.balloon_alert(user, "gauze applied")
 	if(user != patient)
@@ -351,8 +371,9 @@
 		if(get_amount() < 2)
 			balloon_alert(user, "not enough gauze!")
 			return
-		new /obj/item/stack/sheet/cloth(I.drop_location())
+		var/obj/item/stack/sheet/cloth/cloth = new(I.drop_location())
 		if(user.CanReach(src))
+			user.put_in_hands(cloth)
 			user.visible_message(span_notice("[user] cuts [src] into pieces of cloth with [I]."), \
 				span_notice("You cut [src] into pieces of cloth with [I]."), \
 				span_hear("You hear cutting."))
@@ -399,7 +420,7 @@
 	max_amount = 10
 	repeating = TRUE
 	heal_brute = 10
-	stop_bleeding = 0.6
+	stop_bleeding = 0.8
 	grind_results = list(/datum/reagent/medicine/spaceacillin = 2)
 	merge_type = /obj/item/stack/medical/suture
 	heal_sound = 'maplestation_modules/sound/items/snip.ogg'
@@ -417,7 +438,7 @@
 	icon_state = "suture_purp"
 	desc = "A suture infused with drugs that speed up wound healing of the treated laceration."
 	heal_brute = 15
-	stop_bleeding = 0.75
+	stop_bleeding = 1
 	grind_results = list(/datum/reagent/medicine/polypyr = 1)
 	merge_type = /obj/item/stack/medical/suture/medicated
 
@@ -435,8 +456,8 @@
 	other_delay = 2 SECONDS
 
 	heal_burn = 5
-	flesh_regeneration = 2.5
-	sanitization = 0.25
+	flesh_regeneration = 5
+	sanitization = 1
 	grind_results = list(/datum/reagent/medicine/c2/lenturi = 10)
 	merge_type = /obj/item/stack/medical/ointment
 
@@ -456,8 +477,8 @@
 	heal_burn = 10
 	max_amount = 15
 	repeating = TRUE
-	sanitization = 0.75
-	flesh_regeneration = 3
+	sanitization = 0.5
+	flesh_regeneration = 2.5
 
 	var/is_open = TRUE ///This var determines if the sterile packaging of the mesh has been opened.
 	grind_results = list(/datum/reagent/medicine/spaceacillin = 2)
@@ -474,11 +495,14 @@
 		return ..()
 	icon_state = "regen_mesh_closed"
 
-/obj/item/stack/medical/mesh/try_heal(mob/living/patient, mob/user, silent = FALSE, looping)
+/obj/item/stack/medical/mesh/can_heal(mob/living/patient, mob/user)
+	. = ..()
+	if(!.)
+		return .
 	if(!is_open)
 		balloon_alert(user, "open it first!")
-		return
-	return ..()
+		return FALSE
+	return .
 
 /obj/item/stack/medical/mesh/AltClick(mob/living/user)
 	if(!is_open)
@@ -606,15 +630,10 @@
 	hitsound = 'sound/misc/moist_impact.ogg'
 	merge_type = /obj/item/stack/medical/poultice
 
-/obj/item/stack/medical/poultice/heal(mob/living/patient, mob/user)
-	if(iscarbon(patient))
-		playsound(src, 'sound/misc/soggy.ogg', 30, TRUE)
-		return heal_carbon(patient, user, heal_brute, heal_burn)
-	return ..()
-
 /obj/item/stack/medical/poultice/post_heal_effects(amount_healed, mob/living/carbon/healed_mob, mob/user)
 	. = ..()
 	healed_mob.adjustOxyLoss(amount_healed)
+	playsound(src, 'sound/misc/soggy.ogg', 30, TRUE)
 
 /obj/item/stack/medical/bandage
 	name = "first aid bandage"

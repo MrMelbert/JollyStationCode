@@ -299,7 +299,7 @@
 			weak_against_armour = attacking_item.weak_against_armour,
 		), ARMOR_MAX_BLOCK)
 
-	var/damage = attacking_item.force
+	var/damage = attacking_item.force * user.outgoing_damage_mod
 	if(mob_biotypes & MOB_ROBOTIC)
 		damage *= attacking_item.demolition_mod
 
@@ -420,12 +420,13 @@
 			if(.)
 				add_blood_DNA_to_items(get_blood_dna_list(), ITEM_SLOT_ICLOTHING|ITEM_SLOT_OCLOTHING)
 
-			if(stat == CONSCIOUS && !attacking_item.get_sharpness() && armor_block < 50 && attacking_item.damtype == BRUTE)
+			if(!attacking_item.get_sharpness() && armor_block < 50 && attacking_item.damtype == BRUTE)
 				if(prob(damage_done))
-					visible_message(
-						span_danger("[src] is knocked down!"),
-						span_userdanger("You're knocked down!"),
-					)
+					if(body_position == STANDING_UP && stat <= SOFT_CRIT)
+						visible_message(
+							span_danger("[src] is knocked down!"),
+							span_userdanger("You're knocked down!"),
+						)
 					apply_effect(6 SECONDS, EFFECT_KNOCKDOWN, armor_block)
 
 	// Triggers force say events

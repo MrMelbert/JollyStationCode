@@ -10,11 +10,11 @@
 /obj/item/melee/energy/sword/holographic
 	name = "holographic energy sword"
 	desc = "May the force be with you. Sorta."
-	damtype = STAMINA
+	damtype = PAIN
 	throw_speed = 2
 	block_chance = 0
 	throwforce = 0
-	embedding = null
+	embed_type = null
 	sword_color_icon = null
 
 	active_throwforce = 0

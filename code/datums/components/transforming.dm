@@ -266,7 +266,7 @@
 			span_warning("[user] triggers [parent] while holding it backwards and [hurt_self_verb_continuous] themself, like a doofus!"),
 			span_warning("You trigger [parent] while holding it backwards and [hurt_self_verb_simple] yourself, like a doofus!"),
 		)
-		user.take_bodypart_damage(10)
+		user.damage_random_bodypart(10)
 		return TRUE
 	return FALSE
 

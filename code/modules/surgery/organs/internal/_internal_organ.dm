@@ -20,7 +20,7 @@
 	if((organ_flags & ORGAN_VITAL) && !special && !(organ_owner.status_flags & GODMODE))
 		if(organ_owner.stat != DEAD)
 			organ_owner.investigate_log("has been killed by losing a vital organ ([src]).", INVESTIGATE_DEATHS)
-		organ_owner.death()
+		organ_owner.death(null, "losing your [name]")
 
 	START_PROCESSING(SSobj, src)
 
@@ -30,7 +30,8 @@
 /obj/item/organ/internal/on_death(seconds_per_tick, times_fired) //runs decay when outside of a person
 	if(organ_flags & (ORGAN_ROBOTIC | ORGAN_FROZEN))
 		return
-
+	if(HAS_TRAIT(src, TRAIT_NO_ORGAN_DECAY) || (owner && HAS_TRAIT(owner, TRAIT_NO_ORGAN_DECAY)))
+		return
 	if(owner)
 		if(owner.body_temperature > T0C)
 			var/air_temperature_factor = min((owner.body_temperature - T0C) / 20, 1)
@@ -62,7 +63,7 @@
 			apply_organ_damage(2 * decay_factor * maxHealth * seconds_per_tick)
 			// Chance to gain some free tox damage when taking irradiation organ damage, 50% chance on that to actually feel it
 			if(prob(10) && owner?.apply_damage(1 * seconds_per_tick, TOX, zone) > 0 && owner.stat <= SOFT_CRIT && prob(50))
-				if(owner.can_feel_pain())
+				if(CAN_FEEL_PAIN(owner))
 					to_chat(owner, span_warning("You feel a slight [pick("pain", "twinge", "throb", "ache")] in your [parse_zone(zone)]."))
 					owner.cause_pain(zone, 2, BURN)
 				else

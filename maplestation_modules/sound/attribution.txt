@@ -8,6 +8,7 @@
 - rip1.ogg through rip4.ogg
 - inhale.ogg
 - the contents of `item/ambience`
+- the contents of `item/bullets`
 - the contents of `item/drop`
 - the contents of `item/lighters`
 - the contents of `item/storage`

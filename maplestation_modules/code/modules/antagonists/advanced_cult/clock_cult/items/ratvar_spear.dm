@@ -47,9 +47,5 @@
 		span_warning("A powerful force shoves [user] away from [target]!"),
 		span_large_brass("\"You shouldn't play with sharp things. You'll poke someone's eye out.\""),
 		)
-	if(ishuman(user))
-		var/mob/living/carbon/human/miscreant = user
-		miscreant.apply_damage(rand(force/2, force), BRUTE, pick(BODY_ZONE_L_ARM, BODY_ZONE_R_ARM))
-	else
-		user.adjustBruteLoss(rand(force/2, force))
+	user.apply_damage(rand(force / 2, force), BRUTE, user.get_active_hand())
 	return TRUE

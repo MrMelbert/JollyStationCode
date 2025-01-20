@@ -41,6 +41,10 @@
 	. = ..()
 	if(.)
 		return
+	if(user.getStaminaLoss() > 100)
+		balloon_alert(user, "too tired!")
+		return
+
 	flick("[icon_state]-punch", src)
 	playsound(loc, pick(hit_sounds), 25, TRUE, -1)
 

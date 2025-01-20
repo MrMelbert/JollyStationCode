@@ -32,9 +32,14 @@
 		target,
 		span_notice("You begin to cut away [target]'s excess fat..."),
 		span_notice("[user] begins to cut away [target]'s excess fat."),
-		span_notice("[user] begins to cut [target]'s [target_zone] with [tool]."),
+		span_notice("[user] begins to cut [target]'s [parse_zone(target_zone)] with [tool]."),
 	)
-	display_pain(target, "You feel a stabbing in your [target_zone]!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "You feel a stabbing in your [parse_zone(target_zone)]!",
+		pain_amount = SURGERY_PAIN_TRIVIAL,
+	)
 
 /datum/surgery_step/cut_fat/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results)
 	display_results(
@@ -42,9 +47,14 @@
 		target,
 		span_notice("You cut [target]'s excess fat loose."),
 		span_notice("[user] cuts [target]'s excess fat loose!"),
-		span_notice("[user] finishes the cut on [target]'s [target_zone]."),
+		span_notice("[user] finishes the cut on [target]'s [parse_zone(target_zone)]."),
 	)
-	display_pain(target, "The fat in your [target_zone] comes loose, dangling and hurting like hell!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "The fat in your [parse_zone(target_zone)] comes loose, dangling and hurting like hell!",
+		pain_amount = SURGERY_PAIN_MEDIUM,
+	)
 	return TRUE
 
 //remove fat
@@ -62,9 +72,13 @@
 		target,
 		span_notice("You begin to extract [target]'s loose fat..."),
 		span_notice("[user] begins to extract [target]'s loose fat!"),
-		span_notice("[user] begins to extract something from [target]'s [target_zone]."),
+		span_notice("[user] begins to extract something from [target]'s [parse_zone(target_zone)]."),
 	)
-	display_pain(target, "You feel an oddly painless tugging on your loose fat!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "You feel an oddly painless tugging on your loose fat!",
+	)
 
 /datum/surgery_step/remove_fat/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	display_results(

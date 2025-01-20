@@ -273,10 +273,10 @@
 
 	healthdoll = new /atom/movable/screen/healthdoll/human(null, src)
 	infodisplay += healthdoll
-
+/*
 	stamina = new /atom/movable/screen/stamina(null, src)
 	infodisplay += stamina
-
+*/
 	pull_icon = new /atom/movable/screen/pull(null, src)
 	pull_icon.icon = ui_style
 	pull_icon.screen_loc = ui_above_intent

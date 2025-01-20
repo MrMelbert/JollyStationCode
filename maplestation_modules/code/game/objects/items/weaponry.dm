@@ -134,6 +134,9 @@
 		new /obj/item/melee/psych_rock(loc)
 		paperweight_spawned = TRUE
 
+/datum/embed_data/combat_knife/nullknife
+	embed_chance = 35
+
 /obj/item/knife/combat/nullknife
 	name = "\improper XM6N Null Knife"
 	icon = 'maplestation_modules/icons/obj/weapons.dmi'
@@ -145,7 +148,7 @@
 	desc = "An experimental anti-magic knife."
 	force = 17
 	throwforce = 10
-	embedding = list("pain_mult" = 4, "embed_chance" = 35, "fall_chance" = 10)
+	embed_type = /datum/embed_data/combat_knife/nullknife
 	custom_materials = null
 
 /obj/item/knife/combat/nullknife/Initialize(mapload)

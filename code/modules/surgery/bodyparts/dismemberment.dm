@@ -1,5 +1,5 @@
 
-/obj/item/bodypart/proc/can_dismember(obj/item/item)
+/obj/item/bodypart/proc/can_dismember()
 	if(bodypart_flags & BODYPART_UNREMOVABLE || (owner && HAS_TRAIT(owner, TRAIT_NODISMEMBER)))
 		return FALSE
 	return TRUE
@@ -15,7 +15,7 @@
 		return FALSE
 
 	var/obj/item/bodypart/affecting = limb_owner.get_bodypart(BODY_ZONE_CHEST)
-	affecting.receive_damage(clamp(brute_dam/2 * affecting.body_damage_coeff, 15, 50), clamp(burn_dam/2 * affecting.body_damage_coeff, 0, 50), wound_bonus=CANT_WOUND) //Damage the chest based on limb's existing damage
+	affecting.receive_damage(clamp(brute_dam / 4, 15, 50), clamp(burn_dam / 4, 0, 50), wound_bonus=CANT_WOUND) //Damage the chest based on limb's existing damage
 	if(!silent)
 		limb_owner.visible_message(span_danger("<B>[limb_owner]'s [name] is violently dismembered!</B>"))
 	INVOKE_ASYNC(limb_owner, TYPE_PROC_REF(/mob, emote), "scream")
@@ -170,20 +170,21 @@
  */
 /obj/item/bodypart/proc/try_dismember(wounding_type, wounding_dmg, wound_bonus, bare_wound_bonus)
 	if (!can_dismember())
-		return
+		return FALSE
 
 	if(wounding_dmg < DISMEMBER_MINIMUM_DAMAGE)
-		return
+		return FALSE
 
 	var/base_chance = wounding_dmg
-	base_chance += (get_damage() / max_damage * 50) // how much damage we dealt with this blow, + 50% of the damage percentage we already had on this bodypart
+	base_chance += ((get_damage() / max_damage) * 50) // how much damage we dealt with this blow, + 50% of the damage percentage we already had on this bodypart
 
 	for (var/datum/wound/iterated_wound as anything in wounds)
 		base_chance += iterated_wound.get_dismember_chance_bonus(base_chance)
 
-	if(prob(base_chance))
-		var/datum/wound/loss/dismembering = new
-		return dismembering.apply_dismember(src, wounding_type)
+	if(!prob(base_chance))
+		return FALSE
+	var/datum/wound/loss/dismembering = new
+	return dismembering.apply_dismember(src, wounding_type)
 
 /obj/item/bodypart/chest/drop_limb(special, dismembered, move_to_floor = TRUE)
 	if(special)
@@ -383,34 +384,34 @@
 		regenerate_limb(limb_zone, dismembered_by_copy)
 
 /mob/living/carbon/proc/regenerate_limb(limb_zone, list/dismembered_by_copy = body_zone_dismembered_by?.Copy())
-	var/obj/item/bodypart/limb
 	if(get_bodypart(limb_zone))
 		return FALSE
-	limb = newBodyPart(limb_zone, 0, 0)
-	if(limb)
-		if(!limb.try_attach_limb(src, TRUE))
-			qdel(limb)
-			return FALSE
-		limb.update_limb(is_creating = TRUE)
-		if (LAZYLEN(dismembered_by_copy))
-			var/datum/scar/scaries = new
-			var/datum/wound/loss/phantom_loss = new // stolen valor, really
-			phantom_loss.loss_wounding_type = dismembered_by_copy?[limb_zone]
-			if (phantom_loss.loss_wounding_type)
-				scaries.generate(limb, phantom_loss)
-				LAZYREMOVE(dismembered_by_copy, limb_zone) // in case we're using a passed list
-			else
-				qdel(scaries)
-				qdel(phantom_loss)
+	var/obj/item/bodypart/limb = newBodyPart(limb_zone)
+	if(isnull(limb))
+		return FALSE
+	if(!limb.try_attach_limb(src, TRUE))
+		qdel(limb)
+		return FALSE
+	limb.update_limb(is_creating = TRUE)
+	if (LAZYLEN(dismembered_by_copy))
+		var/datum/scar/scaries = new
+		var/datum/wound/loss/phantom_loss = new // stolen valor, really
+		phantom_loss.loss_wounding_type = dismembered_by_copy?[limb_zone]
+		if (phantom_loss.loss_wounding_type)
+			scaries.generate(limb, phantom_loss)
+			LAZYREMOVE(dismembered_by_copy, limb_zone) // in case we're using a passed list
+		else
+			qdel(scaries)
+			qdel(phantom_loss)
 
-		//Copied from /datum/species/proc/on_species_gain()
-		for(var/obj/item/organ/external/organ_path as anything in dna.species.external_organs)
-			//Load a persons preferences from DNA
-			var/zone = initial(organ_path.zone)
-			if(zone != limb_zone)
-				continue
-			var/obj/item/organ/external/new_organ = SSwardrobe.provide_type(organ_path)
-			new_organ.Insert(src)
+	//Copied from /datum/species/proc/on_species_gain()
+	for(var/obj/item/organ/external/organ_path as anything in dna.species.external_organs)
+		//Load a persons preferences from DNA
+		var/zone = initial(organ_path.zone)
+		if(zone != limb_zone)
+			continue
+		var/obj/item/organ/external/new_organ = SSwardrobe.provide_type(organ_path)
+		new_organ.Insert(src)
 
-		update_body_parts()
-		return TRUE
+	update_body_parts()
+	return TRUE

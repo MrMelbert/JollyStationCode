@@ -129,8 +129,7 @@
 	SEND_SIGNAL(owner, COMSIG_LIVING_MINOR_SHOCK)
 	owner.add_mood_event("tased", /datum/mood_event/tased)
 	owner.add_movespeed_modifier(/datum/movespeed_modifier/being_tased)
-	if(owner.pain_controller?.pain_modifier > 0.5)
-		owner.pain_emote("scream")
+	owner.pain_emote("scream")
 	if(ishuman(owner))
 		var/mob/living/carbon/human/human_owner = owner
 		human_owner.force_say()
@@ -166,15 +165,15 @@
 		return
 	// You are damp, that's bad when you're being tased
 	if(owner.fire_stacks < 0)
-		owner.apply_damage(max(1, owner.fire_stacks * -0.5 * seconds_between_ticks), FIRE, spread_damage = TRUE)
+		owner.apply_damage(max(1, owner.fire_stacks * -0.5) * seconds_between_ticks, FIRE, spread_damage = TRUE)
 		if(SPT_PROB(25, seconds_between_ticks))
 			do_sparks(1, FALSE, owner)
 
-	owner.set_stutter_if_lower(10 SECONDS)
-	owner.set_jitter_if_lower(20 SECONDS)
-	owner.cause_pain(BODY_ZONES_ALL, 2 * seconds_between_ticks, BURN)
+	owner.sharp_pain(BODY_ZONES_ALL, 6 * seconds_between_ticks, BURN, 12.5 SECONDS, 0.66)
 	owner.apply_damage(120 * seconds_between_ticks * (owner.pain_controller?.pain_modifier || 1), STAMINA)
 	if(owner.stat <= SOFT_CRIT)
+		owner.set_stutter_if_lower(10 SECONDS)
+		owner.set_jitter_if_lower(20 SECONDS)
 		owner.do_jitter_animation(INFINITY) // maximum POWER
 
 /// Sets the passed atom as the "taser"

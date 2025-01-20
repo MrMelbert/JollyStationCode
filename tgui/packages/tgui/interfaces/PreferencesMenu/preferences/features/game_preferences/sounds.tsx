@@ -103,3 +103,9 @@ export const sound_achievement: FeatureChoiced = {
   `,
   component: FeatureDropdownInput,
 };
+
+export const sound_heartbeat: FeatureToggle = {
+  name: 'Enable heartbeat sound',
+  category: 'SOUND',
+  component: CheckboxInput,
+};

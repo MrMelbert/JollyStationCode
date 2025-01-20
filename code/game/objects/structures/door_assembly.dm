@@ -8,7 +8,7 @@
 	max_integrity = 200
 	/// Airlock's current construction state
 	var/state = AIRLOCK_ASSEMBLY_NEEDS_WIRES
-	var/base_name = "Airlock"
+	var/base_name = "\improper Airlock"
 	var/created_name = null
 	var/mineral = null
 	var/obj/item/electronics/airlock/electronics = null

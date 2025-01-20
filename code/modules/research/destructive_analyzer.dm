@@ -153,7 +153,7 @@
 		var/mob/living/mob_thing = thing
 		if(mob_thing.stat != DEAD)
 			mob_thing.investigate_log("has been killed by a destructive analyzer.", INVESTIGATE_DEATHS)
-		mob_thing.death()
+		mob_thing.death(null, "being destructively analyzed")
 	var/list/point_value = techweb_item_point_check(thing)
 	if(point_value && !stored_research.deconstructed_items[thing.type])
 		stored_research.deconstructed_items[thing.type] = TRUE

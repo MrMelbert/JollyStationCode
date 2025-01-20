@@ -162,7 +162,11 @@
 	SET_PLANE(occupant_vis, PLANE_TO_TRUE(occupant_vis.plane), new_turf)
 
 /obj/machinery/cryo_cell/set_occupant(atom/movable/new_occupant)
+	if(occupant && isnull(new_occupant))
+		REMOVE_TRAIT(occupant, TRAIT_ASSISTED_BREATHING, REF(src))
 	. = ..()
+	if(occupant && on)
+		ADD_TRAIT(occupant, TRAIT_ASSISTED_BREATHING, REF(src))
 	update_appearance()
 
 /obj/machinery/cryo_cell/RefreshParts()
@@ -270,6 +274,10 @@
 		begin_processing()
 	else //Turned off
 		end_processing()
+	if(occupant)
+		ADD_TRAIT(occupant, TRAIT_ASSISTED_BREATHING, REF(src))
+	else
+		REMOVE_TRAIT(occupant, TRAIT_ASSISTED_BREATHING, REF(src))
 
 /obj/machinery/cryo_cell/begin_processing()
 	. = ..()
@@ -395,7 +403,7 @@
 	internal_connector.gas_connector.update_parents()
 
 /obj/machinery/cryo_cell/assume_air(datum/gas_mixture/giver)
-	internal_connector.gas_connector.airs[1].merge(giver)
+	return internal_connector.gas_connector.airs[1].merge(giver)
 
 /obj/machinery/cryo_cell/return_temperature()
 	var/datum/gas_mixture/internal_air = internal_connector.gas_connector.airs[1]

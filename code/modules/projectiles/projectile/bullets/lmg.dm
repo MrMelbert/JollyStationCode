@@ -1,33 +1,39 @@
 // C3D (Borgs)
 
 /obj/projectile/bullet/c3d
+	generic_name = "bullet"
 	damage = 20
 
 // Mech LMG
 
 /obj/projectile/bullet/lmg
+	generic_name = "bullet"
 	damage = 20
 
 // Mech FNX-99
 
 /obj/projectile/bullet/incendiary/fnx99
+	generic_name = "bullet"
 	damage = 20
 
 // Turrets
 
 /obj/projectile/bullet/manned_turret
+	generic_name = "bullet"
 	damage = 20
 
 /obj/projectile/bullet/manned_turret/hmg
 	icon_state = "redtrac"
 
 /obj/projectile/bullet/syndicate_turret
+	generic_name = "bullet"
 	damage = 20
 
 // 7mm (SAW)
 
 /obj/projectile/bullet/a7mm
 	name = "7mm bullet"
+	generic_name = "bullet"
 	damage = 30
 	armour_penetration = 5
 	wound_bonus = -50
@@ -49,6 +55,7 @@
 
 /obj/projectile/bullet/incendiary/a7mm
 	name = "7mm incendiary bullet"
+	generic_name = "bullet"
 	damage = 15
 	fire_stacks = 3
 

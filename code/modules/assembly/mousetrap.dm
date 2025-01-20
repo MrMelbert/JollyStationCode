@@ -133,8 +133,7 @@
 				else
 					to_chat(victim, span_notice("Your [victim.gloves] protects you from [src]."))
 		if(affecting)
-			if(affecting.receive_damage(1, 0))
-				victim.update_damage_overlays()
+			victim.apply_damage(1, BRUTE, affecting)
 	else if(ismouse(target))
 		var/mob/living/basic/mouse/splatted = target
 		visible_message(span_boldannounce("SPLAT!"))

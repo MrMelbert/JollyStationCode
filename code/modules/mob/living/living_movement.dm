@@ -153,6 +153,6 @@
 	return ..()
 
 /mob/living/keybind_face_direction(direction)
-	if(stat > SOFT_CRIT)
+	if(HAS_TRAIT(src, TRAIT_KNOCKEDOUT) || stat == DEAD)
 		return
 	return ..()

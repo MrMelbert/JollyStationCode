@@ -10,7 +10,6 @@
 	melee_damage_upper = 3
 	maxHealth = 25
 	health = 25
-	hardcrit_threshold = HEALTH_THRESHOLD_CRIT
 
 	rotate_on_lying = FALSE
 

@@ -2,18 +2,21 @@
 
 /obj/projectile/bullet/n762
 	name = "7.62x38mmR bullet"
+	generic_name = "bullet"
 	damage = 60
 
 // .50AE (Desert Eagle)
 
 /obj/projectile/bullet/a50ae
 	name = ".50AE bullet"
+	generic_name = "bullet"
 	damage = 60
 
 // .38 (Detective's Gun)
 
 /obj/projectile/bullet/c38
 	name = ".38 bullet"
+	generic_name = "bullet"
 	damage = 25
 	ricochets_max = 2
 	ricochet_chance = 50
@@ -21,8 +24,17 @@
 	ricochet_auto_aim_range = 3
 	wound_bonus = -20
 	bare_wound_bonus = 10
-	embedding = list(embed_chance=25, fall_chance=2, jostle_chance=2, ignore_throwspeed_threshold=TRUE, pain_stam_pct=0.4, pain_mult=3, jostle_pain_mult=5, rip_time=1 SECONDS)
-	embed_falloff_tile = -4
+	embed_type = /datum/embed_data/bullet/c38
+	embed_falloff_tile = 4
+
+/datum/embed_data/bullet/c38
+	embed_chance = 33
+	fall_chance = 0.0020
+	jostle_chance = 2
+	pain_stam_pct = 0.4
+	pain_mult = 3
+	jostle_pain_mult = 5
+	rip_time = 8 SECONDS
 
 /obj/projectile/bullet/c38/match
 	name = ".38 Match bullet"
@@ -37,7 +49,7 @@
 /obj/projectile/bullet/c38/match/bouncy
 	name = ".38 Rubber bullet"
 	damage = 10
-	stamina = 30
+	pain = 30
 	weak_against_armour = TRUE
 	ricochets_max = 6
 	ricochet_incidence_leeway = 0
@@ -45,7 +57,7 @@
 	ricochet_decay_damage = 0.8
 	shrapnel_type = null
 	sharpness = NONE
-	embedding = null
+	embed_type = null
 
 // premium .38 ammo from cargo, weak against armor, lower base damage, but excellent at embedding and causing slice wounds at close range
 /obj/projectile/bullet/c38/dumdum
@@ -56,9 +68,17 @@
 	sharpness = SHARP_EDGED
 	wound_bonus = 20
 	bare_wound_bonus = 20
-	embedding = list(embed_chance=75, fall_chance=3, jostle_chance=4, ignore_throwspeed_threshold=TRUE, pain_stam_pct=0.4, pain_mult=5, jostle_pain_mult=6, rip_time=1 SECONDS)
+	embed_type = /datum/embed_data/bullet/c38/dumdum
 	wound_falloff_tile = -5
 	embed_falloff_tile = -15
+
+/datum/embed_data/bullet/c38/dumdum
+	embed_chance = 75
+	fall_chance = 0.0030
+	jostle_chance = 4
+	pain_mult = 5
+	jostle_pain_mult = 6
+	rip_time = 5 SECONDS
 
 /obj/projectile/bullet/c38/trac
 	name = ".38 TRAC bullet"
@@ -109,6 +129,7 @@
 
 /obj/projectile/bullet/a357
 	name = ".357 bullet"
+	generic_name = "bullet"
 	damage = 60
 	wound_bonus = -30
 

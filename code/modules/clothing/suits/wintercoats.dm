@@ -19,6 +19,7 @@
 
 /obj/item/clothing/suit/hooded/wintercoat/Initialize(mapload)
 	. = ..()
+	AddElement(/datum/element/pat_out_fire)
 	allowed += list(
 		/obj/item/flashlight,
 		/obj/item/lighter,

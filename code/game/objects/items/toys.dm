@@ -613,7 +613,7 @@
 
 /obj/item/dualsaber/toy/impale(mob/living/user)//Stops Toy Dualsabers from injuring clowns
 	to_chat(user, span_warning("You twirl around a bit before losing your balance and impaling yourself on [src]."))
-	user.adjustStaminaLoss(25)
+	user.apply_damage(25, STAMINA)
 
 /obj/item/toy/katana
 	name = "replica katana"

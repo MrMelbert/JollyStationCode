@@ -34,7 +34,7 @@
 		if(carbon_source.unset_pain_mod(PAIN_MOD_OFF_STATION))
 			to_chat(carbon_source, span_green("Returning to the station, you feel much more vulnerable to incoming pain."))
 	else
-		if(carbon_source.set_pain_mod(PAIN_MOD_OFF_STATION, 0.6))
+		if(carbon_source.set_pain_mod(PAIN_MOD_OFF_STATION, 0.5))
 			to_chat(carbon_source, span_green("As you depart from the station, you feel more resilient to incoming pain."))
 
 /datum/outfit/job/miner

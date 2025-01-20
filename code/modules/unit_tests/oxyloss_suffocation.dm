@@ -4,7 +4,7 @@
 /datum/unit_test/oxyloss_suffocation/Run()
 	var/mob/living/carbon/human/dummy = allocate(/mob/living/carbon/human/consistent)
 
-	dummy.setOxyLoss(75)
-	TEST_ASSERT(HAS_TRAIT_FROM(dummy, TRAIT_KNOCKEDOUT, OXYLOSS_TRAIT), "Dummy should have been knocked out from taking oxy damage.")
+	dummy.setOxyLoss(150)
+	TEST_ASSERT(HAS_TRAIT(dummy, TRAIT_KNOCKEDOUT), "Dummy should have been knocked out from taking oxy damage.")
 	dummy.setOxyLoss(0)
-	TEST_ASSERT(!HAS_TRAIT_FROM(dummy, TRAIT_KNOCKEDOUT, OXYLOSS_TRAIT), "Dummy should have woken up from KO when healing to 0 oxy damage.")
+	TEST_ASSERT(!HAS_TRAIT(dummy, TRAIT_KNOCKEDOUT), "Dummy should have woken up from KO when healing to 0 oxy damage.")

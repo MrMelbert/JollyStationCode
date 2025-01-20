@@ -83,7 +83,7 @@
 	return TRUE
 
 /datum/unit_test/strange_reagent/proc/get_target_organic_health_manual(mob/living/target)
-	return target.getMaxHealth() - (target.getBruteLoss() + target.getFireLoss())
+	return round(target.getMaxHealth() - (target.getBruteLoss() + target.getFireLoss()), 1)
 
 /datum/unit_test/strange_reagent/proc/test_damage_but_no_death(target_type)
 	var/mob/living/target = allocate_new_target(target_type)
@@ -153,7 +153,7 @@
 		return
 	if(QDELETED(target))
 		return
-		
+
 	update_amounts(target)
 	strange_reagent.expose_mob(target, INGEST, amount_needed_to_revive)
 	TEST_ASSERT_EQUAL(target.stat, DEAD, "Strange Reagent revived a target type [target.type] with more than double their max health in damage.")

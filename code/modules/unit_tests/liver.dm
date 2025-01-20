@@ -20,7 +20,7 @@
 
 	mrbones.reagents.add_reagent(bonehurting, 40)
 	mrbones.Life(SSMOBS_DT)
-	var/expected_stamina_damage = (7.5 * REM * SECONDS_PER_TICK)
+	var/expected_stamina_damage = (7.5 * REM * SECONDS_PER_TICK) - (2.5 * SECONDS_PER_TICK)
 	var/expected_brute_damage = (0.5 * REM * SECONDS_PER_TICK)
 
 	TEST_ASSERT_EQUAL(mrbones.getStaminaLoss(), expected_stamina_damage,

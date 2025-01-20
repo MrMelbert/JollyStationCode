@@ -44,6 +44,7 @@
 	ADD_TRAIT(user, TRAIT_VIRUS_RESISTANCE, type)
 	// Slight improved vision
 	ADD_TRAIT(user, TRAIT_NIGHT_VISION, type)
+	user.add_consciousness_modifier(type, 20)
 
 /datum/reagent/medicine/luciferium/on_mob_end_metabolize(mob/living/carbon/user)
 	. = ..()
@@ -65,7 +66,7 @@
 		return ..()
 
 	// Heals pain and tons of damage (based on purity)
-	user.cause_pain(BODY_ZONES_ALL, -1 * REM * seconds_per_tick)
+	user.cause_pain(BODY_ZONES_ALL, -2 * REM * seconds_per_tick)
 	user.adjustBruteLoss(-5 * REM * seconds_per_tick, FALSE)
 	user.adjustFireLoss(-5 * REM * seconds_per_tick, FALSE)
 	user.adjustOxyLoss(-3 * REM * seconds_per_tick, FALSE)
@@ -124,6 +125,9 @@
  * Stop the effects of the chem.
  */
 /datum/reagent/medicine/luciferium/proc/stop_effects(mob/living/user)
+	if(!HAS_TRAIT_FROM(user, TRAIT_NOSOFTCRIT, type))
+		return
+
 	user.remove_movespeed_modifier(/datum/movespeed_modifier/reagent/luciferium)
 	REMOVE_TRAIT(user, TRAIT_ANTICONVULSANT, type)
 	REMOVE_TRAIT(user, TRAIT_VIRUS_CONTACT_IMMUNE, type)
@@ -132,6 +136,7 @@
 	REMOVE_TRAIT(user, TRAIT_NOCRITDAMAGE, type)
 	REMOVE_TRAIT(user, TRAIT_NIGHT_VISION, type)
 	REMOVE_TRAIT(user, TRAIT_COAGULATING, type)
+	user.remove_consciousness_modifier(type)
 
 /obj/item/reagent_containers/pill/luciferium
 	name = "luciferium pill"
@@ -199,6 +204,7 @@
 	user.add_mood_event(type, /datum/mood_event/gojuice)
 	ADD_TRAIT(user, TRAIT_NIGHT_VISION, type)
 	ADD_TRAIT(user, TRAIT_NOSOFTCRIT, type)
+	user.add_consciousness_modifier(type, 25)
 
 /datum/reagent/drug/gojuice/on_mob_end_metabolize(mob/living/user)
 	. = ..()
@@ -230,10 +236,14 @@
  * Remove the effects of the drug.
  */
 /datum/reagent/drug/gojuice/proc/stop_effects(mob/living/user)
+	if(!HAS_TRAIT_FROM(user, TRAIT_NOSOFTCRIT, type))
+		return
+
 	user.remove_movespeed_modifier(/datum/movespeed_modifier/reagent/gojuice)
 	user.clear_mood_event(type)
 	REMOVE_TRAIT(user, TRAIT_NIGHT_VISION, type)
 	REMOVE_TRAIT(user, TRAIT_NOSOFTCRIT, type)
+	user.remove_consciousness_modifier(type)
 
 /datum/chemical_reaction/gojuice
 	results = list(/datum/reagent/drug/gojuice = 3)

@@ -238,8 +238,9 @@
 		update_appearance()
 
 	// Instantly lie down, also go unconscious from the pain, before you die.
-	L.Unconscious(100)
-	L.adjustBruteLoss(crush_damage)
+	if(!issilicon(L))
+		L.Unconscious(10 SECONDS)
+	L.apply_damage(crush_damage)
 
 /obj/machinery/recycler/on_deconstruction()
 	safety_mode = TRUE

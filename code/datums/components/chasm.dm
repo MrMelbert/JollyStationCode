@@ -208,7 +208,7 @@
 		REMOVE_TRAIT(fallen_mob, TRAIT_NO_TRANSFORM, REF(src))
 		if (fallen_mob.stat != DEAD)
 			fallen_mob.investigate_log("has died from falling into a chasm.", INVESTIGATE_DEATHS)
-			fallen_mob.death(TRUE)
+			fallen_mob.death(TRUE, "falling")
 			fallen_mob.apply_damage(300)
 
 	falling_atoms -= falling_ref

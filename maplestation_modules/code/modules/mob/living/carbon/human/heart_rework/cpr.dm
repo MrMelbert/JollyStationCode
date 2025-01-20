@@ -1,14 +1,3 @@
-
-/mob/living/carbon/human/do_cpr(mob/living/carbon/human/target)
-	if(target == src)
-		return FALSE
-
-	if (DOING_INTERACTION_WITH_TARGET(src, target))
-		return FALSE
-
-	cpr_process(target, beat = 1) // begin at beat 1, skip the first breath
-	return TRUE
-
 /// Number of "beats" per CPR cycle
 /// This corresponds to N - 1 compressions and 1 breath
 #define BEATS_PER_CPR_CYCLE 16
@@ -18,18 +7,18 @@
 /mob/living/carbon/human/proc/cpr_process(mob/living/carbon/human/target, beat = 0, panicking = FALSE)
 	set waitfor = FALSE
 
-	if (!target.appears_alive())
-		to_chat(src, span_warning("[target.name] is dead!"))
+	if(get_active_held_item() || get_inactive_held_item() || usable_hands <= 0)
+		to_chat(src, span_warning("Your hands are full, you can't perform CPR!"))
 		return
 
 	var/cpr_certified = HAS_TRAIT(src, TRAIT_CPR_CERTIFIED)
 	if(!panicking && target.stat != CONSCIOUS && beat >= BEATS_PER_CPR_CYCLE + 1)
-		to_chat(src, span_warning("[target] still isn't up[cpr_certified ? " - you pick up the pace." : "! You try harder!"]"))
+		to_chat(src, span_warning("[target] still has no pulse[cpr_certified ? " - you pick up the pace." : "! You try harder!"]"))
 		panicking = TRUE
 
 	var/doafter_mod = panicking ? 0.5 : 1
 	var/doing_a_breath = FALSE
-	if(beat % BEATS_PER_CPR_CYCLE == 0)
+	if(beat % BEATS_PER_CPR_CYCLE == 0 || beat == 1)
 		if (is_mouth_covered())
 			to_chat(src, span_warning("Your mouth is covered, so you can only perform compressions!"))
 
@@ -50,14 +39,18 @@
 			span_notice("[src] attempts to give [target.name] a rescue breath!"),
 			span_notice("You attempt to give [target.name] a rescue breath as a part of CPR... Hold still!"),
 		)
+		if(target.stat == DEAD)
+			to_chat(src, span_warning("[target.p_Their()] mouth feels cold to the touch..."))
+		else if(!target.undergoing_cardiac_arrest())
+			to_chat(src, span_notice("You feel a pulse!"))
 
 		if(!do_after(user = src, delay = doafter_mod * 6 SECONDS, target = target))
 			return
 
 		add_mood_event("saved_life", /datum/mood_event/saved_life)
 		visible_message(
-			span_notice("[src] delivers a rescue breath on [target.name]!"),
-			span_notice("You deliver  a rescue breath on [target.name]."),
+			span_notice("[src] delivers a rescue breath to [target.name]!"),
+			span_notice("You deliver a rescue breath to [target.name]."),
 		)
 
 	else
@@ -99,7 +92,7 @@
 		if(IS_ORGANIC_LIMB(chest))
 			to_chat(target, span_notice("You feel the pressure on your chest ease!"))
 			chest.heal_damage(brute = 3)
-			target.cause_pain(BODY_ZONE_CHEST, -2)
+			target.cause_pain(BODY_ZONE_CHEST, -3)
 
 		log_combat(src, target, "CPRed", addition = "(breath)")
 
@@ -112,13 +105,11 @@
 				if(critical_success)
 					target.set_heartattack(FALSE)
 					to_chat(target, span_warning("You feel immense pressure on your chest, and a sudden wave of pain... and then relief."))
-					chest.receive_damage(brute = 6, wound_bonus = CANT_WOUND, damage_source = "chest compressions")
-					target.cause_pain(BODY_ZONE_CHEST, 12)
+					target.apply_damage(6, BRUTE, chest, wound_bonus = CANT_WOUND, attacking_item = "chest compressions")
 
 				else
 					to_chat(target, span_warning("You feel pressure on your chest!"))
-					chest.receive_damage(brute = 3, wound_bonus = CANT_WOUND, damage_source = "chest compressions")
-					target.cause_pain(BODY_ZONE_CHEST, 2)
+					target.apply_damage(3, BRUTE, chest, wound_bonus = CANT_WOUND, attacking_item = "chest compressions")
 
 				to_chat(src, span_warning("You bruise [target.name]'s chest with the pressure!"))
 
@@ -129,9 +120,7 @@
 
 		log_combat(src, target, "CPRed", addition = "(compression)")
 
-	if(target.body_position != LYING_DOWN)
-		return
-	if(target.stat == CONSCIOUS)
+	if(target.body_position != LYING_DOWN || !target.undergoing_cardiac_arrest())
 		return
 
 	cpr_process(target, beat + 1, panicking)
@@ -148,7 +137,15 @@
 /datum/status_effect/cpr_applied/on_apply()
 	if(!is_effective(owner))
 		return FALSE
+	owner.add_consciousness_modifier(id, 5)
+	ADD_TRAIT(owner, TRAIT_NO_ORGAN_DECAY, id) // cycling the heart, so if they're dead, organs aren't decaying
+	ADD_TRAIT(owner, TRAIT_ASSISTED_BREATHING, id)
 	return TRUE
+
+/datum/status_effect/cpr_applied/on_remove()
+	owner.remove_consciousness_modifier(id)
+	REMOVE_TRAIT(owner, TRAIT_NO_ORGAN_DECAY, id)
+	REMOVE_TRAIT(owner, TRAIT_ASSISTED_BREATHING, id)
 
 /datum/status_effect/cpr_applied/refresh(effect, ...)
 	if(!is_effective(owner))

@@ -58,7 +58,6 @@
 
 	var/old_stat = stat
 	update_stat()
-
 	diag_hud_set_health()
 
 	if(old_health > health || old_stat != stat) // only disconnect if we lose health or change stat
@@ -69,7 +68,7 @@
 	if(status_flags & GODMODE)
 		return
 	if(stat != DEAD)
-		if(health <= HEALTH_THRESHOLD_DEAD)
+		if(health <= -maxHealth)
 			death()
 			return
 		else if(stat >= UNCONSCIOUS)

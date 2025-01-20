@@ -12,7 +12,14 @@
 	armour_penetration = 10
 	wound_bonus = -20
 	bare_wound_bonus = -10
-	embedding = list(embed_chance=15, fall_chance=10, jostle_chance=2, ignore_throwspeed_threshold=TRUE, pain_mult=1, jostle_pain_mult=1.2, rip_time=5)
-
+	embed_type = /datum/embed_data/spear/dull
 	force_unwielded = 5
 	force_wielded = 9
+
+/datum/embed_data/spear/dull
+	embed_chance = 15
+	fall_chance = 10
+	jostle_chance = 2
+	pain_mult = 1
+	jostle_pain_mult = 1.2
+	rip_time = 0.5 SECONDS

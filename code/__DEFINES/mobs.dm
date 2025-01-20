@@ -155,31 +155,20 @@
 // Health/damage defines
 #define MAX_LIVING_HEALTH 100
 
-//for determining which type of heartbeat sound is playing
-///Heartbeat is beating fast for hard crit
-#define BEAT_FAST 1
-///Heartbeat is beating slow for soft crit
-#define BEAT_SLOW 2
-///Heartbeat is gone... He's dead Jim :(
-#define BEAT_NONE 0
-
 #define HUMAN_MAX_OXYLOSS 3
 #define HUMAN_CRIT_MAX_OXYLOSS (SSMOBS_DT/3)
-
-#define STAMINA_REGEN_BLOCK_TIME (10 SECONDS)
 
 /// Damage recieved when past heat damage threshold.
 /// Gets multiplied by 2x, 4x, 8x depending on how far past the threshold you are.
 #define HEAT_DAMAGE 1
-
 /// Damage recieved when past cold damage threshold.
 /// Gets multiplied by 2x, 4x, 8x depending on how far past the threshold you are.
 #define COLD_DAMAGE 0.25
 
 //Brain Damage defines
-#define BRAIN_DAMAGE_MILD 20
-#define BRAIN_DAMAGE_SEVERE 100
-#define BRAIN_DAMAGE_DEATH 200
+#define BRAIN_DAMAGE_MILD 50
+#define BRAIN_DAMAGE_SEVERE 150
+#define BRAIN_DAMAGE_DEATH 300
 
 #define BRAIN_TRAUMA_MILD /datum/brain_trauma/mild
 #define BRAIN_TRAUMA_SEVERE /datum/brain_trauma/severe
@@ -450,7 +439,7 @@
 #define DOOR_CRUSH_DAMAGE 15 //the amount of damage that airlocks deal when they crush you
 
 /// Factor at which mob nutrition decreases
-#define HUNGER_FACTOR 0.1
+#define HUNGER_FACTOR 0.075
 
 // These add up to 1 to roughly (VERY roughly) represent the proportion of hunger used by each system
 /// What % of hunger is used by homeostasis
@@ -533,7 +522,7 @@
 #define DEFIB_POSSIBLE (1<<0)
 #define DEFIB_FAIL_SUICIDE (1<<1)
 #define DEFIB_FAIL_HUSK (1<<2)
-#define DEFIB_FAIL_TISSUE_DAMAGE (1<<3)
+#define DEFIB_FAIL_CON (1<<3)
 #define DEFIB_FAIL_FAILING_HEART (1<<4)
 #define DEFIB_FAIL_NO_HEART (1<<5)
 #define DEFIB_FAIL_FAILING_BRAIN (1<<6)
@@ -543,7 +532,7 @@
 #define DEFIB_NOGRAB_AGHOST (1<<10)
 
 // Bit mask of possible return values by can_defib that would result in a revivable patient
-#define DEFIB_REVIVABLE_STATES (DEFIB_FAIL_NO_HEART | DEFIB_FAIL_FAILING_HEART | DEFIB_FAIL_HUSK | DEFIB_FAIL_TISSUE_DAMAGE | DEFIB_FAIL_FAILING_BRAIN | DEFIB_POSSIBLE)
+#define DEFIB_REVIVABLE_STATES (DEFIB_FAIL_NO_HEART | DEFIB_FAIL_FAILING_HEART | DEFIB_FAIL_HUSK | DEFIB_FAIL_CON | DEFIB_FAIL_FAILING_BRAIN | DEFIB_POSSIBLE)
 
 #define SLEEP_CHECK_DEATH(X, A) \
 	sleep(X); \
@@ -575,8 +564,30 @@
 
 #define SILENCE_RANGED_MESSAGE (1<<0)
 
+/// Threshold at which a mob is considered to be in a hard crit
+#define HARD_CRIT_THRESHOLD 30
+/// Upper max for consciousness
+#define UPPER_CONSCIOUSNESS_MAX 150
+/// Default max for consciousness
+#define CONSCIOUSNESS_MAX 100
+/// Beyond this threshold you are in crit
+#define CONSCIOUSNESS_CRIT_THRESHOLD (HARD_CRIT_THRESHOLD + 5)
+/// Beyond this pain you are in paincrit
+#define PAIN_CRIT_THRESOLD 200
+/// Beyond this amount of shock you are in paincrit
+#define SHOCK_CRIT_THRESHOLD 150
+/// Beyond this amount of shock you are in soft crit
+#define SHOCK_DANGER_THRESHOLD 90
+/// Beyond this amount of shock you can have a heart attack
+#define SHOCK_HEART_ATTACK_THRESHOLD 120
+
+/// At this threshold you are usually in crit from con loss
+#define HEALTH_THRESHOLD_LIKELY_CRIT -100
+/// At this threshold you are usually dead from con loss
+#define HEALTH_THRESHOLD_LIKELY_DEAD -600
+
 /// Returns whether or not the given mob can succumb
-#define CAN_SUCCUMB(target) (HAS_TRAIT(target, TRAIT_CRITICAL_CONDITION) && !HAS_TRAIT(target, TRAIT_NODEATH))
+#define CAN_SUCCUMB(target) ((target.health <= HEALTH_THRESHOLD_LIKELY_CRIT || target.pain_controller?.traumatic_shock > 90) && target.stat == HARD_CRIT && !HAS_TRAIT(target, TRAIT_NODEATH))
 
 // Body position defines.
 /// Mob is standing up, usually associated with lying_angle value of 0.

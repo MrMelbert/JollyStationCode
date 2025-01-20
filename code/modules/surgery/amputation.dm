@@ -47,7 +47,14 @@
 		span_notice("[user] begins to sever [target]'s [parse_zone(target_zone)]!"),
 		span_notice("[user] begins to sever [target]'s [parse_zone(target_zone)]!"),
 	)
-	display_pain(target, "You feel a gruesome pain in your [parse_zone(target_zone)]'s joint!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "You feel a gruesome pain in your [parse_zone(target_zone)]'s joint!",
+		pain_amount = SURGERY_PAIN_MEDIUM, // loss of the limb also applies pain to the chest, so we can afford to make this a bit lower
+		pain_overlay_severity = 2,
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
 
 
 /datum/surgery_step/sever_limb/success(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
@@ -58,7 +65,14 @@
 		span_notice("[user] severs [target]'s [parse_zone(target_zone)]!"),
 		span_notice("[user] severs [target]'s [parse_zone(target_zone)]!"),
 	)
-	display_pain(target, "You can no longer feel your severed [parse_zone(target_zone)]!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "You can no longer feel your severed [parse_zone(target_zone)]!",
+		pain_amount = SURGERY_PAIN_MEDIUM,
+		pain_overlay_severity = 2,
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
 
 	if(HAS_MIND_TRAIT(user, TRAIT_MORBID) && ishuman(user))
 		var/mob/living/carbon/human/morbid_weirdo = user

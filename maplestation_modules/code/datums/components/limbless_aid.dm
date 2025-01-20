@@ -49,6 +49,7 @@
 /datum/component/limbless_aid/proc/add_support(mob/living/user)
 	ADD_TRAIT(user, TRAIT_NO_LEG_AID, "[REF(src)]_aid")
 	RegisterSignal(user, COMSIG_LIVING_LIMBLESS_MOVESPEED_UPDATE, PROC_REF(modify_movespeed), override = TRUE)
+	RegisterSignal(user, COMSIG_CARBON_PAINED_STEP, PROC_REF(pain_step), override = TRUE)
 	RegisterSignal(user, COMSIG_CARBON_LIMPING, PROC_REF(limp_check), override = TRUE)
 	RegisterSignal(user, COMSIG_LIVING_RESIST, PROC_REF(self_brace), override = TRUE)
 	user.update_limbless_locomotion()
@@ -63,12 +64,11 @@
 	REMOVE_TRAIT(user, TRAIT_NO_LEG_AID, "[REF(src)]_aid")
 	un_self_brace(user)
 	UnregisterSignal(user, COMSIG_LIVING_LIMBLESS_MOVESPEED_UPDATE)
+	UnregisterSignal(user, COMSIG_CARBON_PAINED_STEP)
 	UnregisterSignal(user, COMSIG_CARBON_LIMPING)
 	UnregisterSignal(user, COMSIG_LIVING_RESIST)
 	user.update_limbless_locomotion()
 	user.update_limbless_movespeed_mod()
-
-#define IS_RIGHT_ARM(index) (index % 2 == 0)
 
 /datum/component/limbless_aid/proc/modify_movespeed(mob/living/source, list/modifiers)
 	SIGNAL_HANDLER
@@ -77,11 +77,24 @@
 	if(required_slot & ITEM_SLOT_HANDS)
 		// this is not backwards intentionally:
 		// if you're missing the left leg, you need the left leg braced
-		var/side = IS_RIGHT_ARM(source.get_held_index_of_item(parent)) ? BODY_ZONE_R_LEG : BODY_ZONE_L_LEG
+		var/side = IS_RIGHT(source.get_held_index_of_item(parent)) ? BODY_ZONE_R_LEG : BODY_ZONE_L_LEG
 		leg = source.get_bodypart(side)
 
 	if(isnull(leg) || leg.bodypart_disabled)
 		modifiers += movespeed_mod
+
+/datum/component/limbless_aid/proc/pain_step(mob/living/source, obj/item/affected_leg, footstep_count)
+	SIGNAL_HANDLER
+
+	var/obj/item/bodypart/leg
+	if(required_slot & ITEM_SLOT_HANDS)
+		// note this is backwards intentionally:
+		// see below
+		var/side = IS_RIGHT(source.get_held_index_of_item(parent)) ? BODY_ZONE_L_LEG : BODY_ZONE_R_LEG
+		leg = source.get_bodypart(side)
+
+	if(isnull(leg) || leg == affected_leg)
+		return STOP_PAIN
 
 /datum/component/limbless_aid/proc/limp_check(mob/living/source, obj/item/bodypart/next_leg)
 	SIGNAL_HANDLER
@@ -90,13 +103,11 @@
 	if(required_slot & ITEM_SLOT_HANDS)
 		// note this is backwards intentionally:
 		// you use your right arm to brace your left leg, and vice versa
-		var/side = IS_RIGHT_ARM(source.get_held_index_of_item(parent)) ? BODY_ZONE_L_LEG : BODY_ZONE_R_LEG
+		var/side = IS_RIGHT(source.get_held_index_of_item(parent)) ? BODY_ZONE_L_LEG : BODY_ZONE_R_LEG
 		leg = source.get_bodypart(side)
 
 	if(isnull(leg) || leg == next_leg)
 		return COMPONENT_CANCEL_LIMP
-
-#undef IS_RIGHT_ARM
 
 /datum/component/limbless_aid/proc/self_brace(mob/living/source)
 	SIGNAL_HANDLER

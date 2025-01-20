@@ -1,6 +1,7 @@
 /obj/projectile/bullet/shotgun_slug
 	name = "12g shotgun slug"
 	icon_state = "pellet"
+	generic_name = "slug"
 	damage = 50
 	sharpness = SHARP_POINTY
 	wound_bonus = 0
@@ -18,23 +19,25 @@
 /obj/projectile/bullet/shotgun_beanbag
 	name = "beanbag slug"
 	icon_state = "pellet"
+	generic_name = "slug"
 	damage = 10
-	stamina = 55
+	pain = 55
 	wound_bonus = 20
 	sharpness = NONE
-	embedding = null
+	embed_type = null
 
 /obj/projectile/bullet/shotgun_beanbag/a40mm
 	name = "rubber slug"
 	icon_state = "cannonball"
 	damage = 20
-	stamina = 160 //BONK
+	pain = 160 //BONK
 	wound_bonus = 30
 	weak_against_armour = TRUE
 
 /obj/projectile/bullet/incendiary/shotgun
 	name = "incendiary slug"
 	icon_state = "pellet"
+	generic_name = "pellet"
 	damage = 20
 
 /obj/projectile/bullet/incendiary/shotgun/no_trail
@@ -48,17 +51,19 @@
 
 /obj/projectile/bullet/shotgun_stunslug
 	name = "stunslug"
+	generic_name = "slug"
 	damage = 5
 	paralyze = 100
 	stutter = 10 SECONDS
 	jitter = 40 SECONDS
 	range = 7
 	icon_state = "spark"
-	color = "#FFFF00"
-	embedding = null
+	color = COLOR_YELLOW
+	embed_type = null
 
 /obj/projectile/bullet/shotgun_frag12
 	name ="frag12 slug"
+	generic_name = "slug"
 	icon_state = "pellet"
 	damage = 15
 	paralyze = 10
@@ -70,6 +75,7 @@
 
 /obj/projectile/bullet/pellet
 	icon_state = "pellet"
+	generic_name = "pellet"
 	damage_falloff_tile = -0.45
 
 /obj/projectile/bullet/pellet/shotgun_buckshot
@@ -78,13 +84,15 @@
 	wound_bonus = 5
 	bare_wound_bonus = 5
 	wound_falloff_tile = -2.5 // low damage + additional dropoff will already curb wounding potential anything past point blank
+	embed_type = /datum/embed_data/bullet/pellet
+	shrapnel_type = /obj/item/shrapnel/bullet/pellet
 
 /obj/projectile/bullet/pellet/shotgun_rubbershot
 	name = "rubber shot pellet"
 	damage = 3
-	stamina = 11
+	pain = 11
 	sharpness = NONE
-	embedding = null
+	embed_type = null
 	speed = 1.2
 	stamina_falloff_tile = -0.25
 	ricochets_max = 4
@@ -106,7 +114,7 @@
 	name = "incapacitating pellet"
 	damage = 1
 	stamina = 6
-	embedding = null
+	embed_type = null
 
 /obj/projectile/bullet/pellet/shotgun_improvised
 	damage = 5
@@ -125,6 +133,7 @@
 
 /obj/projectile/bullet/scattershot
 	icon_state = "pellet"
+	generic_name = "pellet"
 	damage = 24
 
 //Breaching Ammo
@@ -132,6 +141,7 @@
 /obj/projectile/bullet/shotgun_breaching
 	name = "12g breaching round"
 	desc = "A breaching round designed to destroy airlocks and windows with only a few shots. Ineffective against other targets."
+	generic_name = "slug"
 	hitsound = 'sound/weapons/sonic_jackhammer.ogg'
 	damage = 5 //does shit damage to everything except doors and windows
 	demolition_mod = 200 //one shot to break a window or grille, or two shots to breach an airlock door

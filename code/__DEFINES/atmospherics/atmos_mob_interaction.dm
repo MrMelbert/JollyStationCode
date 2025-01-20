@@ -20,11 +20,6 @@
 //The proportion of oxygen needed for metabolism compared to pluoxium. (Pluoxium is this many times efficient as oxygen)
 #define PLUOXIUM_PROPORTION 8
 
-//Defines for N2O and Healium euphoria moodlets
-#define EUPHORIA_INACTIVE 0
-#define EUPHORIA_ACTIVE 1
-#define EUPHORIA_LAST_FLAG 2
-
 #define MIASMA_CORPSE_MOLES 0.02
 #define MIASMA_GIBS_MOLES 0.005
 
@@ -200,3 +195,5 @@
 
 ///Minimum temperature for items on fire
 #define BURNING_ITEM_MINIMUM_TEMPERATURE (150+T0C)
+
+#define SKIP_INTERNALS "skip_internals"

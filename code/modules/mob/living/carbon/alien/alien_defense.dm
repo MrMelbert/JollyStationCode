@@ -52,6 +52,9 @@ In all, this is a lot like the monkey code. /N
 		return TRUE
 	if(user.combat_mode)
 		user.do_attack_animation(src, ATTACK_EFFECT_PUNCH)
+	else if(src == user)
+		check_self_for_injuries()
+		return TRUE
 	else
 		help_shake_act(user)
 		return TRUE

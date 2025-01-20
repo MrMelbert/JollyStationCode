@@ -17,6 +17,8 @@
 	attack_verb_simple = "beat"
 	attack_sound = 'sound/weapons/egloves.ogg'
 	attack_vis_effect = ATTACK_EFFECT_SLASH
+	sharpness = SHARP_EDGED
+	wound_bonus = 0
 	r_hand = /obj/item/melee/baton/abductor
 	var/projectile_deflect_chance = 0
 

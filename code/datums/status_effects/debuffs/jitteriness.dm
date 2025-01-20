@@ -16,12 +16,14 @@
 		return FALSE
 
 	RegisterSignal(owner, COMSIG_LIVING_DEATH, PROC_REF(remove_jitter))
+	ADD_TRAIT(owner, TRAIT_HEART_RATE_BOOST, TRAIT_STATUS_EFFECT(id))
 	owner.add_mood_event(id, /datum/mood_event/jittery)
 	return TRUE
 
 /datum/status_effect/jitter/on_remove()
 	UnregisterSignal(owner, COMSIG_LIVING_DEATH)
 	owner.clear_mood_event(id)
+	REMOVE_TRAIT(owner, TRAIT_HEART_RATE_BOOST, TRAIT_STATUS_EFFECT(id))
 	// juuust in case, reset our x and y's from our jittering
 	owner.pixel_x = 0
 	owner.pixel_y = 0

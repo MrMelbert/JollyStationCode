@@ -1,8 +1,9 @@
 /datum/status_effect/staggered
 	id = "staggered"
-	tick_interval = 0.5 SECONDS
+	tick_interval = 1 SECONDS
 	alert_type = null
 	remove_on_fullheal = TRUE
+	var/spawn_animating = TRUE
 
 /datum/status_effect/staggered/on_creation(mob/living/new_owner, duration = 10 SECONDS)
 	src.duration = duration
@@ -13,15 +14,17 @@
 	if(owner.stat == DEAD || HAS_TRAIT(owner, TRAIT_NO_STAGGER))
 		return FALSE
 
-	RegisterSignal(owner, COMSIG_LIVING_DEATH, PROC_REF(clear_staggered))
+	RegisterSignals(owner, list(COMSIG_LIVING_DEATH, SIGNAL_ADDTRAIT(TRAIT_NO_STAGGER)), PROC_REF(clear_staggered))
 	owner.add_movespeed_modifier(/datum/movespeed_modifier/staggered)
+	animate_stagger()
+	addtimer(VARSET_CALLBACK(src, spawn_animating, FALSE), initial(tick_interval), TIMER_DELETE_ME)
 	return TRUE
 
 /datum/status_effect/staggered/on_remove()
-	UnregisterSignal(owner, COMSIG_LIVING_DEATH)
+	UnregisterSignal(owner, list(COMSIG_LIVING_DEATH, SIGNAL_ADDTRAIT(TRAIT_NO_STAGGER)))
 	owner.remove_movespeed_modifier(/datum/movespeed_modifier/staggered)
 	// Resetting both X on remove so we're back to normal
-	owner.pixel_x = owner.base_pixel_x
+	animate(owner, pixel_x = owner.base_pixel_x + owner.body_position_pixel_x_offset, time = 0.2 SECONDS, flags = ANIMATION_PARALLEL)
 
 /// Signal proc that self deletes our staggered effect
 /datum/status_effect/staggered/proc/clear_staggered(datum/source)
@@ -30,16 +33,11 @@
 	qdel(src)
 
 /datum/status_effect/staggered/tick(seconds_between_ticks)
-	//you can't stagger the dead - in case somehow you die mid-stagger
-	if(owner.stat == DEAD || HAS_TRAIT(owner, TRAIT_NO_STAGGER))
-		qdel(src)
-		return
-	if(HAS_TRAIT(owner, TRAIT_FAKEDEATH))
-		return
-	owner.do_stagger_animation()
+	animate_stagger()
 
-/// Helper proc that causes the mob to do a stagger animation.
-/// Doesn't change significantly, just meant to represent swaying back and forth
-/mob/living/proc/do_stagger_animation()
-	animate(src, pixel_x = 4, time = 0.2 SECONDS, loop = 6, flags = ANIMATION_RELATIVE|ANIMATION_PARALLEL)
-	animate(pixel_x = -4, time = 0.2 SECONDS, flags = ANIMATION_RELATIVE)
+/datum/status_effect/staggered/proc/animate_stagger()
+	if(!owner.appears_alive())
+		return
+	animate(owner, pixel_x = 2, time = 0.2 SECONDS, flags = ANIMATION_RELATIVE|ANIMATION_PARALLEL)
+	animate(pixel_x = -4, time = 0.4 SECONDS, flags = ANIMATION_RELATIVE)
+	animate(pixel_x = 2, time = 0.2 SECONDS, flags = ANIMATION_RELATIVE)

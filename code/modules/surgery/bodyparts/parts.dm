@@ -45,7 +45,7 @@
 	message_admins("[ADMIN_LOOKUPFLW(old_owner)] was gibbed after their chest teleported to [ADMIN_VERBOSEJMP(loc)].")
 	old_owner.gib(DROP_ALL_REMAINS)
 
-/obj/item/bodypart/chest/can_dismember(obj/item/item)
+/obj/item/bodypart/chest/can_dismember()
 	if(owner.stat < HARD_CRIT || !contents.len)
 		return FALSE
 	return ..()
@@ -93,6 +93,7 @@
 	max_damage = LIMB_MAX_HP_ALIEN_CORE
 	acceptable_bodytype = BODYTYPE_HUMANOID
 	wing_types = NONE
+	burn_modifier = 2
 
 /obj/item/bodypart/chest/larva
 	icon = 'icons/mob/human/species/alien/bodyparts.dmi'
@@ -106,6 +107,7 @@
 	bodytype = BODYTYPE_LARVA_PLACEHOLDER | BODYTYPE_ORGANIC
 	acceptable_bodytype = BODYTYPE_LARVA_PLACEHOLDER
 	wing_types = NONE
+	burn_modifier = 2
 
 /// Parent Type for arms, should not appear in game.
 /obj/item/bodypart/arm
@@ -115,7 +117,6 @@
 	attack_verb_simple = list("slap", "punch")
 	max_damage = LIMB_MAX_HP_DEFAULT
 	aux_layer = BODYPARTS_HIGH_LAYER
-	body_damage_coeff = LIMB_BODY_DAMAGE_COEFFICIENT_DEFAULT
 	can_be_disabled = TRUE
 	unarmed_attack_verb = "punch" /// The classic punch, wonderfully classic and completely random
 	grappled_attack_verb = "pummel"
@@ -267,6 +268,7 @@
 	max_damage = LIMB_MAX_HP_ALIEN_LIMBS
 	should_draw_greyscale = FALSE
 	appendage_noun = "scythe-like hand"
+	burn_modifier = 2
 
 /obj/item/bodypart/arm/right
 	name = "right arm"
@@ -364,6 +366,7 @@
 	max_damage = LIMB_MAX_HP_ALIEN_LIMBS
 	should_draw_greyscale = FALSE
 	appendage_noun = "scythe-like hand"
+	burn_modifier = 2
 
 /// Parent Type for legs, should not appear in game.
 /obj/item/bodypart/leg
@@ -372,7 +375,6 @@
 	attack_verb_continuous = list("kicks", "stomps")
 	attack_verb_simple = list("kick", "stomp")
 	max_damage = LIMB_MAX_HP_DEFAULT
-	body_damage_coeff = LIMB_BODY_DAMAGE_COEFFICIENT_DEFAULT
 	can_be_disabled = TRUE
 	unarmed_attack_effect = ATTACK_EFFECT_KICK
 	body_zone = BODY_ZONE_L_LEG
@@ -475,6 +477,7 @@
 	can_be_disabled = FALSE
 	max_damage = LIMB_MAX_HP_ALIEN_LIMBS
 	should_draw_greyscale = FALSE
+	burn_modifier = 2
 
 /obj/item/bodypart/leg/right
 	name = "right leg"
@@ -563,3 +566,4 @@
 	can_be_disabled = FALSE
 	max_damage = LIMB_MAX_HP_ALIEN_LIMBS
 	should_draw_greyscale = FALSE
+	burn_modifier = 2

@@ -40,11 +40,16 @@
 	lefthand_file = 'maplestation_modules/icons/mob/inhands/weapons/ice_knife_lefthand.dmi'
 	righthand_file = 'maplestation_modules/icons/mob/inhands/weapons/ice_knife_righthand.dmi'
 	inhand_icon_state = "ice_knife"
-	embedding = list("pain_mult" = 4, "embed_chance" = 35, "fall_chance" = 10)
+	embed_type = /datum/embed_data/ice_knife
 	desc = "A knife made out of magical ice. Doesn't look like it'll be solid for too long."
 	force = 12
 	throwforce = 12
 	var/expire_time = -1
+
+/datum/embed_data/ice_knife
+	pain_mult = 4
+	embed_chance = 35
+	fall_chance = 10
 
 /obj/item/knife/combat/ice/Initialize(mapload)
 	. = ..()

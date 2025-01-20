@@ -18,6 +18,8 @@
 	attack_verb_simple = "claw"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	attack_vis_effect = ATTACK_EFFECT_CLAW
+	sharpness = SHARP_EDGED
+	wound_bonus = -10
 	verb_say = "states"
 	verb_ask = "queries"
 	verb_exclaim = "declares"
@@ -135,8 +137,8 @@
 
 /obj/item/ammo_casing/hivebot
 	name = "hivebot bullet casing"
-	projectile_type = /obj/projectile/hivebotbullet
+	projectile_type = /obj/projectile/bullet/hivebotbullet
 
-/obj/projectile/hivebotbullet
+/obj/projectile/bullet/hivebotbullet
 	damage = 10
 	damage_type = BRUTE

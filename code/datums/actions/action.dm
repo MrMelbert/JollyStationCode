@@ -182,7 +182,7 @@
 			return FALSE
 	if((check_flags & AB_CHECK_CONSCIOUS) && owner.stat != CONSCIOUS)
 		if (feedback)
-			owner.balloon_alert(owner, "unconscious!")
+			owner.balloon_alert(owner, "not fully conscious!")
 		return FALSE
 	if((check_flags & AB_CHECK_PHASED) && HAS_TRAIT(owner, TRAIT_MAGICALLY_PHASED))
 		if (feedback)

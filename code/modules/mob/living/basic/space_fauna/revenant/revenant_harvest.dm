@@ -141,7 +141,7 @@
 	LAZYADD(drained_mobs, REF(target))
 	if(target.stat != DEAD)
 		target.investigate_log("has died from revenant harvest.", INVESTIGATE_DEATHS)
-	target.death(FALSE)
+	target.death(FALSE, "a ghostly harvest")
 
 	qdel(draining_beam)
 	return TRUE

@@ -124,10 +124,6 @@
 	variable = TRUE
 	flags = IGNORE_NOSLOW
 
-/datum/movespeed_modifier/carbon_softcrit
-	multiplicative_slowdown = SOFTCRIT_ADD_SLOWDOWN
-	flags = IGNORE_NOSLOW
-
 /datum/movespeed_modifier/slime_tempmod
 	variable = TRUE
 

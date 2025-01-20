@@ -1,3 +1,8 @@
+#define LINK_SOURCE(id) "[id]_linked"
+#define GRAB_SOURCE(id) "[id]_grabbing"
+#define CRIT_SOURCE(id) "[id]_crit"
+#define PIN_SOURCE(id) "[id]_pin"
+
 /// Abstract item to represent grabbing someone
 /obj/item/grabbing_hand
 	name = "grab"
@@ -140,10 +145,10 @@
 	RegisterSignal(owner, COMSIG_LIVING_TRYING_TO_PULL, PROC_REF(try_upgrade))
 	RegisterSignal(owner, COMSIG_ATOM_ATTACK_HAND_SECONDARY, PROC_REF(try_pin))
 	RegisterSignal(owner, COMSIG_ATOM_NO_LONGER_PULLED, PROC_REF(ungrabbed))
-	// melbert todo : put breath signal here
+	RegisterSignal(owner, COMSIG_CARBON_ATTEMPT_BREATHE, PROC_REF(breath_fail))
 
 	if(owner.stat >= SOFT_CRIT)
-		ADD_TRAIT(owner, TRAIT_IMMOBILIZED, "[id]_softcrit")
+		ADD_TRAIT(owner, TRAIT_IMMOBILIZED, CRIT_SOURCE(id))
 	if(isliving(grabbing_us))
 		var/mob/living/mob_grabber = grabbing_us
 		paired_effect = mob_grabber.apply_status_effect(/datum/status_effect/grabbing, src)
@@ -169,14 +174,15 @@
 		COMSIG_ATOM_ATTACK_HAND_SECONDARY,
 		COMSIG_LIVING_TRYING_TO_PULL,
 		COMSIG_ATOM_NO_LONGER_PULLED,
+		COMSIG_CARBON_ATTEMPT_BREATHE,
 	))
 	unlink_mobs()
 	unpin()
 	// grab stuff
-	REMOVE_TRAIT(owner, TRAIT_IMMOBILIZED, "[id]_grab")
-	REMOVE_TRAIT(owner, TRAIT_HANDS_BLOCKED, "[id]_grab")
+	REMOVE_TRAIT(owner, TRAIT_IMMOBILIZED, GRAB_SOURCE(id))
+	REMOVE_TRAIT(owner, TRAIT_HANDS_BLOCKED, GRAB_SOURCE(id))
 	// softcrit stuff
-	REMOVE_TRAIT(owner, TRAIT_IMMOBILIZED, "[id]_softcrit")
+	REMOVE_TRAIT(owner, TRAIT_IMMOBILIZED, CRIT_SOURCE(id))
 
 /datum/status_effect/grabbed/get_examine_text()
 	if(pin)
@@ -207,9 +213,9 @@
 	SIGNAL_HANDLER
 
 	if(new_stat >= SOFT_CRIT)
-		ADD_TRAIT(owner, TRAIT_IMMOBILIZED, "[id]_softcrit")
+		ADD_TRAIT(owner, TRAIT_IMMOBILIZED, CRIT_SOURCE(id))
 	else if(old_stat < SOFT_CRIT)
-		REMOVE_TRAIT(owner, TRAIT_IMMOBILIZED, "[id]_softcrit")
+		REMOVE_TRAIT(owner, TRAIT_IMMOBILIZED, CRIT_SOURCE(id))
 
 /datum/status_effect/grabbed/proc/try_upgrade(datum/source, mob/living/user, force)
 	SIGNAL_HANDLER
@@ -370,7 +376,7 @@
 
 	if(!do_after(grabbing_us, get_grab_time(6 SECONDS), owner, extra_checks = CALLBACK(src, PROC_REF(pin_check)),))
 		return
-	if(owner.buckled || HAS_TRAIT_NOT_FROM(owner, TRAIT_FORCED_STANDING, "[id]_link"))
+	if(owner.buckled || HAS_TRAIT_NOT_FROM(owner, TRAIT_FORCED_STANDING, LINK_SOURCE(id)))
 		to_chat(grabbing_us, span_warning("You fail to pin [owner] to the ground!"))
 		return
 
@@ -388,8 +394,8 @@
 	log_combat(grabbing_us, owner, "pinned")
 	pin = TRUE
 	unlink_mobs()
-	ADD_TRAIT(owner, TRAIT_NO_MOVE_PULL, "[id]_pin")
-	ADD_TRAIT(owner, TRAIT_FLOORED, "[id]_pin")
+	ADD_TRAIT(owner, TRAIT_NO_MOVE_PULL, PIN_SOURCE(id))
+	ADD_TRAIT(owner, TRAIT_FLOORED, PIN_SOURCE(id))
 	owner.Paralyze(2 SECONDS)
 	owner.setDir(SOUTH)
 	grabbing_us.Move(owner.loc)
@@ -437,17 +443,23 @@
 		return
 
 	pin = FALSE
-	REMOVE_TRAIT(owner, TRAIT_FLOORED, "[id]_pin")
-	REMOVE_TRAIT(owner, TRAIT_NO_MOVE_PULL, "[id]_pin")
+	REMOVE_TRAIT(owner, TRAIT_FLOORED, PIN_SOURCE(id))
+	REMOVE_TRAIT(owner, TRAIT_NO_MOVE_PULL, PIN_SOURCE(id))
 	UnregisterSignal(grabbing_us, COMSIG_MOVABLE_PRE_MOVE)
 
 /datum/status_effect/grabbed/proc/update_state(datum/source, new_state)
 	SIGNAL_HANDLER
 	if(new_state >= GRAB_AGGRESSIVE)
-		ADD_TRAIT(owner, TRAIT_IMMOBILIZED, "[id]_grab")
-		ADD_TRAIT(owner, TRAIT_HANDS_BLOCKED, "[id]_grab")
+		ADD_TRAIT(owner, TRAIT_IMMOBILIZED, GRAB_SOURCE(id))
+		ADD_TRAIT(owner, TRAIT_HANDS_BLOCKED, GRAB_SOURCE(id))
 	if(linked && new_state <= GRAB_AGGRESSIVE)
 		unlink_mobs()
+
+/datum/status_effect/grabbed/proc/breath_fail(...)
+	SIGNAL_HANDLER
+	if(grabbing_us.grab_state >= GRAB_KILL && !HAS_TRAIT(owner, TRAIT_ASSISTED_BREATHING))
+		return BREATHE_SKIP_BREATH
+	return NONE
 
 /datum/status_effect/grabbed/proc/ungrabbed(datum/source, mob/living/gone)
 	SIGNAL_HANDLER
@@ -498,9 +510,9 @@
 		return
 
 	linked = TRUE
-	ADD_TRAIT(owner, TRAIT_UNDENSE, "[id]_link")
-	ADD_TRAIT(owner, TRAIT_FORCED_STANDING, "[id]_link")
-	ADD_TRAIT(owner, TRAIT_NO_MOVE_PULL, "[id]_link")
+	ADD_TRAIT(owner, TRAIT_UNDENSE, LINK_SOURCE(id))
+	ADD_TRAIT(owner, TRAIT_FORCED_STANDING, LINK_SOURCE(id))
+	ADD_TRAIT(owner, TRAIT_NO_MOVE_PULL, LINK_SOURCE(id))
 	owner.setDir(grabbing_us.dir)
 	owner.Move(grabbing_us.loc)
 	RegisterSignal(grabbing_us, COMSIG_MOVABLE_MOVED, PROC_REF(bring_along))
@@ -512,9 +524,9 @@
 		return
 
 	linked = FALSE
-	REMOVE_TRAIT(owner, TRAIT_UNDENSE, "[id]_link")
-	REMOVE_TRAIT(owner, TRAIT_FORCED_STANDING, "[id]_link")
-	REMOVE_TRAIT(owner, TRAIT_NO_MOVE_PULL, "[id]_link")
+	REMOVE_TRAIT(owner, TRAIT_UNDENSE, LINK_SOURCE(id))
+	REMOVE_TRAIT(owner, TRAIT_FORCED_STANDING, LINK_SOURCE(id))
+	REMOVE_TRAIT(owner, TRAIT_NO_MOVE_PULL, LINK_SOURCE(id))
 	if(!QDELING(owner) && !QDELING(grabbing_us))
 		owner.Move(unlink_loc || get_step(grabbing_us.loc, grabbing_us.dir))
 	UnregisterSignal(grabbing_us, list(
@@ -559,6 +571,11 @@
 		vulnerability_delta = owner.get_grab_resist_strength() - 5
 
 	return clamp(base_time + (vulnerability_delta * 1 SECONDS), 2 SECONDS, 20 SECONDS)
+
+#undef LINK_SOURCE
+#undef GRAB_SOURCE
+#undef CRIT_SOURCE
+#undef PIN_SOURCE
 
 /// Checks how strong our grabs are.
 /mob/living/proc/get_grab_strength()

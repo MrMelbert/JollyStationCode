@@ -61,7 +61,7 @@
 
 	if(target.stat != DEAD)
 		target.investigate_log("has died from being changeling absorbed.", INVESTIGATE_DEATHS)
-	target.death(FALSE)
+	target.death(FALSE, "changeling absorption")
 	target.Drain()
 	return TRUE
 

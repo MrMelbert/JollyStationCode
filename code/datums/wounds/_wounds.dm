@@ -19,6 +19,8 @@
 /datum/wound
 	/// What it's named
 	var/name = "Wound"
+	/// Optional, what is the wound named when someone is checking themselves (IE, no scanner - just with their eyes and hands)
+	var/undiagnosed_name
 	/// The description shown on the scanners
 	var/desc = ""
 	/// The basic treatment suggested by health analyzers
@@ -107,7 +109,7 @@
 	var/wound_source
 
 	/// What flags apply to this wound
-	var/wound_flags = (ACCEPTS_GAUZE)
+	var/wound_flags = (ACCEPTS_GAUZE|ALERTS_VICTIM)
 
 	/// The unique ID of our wound for use with [actionspeed_mod]. Defaults to REF(src).
 	var/unique_id
@@ -212,7 +214,7 @@
 	if(severity == WOUND_SEVERITY_TRIVIAL)
 		return
 
-	if(!silent && !demoted)
+	if(!silent && !demoted && occur_text)
 		var/msg = span_danger("[victim]'s [limb.plaintext_zone] [occur_text]!")
 		var/vis_dist = COMBAT_MESSAGE_RANGE
 
@@ -389,18 +391,12 @@
 	if(limb?.can_be_disabled)
 		limb.update_disabled()
 
-/// Setter for [interaction_efficiency_penalty]. Updates the actionspeed of our actionspeed mod.
-/datum/wound/proc/set_interaction_efficiency_penalty(new_value)
-	var/should_update = (new_value != interaction_efficiency_penalty)
-
-	interaction_efficiency_penalty = new_value
-
-	if (should_update)
-		update_actionspeed_modifier()
-
 /// Returns a "adjusted" interaction_efficiency_penalty that will be used for the actionspeed mod.
 /datum/wound/proc/get_effective_actionspeed_modifier()
-	return interaction_efficiency_penalty - 1
+	. = interaction_efficiency_penalty - 1
+	if(wound_flags & ACCEPTS_GAUZE)
+		. *= get_splint_power()
+	return .
 
 /// Returns the decisecond multiplier of any click interactions, assuming our limb is being used.
 /datum/wound/proc/get_action_delay_mult()
@@ -421,21 +417,20 @@
 	if (wound_flags & ACCEPTS_GAUZE)
 		update_inefficiencies()
 
+/// Gets modifier from splints. Returns a decimal value 0-1, not including 0.
+/datum/wound/proc/get_splint_power()
+	return limb?.current_gauze?.splint_factor || 1
+
 /// Updates our limping and interaction penalties in accordance with our gauze.
 /datum/wound/proc/update_inefficiencies(replaced_or_replacing = FALSE)
-	if (wound_flags & ACCEPTS_GAUZE)
-		if(limb.body_zone in list(BODY_ZONE_L_LEG, BODY_ZONE_R_LEG))
-			if(limb.current_gauze?.splint_factor)
-				limp_slowdown = initial(limp_slowdown) * limb.current_gauze.splint_factor
-				limp_chance = initial(limp_chance) * limb.current_gauze.splint_factor
-			else
-				limp_slowdown = initial(limp_slowdown)
-				limp_chance = initial(limp_chance)
-		else if(limb.body_zone in GLOB.arm_zones)
-			if(limb.current_gauze?.splint_factor)
-				set_interaction_efficiency_penalty(1 + ((get_effective_actionspeed_modifier()) * limb.current_gauze.splint_factor))
-			else
-				set_interaction_efficiency_penalty(initial(interaction_efficiency_penalty))
+	if(wound_flags & ACCEPTS_GAUZE)
+		var/splint_power = get_splint_power()
+		if(limb.body_zone == BODY_ZONE_L_LEG || limb.body_zone == BODY_ZONE_R_LEG)
+			limp_slowdown = initial(limp_slowdown) * splint_power
+			limp_chance = initial(limp_chance) * splint_power
+
+		if(limb.body_zone == BODY_ZONE_L_ARM || limb.body_zone == BODY_ZONE_R_ARM)
+			update_actionspeed_modifier()
 
 		if(initial(disabling))
 			set_disabling(isnull(limb.current_gauze))
@@ -446,15 +441,18 @@
 
 /// Additional beneficial effects when the wound is gained, in case you want to give a temporary boost to allow the victim to try an escape or last stand
 /datum/wound/proc/second_wind()
+	if(victim.stat > SOFT_CRIT)
+		return
 	switch(severity)
 		if(WOUND_SEVERITY_MODERATE)
-			victim.reagents.add_reagent(/datum/reagent/determination, WOUND_DETERMINATION_MODERATE)
+			victim.apply_status_effect(/datum/status_effect/determined, WOUND_DETERMINATION_MODERATE)
 		if(WOUND_SEVERITY_SEVERE)
-			victim.reagents.add_reagent(/datum/reagent/determination, WOUND_DETERMINATION_SEVERE)
+			victim.apply_status_effect(/datum/status_effect/determined, WOUND_DETERMINATION_SEVERE)
 		if(WOUND_SEVERITY_CRITICAL)
-			victim.reagents.add_reagent(/datum/reagent/determination, WOUND_DETERMINATION_CRITICAL)
+			victim.apply_status_effect(/datum/status_effect/determined, WOUND_DETERMINATION_CRITICAL)
 		if(WOUND_SEVERITY_LOSS)
-			victim.reagents.add_reagent(/datum/reagent/determination, WOUND_DETERMINATION_LOSS)
+			victim.apply_status_effect(/datum/status_effect/determined, WOUND_DETERMINATION_LOSS)
+	// victim.add_reagent(/datum/reagent/medicine/epinephrine, severity * 2)
 
 /**
  * try_treating() is an intercept run from [/mob/living/carbon/proc/attackby] right after surgeries but before anything else. Return TRUE here if the item is something that is relevant to treatment to take over the interaction.
@@ -600,7 +598,7 @@
  */
 /datum/wound/proc/get_examine_description(mob/user)
 	. = get_wound_description(user)
-	if(HAS_TRAIT(src, TRAIT_WOUND_SCANNED))
+	if(. && HAS_TRAIT(src, TRAIT_WOUND_SCANNED))
 		. += span_notice("\nThere is a holo-image next to the wound that seems to contain indications for treatment.")
 
 	return .
@@ -609,14 +607,28 @@
 	var/desc
 
 	if ((wound_flags & ACCEPTS_GAUZE) && limb.current_gauze)
-		var/sling_condition = get_gauze_condition()
-		desc = "[victim.p_Their()] [limb.plaintext_zone] is [sling_condition] fastened in a sling of [limb.current_gauze.name]"
-	else
+		desc = "[victim.p_Their()] [limb.plaintext_zone] is [get_gauze_condition()] fastened in a sling of [limb.current_gauze.name]"
+	else if(examine_desc)
 		desc = "[victim.p_Their()] [limb.plaintext_zone] [examine_desc]"
+
+	if(!desc)
+		return
 
 	desc = modify_desc_before_span(desc, user)
 
 	return get_desc_intensity(desc)
+
+/datum/wound/proc/get_self_check_description(mob/user)
+	// future todo : medical doctors can self-diagnose / don't use [undiagnosed_name]
+	switch(severity)
+		if(WOUND_SEVERITY_TRIVIAL)
+			return span_danger("It's suffering [a_or_from] [lowertext(undiagnosed_name || name)].")
+		if(WOUND_SEVERITY_MODERATE)
+			return span_warning("It's suffering [a_or_from] [lowertext(undiagnosed_name || name)].")
+		if(WOUND_SEVERITY_SEVERE)
+			return span_boldwarning("It's suffering [a_or_from] [lowertext(undiagnosed_name || name)]!")
+		if(WOUND_SEVERITY_CRITICAL)
+			return span_boldwarning("It's suffering [a_or_from] [lowertext(undiagnosed_name || name)]!!")
 
 /// A hook proc used to modify desc before it is spanned via [get_desc_intensity]. Useful for inserting spans yourself.
 /datum/wound/proc/modify_desc_before_span(desc, mob/user)
@@ -680,11 +692,6 @@
 			return "<b>Severe</b>"
 		if(WOUND_SEVERITY_CRITICAL)
 			return "<b>Critical</b>"
-
-/// Returns TRUE if our limb is the head or chest, FALSE otherwise.
-/// Essential in the sense of "we cannot live without it".
-/datum/wound/proc/limb_essential()
-	return (limb.body_zone == BODY_ZONE_HEAD || limb.body_zone == BODY_ZONE_CHEST)
 
 /// Getter proc for our scar_keyword, in case we might have some custom scar gen logic.
 /datum/wound/proc/get_scar_keyword(obj/item/bodypart/scarred_limb, add_to_scars)

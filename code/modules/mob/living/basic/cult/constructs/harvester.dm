@@ -13,6 +13,8 @@
 	attack_verb_simple = "butcher"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	attack_vis_effect = ATTACK_EFFECT_SLASH
+	sharpness = SHARP_EDGED
+	wound_bonus = 0
 	construct_spells = list(
 		/datum/action/cooldown/spell/aoe/area_conversion,
 		/datum/action/cooldown/spell/forcewall/cult,

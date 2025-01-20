@@ -26,7 +26,7 @@
 				affected_mob.emote("cough")
 			if(SPT_PROB(0.5, seconds_per_tick))
 				to_chat(affected_mob, span_danger("You're burning in your own skin!"))
-				affected_mob.take_bodypart_damage(0, 5, updating_health = FALSE)
+				affected_mob.damage_random_bodypart(5, BURN)
 
 		if(3)
 			affected_mob.adjust_body_temperature(1 KELVIN * seconds_per_tick, max_temp = affected_mob.bodytemp_heat_damage_limit + 10 KELVIN)
@@ -36,4 +36,4 @@
 				affected_mob.emote("cough")
 			if(SPT_PROB(2.5, seconds_per_tick))
 				to_chat(affected_mob, span_danger("You're burning in your own skin!"))
-				affected_mob.take_bodypart_damage(0, 5, updating_health = FALSE)
+				affected_mob.damage_random_bodypart(5, BURN)

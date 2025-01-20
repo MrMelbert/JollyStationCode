@@ -1,41 +1,3 @@
-/// Allows us to roll for and apply a wound without actually dealing damage. Used for aggregate wounding power with pellet clouds
-/obj/item/bodypart/proc/painless_wound_roll(wounding_type, wounding_dmg, wound_bonus, bare_wound_bonus, sharpness=NONE)
-	SHOULD_CALL_PARENT(TRUE)
-
-	if(!owner || wounding_dmg <= WOUND_MINIMUM_DAMAGE || wound_bonus == CANT_WOUND || (owner.status_flags & GODMODE))
-		return
-
-	var/mangled_state = get_mangled_state()
-	var/easy_dismember = HAS_TRAIT(owner, TRAIT_EASYDISMEMBER) // if we have easydismember, we don't reduce damage when redirecting damage to different types (slashing weapons on mangled/skinless limbs attack at 100% instead of 50%)
-
-	var/bio_status = get_bio_state_status()
-
-	var/has_exterior = ((bio_status & ANATOMY_EXTERIOR))
-	var/has_interior = ((bio_status & ANATOMY_INTERIOR))
-
-	var/exterior_ready_to_dismember = (!has_exterior || ((mangled_state & BODYPART_MANGLED_EXTERIOR)))
-
-	// if we're bone only, all cutting attacks go straight to the bone
-	if(!has_exterior && has_interior)
-		if(wounding_type == WOUND_SLASH)
-			wounding_type = WOUND_BLUNT
-			wounding_dmg *= (easy_dismember ? 1 : 0.6)
-		else if(wounding_type == WOUND_PIERCE)
-			wounding_type = WOUND_BLUNT
-			wounding_dmg *= (easy_dismember ? 1 : 0.75)
-	else
-		// if we've already mangled the skin (critical slash or piercing wound), then the bone is exposed, and we can damage it with sharp weapons at a reduced rate
-		// So a big sharp weapon is still all you need to destroy a limb
-		if(has_interior && exterior_ready_to_dismember && !(mangled_state & BODYPART_MANGLED_INTERIOR) && sharpness)
-			if(wounding_type == WOUND_SLASH && !easy_dismember)
-				wounding_dmg *= 0.6 // edged weapons pass along 60% of their wounding damage to the bone since the power is spread out over a larger area
-			if(wounding_type == WOUND_PIERCE && !easy_dismember)
-				wounding_dmg *= 0.75 // piercing weapons pass along 75% of their wounding damage to the bone since it's more concentrated
-			wounding_type = WOUND_BLUNT
-		if ((dismemberable_by_wound() || dismemberable_by_total_damage()) && try_dismember(wounding_type, wounding_dmg, wound_bonus, bare_wound_bonus))
-			return
-	return check_wounding(wounding_type, wounding_dmg, wound_bonus, bare_wound_bonus)
-
 /**
  * check_wounding() is where we handle rolling for, selecting, and applying a wound if we meet the criteria
  *
@@ -48,52 +10,121 @@
  * * wound_bonus- The wound_bonus of an attack
  * * bare_wound_bonus- The bare_wound_bonus of an attack
  */
-/obj/item/bodypart/proc/check_wounding(woundtype, damage, wound_bonus, bare_wound_bonus, attack_direction, damage_source)
+/obj/item/bodypart/proc/check_wounding(woundtype, damage, wound_bonus, bare_wound_bonus, attack_direction, damage_source, sharpness)
 	SHOULD_CALL_PARENT(TRUE)
 	RETURN_TYPE(/datum/wound)
 
-	if(HAS_TRAIT(owner, TRAIT_NEVER_WOUNDED) || (owner.status_flags & GODMODE))
+	if(isnull(owner) || HAS_TRAIT(owner, TRAIT_NEVER_WOUNDED) || (owner.status_flags & GODMODE) || wound_bonus == CANT_WOUND)
 		return
+
+	damage *= wound_modifier
+
+	if(woundtype == WOUND_BLUNT && sharpness)
+		if(sharpness & SHARP_EDGED)
+			woundtype = WOUND_SLASH
+		else if (sharpness & SHARP_POINTY)
+			woundtype = WOUND_PIERCE
+
+	var/mangled_state = get_mangled_state()
+	var/easy_dismember = HAS_TRAIT(owner, TRAIT_EASYDISMEMBER) // if we have easydismember, we don't reduce damage when redirecting damage to different types (slashing weapons on mangled/skinless limbs attack at 100% instead of 50%)
+
+	var/bio_status = get_bio_state_status()
+
+	var/has_exterior = ((bio_status & ANATOMY_EXTERIOR))
+	var/has_interior = ((bio_status & ANATOMY_INTERIOR))
+
+	var/exterior_ready_to_dismember = (!has_exterior || (mangled_state & BODYPART_MANGLED_EXTERIOR))
+
+	// if we're bone only, all cutting attacks go straight to the bone
+	if(!has_exterior && has_interior)
+		if(woundtype == WOUND_SLASH)
+			woundtype = WOUND_BLUNT
+			damage *= (easy_dismember ? 1 : 0.6)
+		else if(woundtype == WOUND_PIERCE)
+			woundtype = WOUND_BLUNT
+			damage *= (easy_dismember ? 1 : 0.75)
+	else
+		// if we've already mangled the skin (critical slash or piercing wound), then the bone is exposed, and we can damage it with sharp weapons at a reduced rate
+		// So a big sharp weapon is still all you need to destroy a limb
+		if(has_interior && exterior_ready_to_dismember && !(mangled_state & BODYPART_MANGLED_INTERIOR) && sharpness)
+			if(woundtype == WOUND_SLASH && !easy_dismember)
+				damage *= 0.6 // edged weapons pass along 60% of their wounding damage to the bone since the power is spread out over a larger area
+			if(woundtype == WOUND_PIERCE && !easy_dismember)
+				damage *= 0.75 // piercing weapons pass along 75% of their wounding damage to the bone since it's more concentrated
+			woundtype = WOUND_BLUNT
+
+	if(HAS_TRAIT(owner, TRAIT_HARDLY_WOUNDED))
+		damage *= 0.85
+
+	if(easy_dismember)
+		damage *= 1.1
+
+	if(HAS_TRAIT(owner, TRAIT_EASYBLEED) && (woundtype == WOUND_PIERCE || woundtype == WOUND_SLASH))
+		damage *= 1.5
 
 	// note that these are fed into an exponent, so these are magnified
 	if(HAS_TRAIT(owner, TRAIT_EASILY_WOUNDED))
 		damage *= 1.5
+	// this needs to happen last!
 	else
 		damage = min(damage, WOUND_MAX_CONSIDERED_DAMAGE)
 
-	if(HAS_TRAIT(owner,TRAIT_HARDLY_WOUNDED))
-		damage *= 0.85
-
-	if(HAS_TRAIT(owner, TRAIT_EASYDISMEMBER))
-		damage *= 1.1
-
-	if(HAS_TRAIT(owner, TRAIT_EASYBLEED) && ((woundtype == WOUND_PIERCE) || (woundtype == WOUND_SLASH)))
-		damage *= 1.5
-
-	var/base_roll = rand(1, round(damage ** WOUND_DAMAGE_EXPONENT))
-	var/injury_roll = base_roll
-	injury_roll += check_woundings_mods(woundtype, damage, wound_bonus, bare_wound_bonus)
-	var/list/series_wounding_mods = check_series_wounding_mods()
-
-	if(injury_roll > WOUND_DISMEMBER_OUTRIGHT_THRESH && prob(get_damage() / max_damage * 100) && can_dismember())
-		var/datum/wound/loss/dismembering = new
-		dismembering.apply_dismember(src, woundtype, outright = TRUE, attack_direction = attack_direction)
+	if(damage <= WOUND_MINIMUM_DAMAGE)
+		return
+	// checks cumulative dismemberment
+	if(in_dismemberable_state() && try_dismember(woundtype, damage, wound_bonus, bare_wound_bonus))
 		return
 
-	var/list/datum/wound/possible_wounds = list()
+	var/base_roll = rand(1, round(damage ** WOUND_DAMAGE_EXPONENT))
+	var/injury_roll = base_roll + check_woundings_mods(woundtype, damage, wound_bonus, bare_wound_bonus)
+
+	// checks outright dismemberment
+	if(injury_roll > WOUND_DISMEMBER_OUTRIGHT_THRESH && prob(get_damage() / max_damage * 100) && can_dismember())
+		var/datum/wound/loss/dismembering = new
+		dismembering.apply_dismember(src, woundtype, TRUE, attack_direction)
+		return
+
+	var/list/datum/wound/possible_wounds = get_possible_wounds(injury_roll, woundtype, damage, attack_direction, damage_source)
+
+	while (TRUE)
+		var/datum/wound/possible_wound = pick_weight(possible_wounds)
+		if (isnull(possible_wound))
+			break
+
+		possible_wounds -= possible_wound
+		var/datum/wound_pregen_data/possible_pregen_data = GLOB.all_wound_pregen_data[possible_wound]
+
+		var/datum/wound/replaced_wound
+		for(var/datum/wound/existing_wound as anything in wounds)
+			var/datum/wound_pregen_data/existing_pregen_data = GLOB.all_wound_pregen_data[existing_wound.type]
+			if(existing_pregen_data.wound_series != possible_pregen_data.wound_series)
+				continue
+			if(existing_wound.severity >= initial(possible_wound.severity))
+				continue
+			replaced_wound = existing_wound
+			// if we get through this whole loop without continuing, we found our winner
+
+		var/datum/wound/new_wound = new possible_wound
+		if(replaced_wound)
+			new_wound = replaced_wound.replace_wound(new_wound, attack_direction = attack_direction)
+		else
+			new_wound.apply_wound(src, attack_direction = attack_direction, wound_source = damage_source)
+		log_wound(owner, new_wound, damage, wound_bonus, bare_wound_bonus, base_roll) // dismembering wounds are logged in the apply_wound() for loss wounds since they delete themselves immediately, these will be immediately returned
+		return new_wound
+
+/obj/item/bodypart/proc/get_possible_wounds(injury_roll, woundtype, damage, attack_direction, damage_source)
+	RETURN_TYPE(/list)
+
+	var/list/series_wounding_mods = list()
+	for (var/datum/wound/iterated_wound as anything in wounds)
+		var/datum/wound_pregen_data/pregen_data = GLOB.all_wound_pregen_data[iterated_wound.type]
+		series_wounding_mods[pregen_data.wound_series] += iterated_wound.series_threshold_penalty
+
+	var/list/possible_wounds = list()
 	for (var/datum/wound/type as anything in GLOB.all_wound_pregen_data)
 		var/datum/wound_pregen_data/pregen_data = GLOB.all_wound_pregen_data[type]
 		if (pregen_data.can_be_applied_to(src, list(woundtype), random_roll = TRUE))
 			possible_wounds[type] = pregen_data.get_weight(src, woundtype, damage, attack_direction, damage_source)
-	// quick re-check to see if bare_wound_bonus applies, for the benefit of log_wound(), see about getting the check from check_woundings_mods() somehow
-	if(ishuman(owner))
-		var/mob/living/carbon/human/human_wearer = owner
-		var/list/clothing = human_wearer.get_clothing_on_part(src)
-		for(var/obj/item/clothing/clothes_check as anything in clothing)
-			// unlike normal armor checks, we tabluate these piece-by-piece manually so we can also pass on appropriate damage the clothing's limbs if necessary
-			if(clothes_check.get_armor_rating(WOUND))
-				bare_wound_bonus = 0
-				break
 
 	for (var/datum/wound/iterated_path as anything in possible_wounds)
 		for (var/datum/wound/existing_wound as anything in wounds)
@@ -122,32 +153,7 @@
 					if (initial(iterated_path.severity) < initial(other_path.severity))
 						possible_wounds -= other_path
 						continue
-
-	while (TRUE)
-		var/datum/wound/possible_wound = pick_weight(possible_wounds)
-		if (isnull(possible_wound))
-			break
-
-		possible_wounds -= possible_wound
-		var/datum/wound_pregen_data/possible_pregen_data = GLOB.all_wound_pregen_data[possible_wound]
-
-		var/datum/wound/replaced_wound
-		for(var/datum/wound/existing_wound as anything in wounds)
-			var/datum/wound_pregen_data/existing_pregen_data = GLOB.all_wound_pregen_data[existing_wound.type]
-			if(existing_pregen_data.wound_series == possible_pregen_data.wound_series)
-				if(existing_wound.severity >= initial(possible_wound.severity))
-					continue
-				else
-					replaced_wound = existing_wound
-			// if we get through this whole loop without continuing, we found our winner
-
-		var/datum/wound/new_wound = new possible_wound
-		if(replaced_wound)
-			new_wound = replaced_wound.replace_wound(new_wound, attack_direction = attack_direction)
-		else
-			new_wound.apply_wound(src, attack_direction = attack_direction, wound_source = damage_source)
-		log_wound(owner, new_wound, damage, wound_bonus, bare_wound_bonus, base_roll) // dismembering wounds are logged in the apply_wound() for loss wounds since they delete themselves immediately, these will be immediately returned
-		return new_wound
+	return possible_wounds
 
 // try forcing a specific wound, but only if there isn't already a wound of that severity or greater for that type on this bodypart
 /obj/item/bodypart/proc/force_wound_upwards(datum/wound/potential_wound, smited = FALSE, wound_source)
@@ -246,10 +252,9 @@
 	var/armor_ablation = 0
 	var/injury_mod = 0
 
-	if(owner && ishuman(owner))
+	if(ishuman(owner))
 		var/mob/living/carbon/human/human_owner = owner
-		var/list/clothing = human_owner.get_clothing_on_part(src)
-		for(var/obj/item/clothing/clothes as anything in clothing)
+		for(var/obj/item/clothing/clothes as anything in human_owner.get_clothing_on_part(src))
 			// unlike normal armor checks, we tabluate these piece-by-piece manually so we can also pass on appropriate damage the clothing's limbs if necessary
 			armor_ablation += clothes.get_armor_rating(WOUND)
 			if(wounding_type == WOUND_SLASH)
@@ -273,19 +278,6 @@
 	injury_mod += part_mod
 
 	return injury_mod
-
-/// Should return an assoc list of (wound_series -> penalty). Will be used in determining series-specific penalties for wounding.
-/obj/item/bodypart/proc/check_series_wounding_mods()
-	RETURN_TYPE(/list)
-
-	var/list/series_mods = list()
-
-	for (var/datum/wound/iterated_wound as anything in wounds)
-		var/datum/wound_pregen_data/pregen_data = GLOB.all_wound_pregen_data[iterated_wound.type]
-
-		series_mods[pregen_data.wound_series] += iterated_wound.series_threshold_penalty
-
-	return series_mods
 
 /// Get whatever wound of the given type is currently attached to this limb, if any
 /obj/item/bodypart/proc/get_wound_type(checking_type)
@@ -330,7 +322,7 @@
  * Arguments:
  * * gauze- Just the gauze stack we're taking a sheet from to apply here
  */
-/obj/item/bodypart/proc/apply_gauze(obj/item/stack/medical/gauze/new_gauze)
+/obj/item/bodypart/proc/apply_gauze(obj/item/stack/medical/gauze/new_gauze) // melbert todo : tape gauze may be broken
 	if(!istype(new_gauze) || !new_gauze.absorption_capacity || !new_gauze.use(1))
 		return
 	if(!isnull(current_gauze))
@@ -338,7 +330,7 @@
 
 	current_gauze = new new_gauze.type(src, 1)
 	current_gauze.worn_icon_state = "[body_zone][rand(1, 3)]"
-	if(can_bleed() && (generic_bleedstacks || cached_bleed_rate))
+	if(can_bleed() && get_modified_bleed_rate())
 		current_gauze.add_mob_blood(owner)
 		if(!QDELETED(new_gauze))
 			new_gauze.add_mob_blood(owner)
@@ -351,7 +343,7 @@
 		current_gauze.forceMove(remove_to)
 	else
 		current_gauze.moveToNullspace()
-	if(can_bleed() && (generic_bleedstacks || cached_bleed_rate))
+	if(can_bleed() && get_modified_bleed_rate())
 		current_gauze.add_mob_blood(owner)
 	current_gauze.worn_icon_state = initial(current_gauze.worn_icon_state)
 	current_gauze.update_appearance()

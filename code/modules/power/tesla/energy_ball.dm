@@ -168,7 +168,7 @@
 	if(rip_u)
 		qdel(rip_u)
 	jedi.investigate_log("had [jedi.p_their()] brain dusted by touching [src] with telekinesis.", INVESTIGATE_DEATHS)
-	jedi.death()
+	jedi.death(null, "magic")
 	return COMPONENT_CANCEL_ATTACK_CHAIN
 
 /obj/energy_ball/orbit(obj/energy_ball/target)

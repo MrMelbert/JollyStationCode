@@ -121,8 +121,6 @@ PROCESSING_SUBSYSTEM_DEF(blood_drying)
  * * drip - whether to spawn a drip or a splatter
  */
 /datum/blood_type/proc/make_blood_splatter(mob/living/bleeding, turf/blood_turf, drip)
-	if(HAS_TRAIT(bleeding, TRAIT_NOBLOOD))
-		return
 	if(isgroundlessturf(blood_turf))
 		blood_turf = GET_TURF_BELOW(blood_turf)
 	if(isnull(blood_turf) || isclosedturf(blood_turf))

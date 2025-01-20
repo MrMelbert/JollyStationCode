@@ -27,7 +27,15 @@
 		span_notice("[user] starts rerouting [target]'s nerves."),
 		span_notice("[user] starts manipulating [target]'s nervous system."),
 	)
-	display_pain(target, "Your entire body goes numb!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = BODY_ZONES_ALL,
+		pain_message = "Your entire body goes numb!",
+		pain_amount = SURGERY_PAIN_HIGH,
+		pain_type = BURN,
+		pain_overlay_severity = 2,
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
 	target.cause_pain(BODY_ZONES_ALL, 15, BURN) // NON-MODULE CHANGE
 
 /datum/surgery_step/ground_nerves/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
@@ -38,7 +46,13 @@
 		span_notice("[user] successfully reroutes [target]'s nervous system!"),
 		span_notice("[user] finishes manipulating [target]'s nervous system."),
 	)
-	display_pain(target, "You regain feeling in your body! You feel energzed!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = BODY_ZONES_ALL,
+		pain_message = "You regain feeling in your body! You feel energzed!",
+		pain_amount = -0.5 * SURGERY_PAIN_HIGH,
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
 	new /datum/bioware/grounded_nerves(target)
 	return ..()
 

@@ -23,9 +23,9 @@
 	clawfootstep = FOOTSTEP_LAVA
 	heavyfootstep = FOOTSTEP_LAVA
 	/// How much fire damage we deal to living mobs stepping on us
-	var/lava_damage = 20
+	var/lava_damage = 50
 	/// How many firestacks we add to living mobs stepping on us
-	var/lava_firestacks = 20
+	var/lava_firestacks = 10
 	/// How much temperature we expose objects with
 	var/temperature_damage = 10000
 	/// mobs with this trait won't burn.
@@ -211,10 +211,10 @@
 			to_chat(user, span_warning("The [ciggie.name] is already lit!"))
 			return TRUE
 		var/clumsy_modifier = HAS_TRAIT(user, TRAIT_CLUMSY) ? 2 : 1
-		if(prob(25 * clumsy_modifier ))
+		if(prob(25 * clumsy_modifier))
+			var/mob/living/badass_dumbass = user
 			ciggie.light(span_warning("[user] expertly dips \the [ciggie.name] into [src], along with the rest of [user.p_their()] arm. What a dumbass."))
-			var/obj/item/bodypart/affecting = user.get_active_hand()
-			affecting?.receive_damage(burn = 90)
+			badass_dumbass.apply_damage(90, BURN, user.get_active_hand())
 		else
 			ciggie.light(span_rose("[user] expertly dips \the [ciggie.name] into [src], lighting it with the scorching heat of the planet. Witnessing such a feat is almost enough to make you cry."))
 		return TRUE
@@ -318,7 +318,12 @@
 			ADD_TRAIT(burn_living, TRAIT_NO_EXTINGUISH, TURF_TRAIT)
 		burn_living.adjust_fire_stacks(lava_firestacks * seconds_per_tick)
 		burn_living.ignite_mob()
-		burn_living.adjustFireLoss(lava_damage * seconds_per_tick)
+		if(burn_living.body_position == STANDING_UP)
+			for(var/zone in list(BODY_ZONE_L_LEG, BODY_ZONE_R_LEG))
+				burn_living.apply_damage(lava_damage * seconds_per_tick * 0.5, BURN, zone, wound_bonus = -20)
+		else
+			for(var/zone in BODY_ZONES_ALL)
+				burn_living.apply_damage(lava_damage * seconds_per_tick * 0.2, BURN, zone, wound_bonus = -20)
 		return TRUE
 
 	return FALSE

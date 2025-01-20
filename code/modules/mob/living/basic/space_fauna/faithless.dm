@@ -15,8 +15,11 @@
 	obj_damage = 50
 	melee_damage_lower = 15
 	melee_damage_upper = 15
-	attack_verb_continuous = "grips"
-	attack_verb_simple = "grip"
+	attack_verb_continuous = "slashes"
+	attack_verb_simple = "slash"
+	attack_vis_effect = ATTACK_EFFECT_CLAW
+	sharpness = SHARP_EDGED
+	wound_bonus = 5
 	attack_sound = 'sound/hallucinations/growl1.ogg'
 	melee_attack_cooldown = 1 SECONDS
 	speak_emote = list("growls")

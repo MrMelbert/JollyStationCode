@@ -37,7 +37,7 @@
 			if(SPT_PROB(1, seconds_per_tick))
 				to_chat(affected_mob, span_danger("Your body feels hot!"))
 				if(prob(20))
-					affected_mob.take_bodypart_damage(burn = 1)
+					affected_mob.damage_random_bodypart(1, BURN)
 			if(SPT_PROB(3, seconds_per_tick))
 				affected_mob.adjustToxLoss(10)
 
@@ -51,10 +51,9 @@
 			if(SPT_PROB(2.5, seconds_per_tick))
 				to_chat(affected_mob, span_danger("Your body feels hot!"))
 				if(prob(60))
-					affected_mob.take_bodypart_damage(burn = 2)
+					affected_mob.damage_random_bodypart(2, BURN)
 			if(SPT_PROB(6, seconds_per_tick))
 				affected_mob.adjustToxLoss(15)
 			if(SPT_PROB(1.5, seconds_per_tick))
 				to_chat(affected_mob, span_danger("You try to scream, but nothing comes out!"))
 				affected_mob.set_silence_if_lower(5 SECONDS)
-

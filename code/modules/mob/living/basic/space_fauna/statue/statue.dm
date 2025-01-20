@@ -26,7 +26,8 @@
 	attack_verb_continuous = "claws"
 	attack_verb_simple = "claw"
 	attack_sound = 'sound/hallucinations/growl1.ogg'
-	attack_vis_effect = ATTACK_EFFECT_CLAW
+	attack_vis_effect = ATTACK_EFFECT_SMASH
+	wound_bonus = -20
 	melee_attack_cooldown = 1 SECONDS
 
 	faction = list(FACTION_STATUE)

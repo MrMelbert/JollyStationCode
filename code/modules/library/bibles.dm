@@ -237,13 +237,13 @@ GLOBAL_LIST_INIT(bibleitemstates, list(
 
 	if(HAS_TRAIT(user, TRAIT_CLUMSY) && prob(50))
 		to_chat(user, span_danger("[src] slips out of your hand and hits your head."))
-		user.take_bodypart_damage(10)
+		user.damage_random_bodypart(10, BRUTE)
 		user.Unconscious(40 SECONDS)
 		return
 
 	if(!user.mind?.holy_role)
 		to_chat(user, span_danger("The book sizzles in your hands."))
-		user.take_bodypart_damage(burn = 10)
+		user.damage_random_bodypart(10, BURN)
 		return
 
 	if(!heal_mode)

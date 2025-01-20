@@ -8,7 +8,7 @@
 	base_icon_state = "foamdart"
 	range = 10
 	shrapnel_type = null
-	embedding = null
+	embed_type = null
 	var/modified = FALSE
 	var/obj/item/pen/pen = null
 
@@ -33,4 +33,4 @@
 	name = "riot foam dart"
 	icon_state = "foamdart_riot_proj"
 	base_icon_state = "foamdart_riot"
-	stamina = 25
+	pain = 25

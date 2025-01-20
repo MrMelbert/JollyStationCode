@@ -1,12 +1,13 @@
 /mob/living/brain/death(gibbed)
 	if(stat == DEAD)
 		return
-	set_stat(DEAD)
 
 	if(!gibbed && container)//If not gibbed but in a container.
 		var/obj/item/mmi = container
-		mmi.visible_message(span_warning("[src]'s MMI flatlines!"), \
-					span_hear("You hear something flatline."))
+		mmi.visible_message(
+			message = span_warning("[src]'s MMI flatlines!"),
+			blind_message = span_hear("You hear something flatline."),
+		)
 		mmi.update_appearance()
 
 	return ..()

@@ -51,7 +51,7 @@
 	if(!iscarbon(target_mob))
 		return
 	if(bricked || HAS_TRAIT(src, TRAIT_WIELDED))
-		user.apply_damage(5, STAMINA) // when hitting with such force we should prolly be getting tired too
+		user.adjustStaminaLoss(5) // when hitting with such force we should prolly be getting tired too
 		hit_sound = 'sound/items/pillow_hit2.ogg'
 	else
 		hit_sound = 'sound/items/pillow_hit.ogg'

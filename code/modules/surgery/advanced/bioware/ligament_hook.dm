@@ -27,7 +27,15 @@
 		span_notice("[user] starts reshaping [target]'s ligaments into a hook-like shape."),
 		span_notice("[user] starts manipulating [target]'s ligaments."),
 	)
-	display_pain(target, "Your limbs burn with severe pain!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = BODY_ZONES_LIMBS,
+		pain_message = "Your limbs burn with severe pain!",
+		pain_amount = SURGERY_PAIN_LOW,
+		pain_type = BURN,
+		pain_overlay_severity = 2,
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
 	target.cause_pain(BODY_ZONES_LIMBS, 20, BURN) // NON-MODULE CHANGE
 
 /datum/surgery_step/reshape_ligaments/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
@@ -38,7 +46,12 @@
 		span_notice("[user] reshapes [target]'s ligaments into a connective hook!"),
 		span_notice("[user] finishes manipulating [target]'s ligaments."),
 	)
-	display_pain(target, "Your limbs feel... strangely loose.", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = BODY_ZONES_LIMBS,
+		pain_message = "Your limbs feel... strangely loose.",
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
 	new /datum/bioware/hooked_ligaments(target)
 	return ..()
 

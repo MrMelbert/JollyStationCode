@@ -229,14 +229,6 @@
 	desc = "You feel a shiver down your spine after hearing the haunting noise of bone rattling. You'll move slower and get frostbite for a while!"
 	icon_state = "bloodchill"
 
-/datum/status_effect/rebreathing
-	id = "rebreathing"
-	duration = -1
-	alert_type = null
-
-/datum/status_effect/rebreathing/tick(seconds_between_ticks)
-	owner.adjustOxyLoss(-6) //Just a bit more than normal breathing.
-
 ///////////////////////////////////////////////////////
 //////////////////CONSUMING EXTRACTS///////////////////
 ///////////////////////////////////////////////////////

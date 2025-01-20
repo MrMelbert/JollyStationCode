@@ -226,7 +226,7 @@
 	victim.apply_damage(1000, BRUTE, wound_bonus = CANT_WOUND)
 	if(victim.stat != DEAD)
 		victim.investigate_log("has been killed by being consumed by a slaugter demon.", INVESTIGATE_DEATHS)
-	victim.death()
+	victim.death(null, "being consumed by a slaughter demon")
 	on_victim_consumed(victim, jaunter)
 
 /**

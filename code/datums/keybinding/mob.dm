@@ -64,11 +64,13 @@
 	if(iscyborg(user.mob)) //cyborgs can't drop items
 		return FALSE
 	var/mob/M = user.mob
+	if(M.incapacitated())
+		return FALSE
 	var/obj/item/I = M.get_active_held_item()
 	if(!I)
 		to_chat(user, span_warning("You have nothing to drop in your hand!"))
 	else
-		user.mob.dropItemToGround(I)
+		M.dropItemToGround(I)
 	return TRUE
 
 /datum/keybinding/mob/target/down(client/user)

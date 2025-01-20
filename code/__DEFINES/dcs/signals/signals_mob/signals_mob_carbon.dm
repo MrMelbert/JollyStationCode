@@ -97,10 +97,14 @@
 #define COMSIG_CARBON_SANITY_UPDATE "carbon_sanity_update"
 ///Called when a carbon attempts to breath, before the breath has actually occured
 #define COMSIG_CARBON_ATTEMPT_BREATHE "carbon_attempt_breathe"
-	// Prevents the breath
-	#define COMSIG_CARBON_BLOCK_BREATH (1 << 0)
-///Called when a carbon breathes, before the breath has actually occured
-#define COMSIG_CARBON_PRE_BREATHE "carbon_pre_breathe"
+	/// Prevents the breath entirely, which means they will neither suffocate nor regain oxyloss nor decay losebreath stacks
+	#define BREATHE_BLOCK_BREATH (1<<0)
+	/// Allow the breath but prevent inake, think losebreath
+	#define BREATHE_SKIP_BREATH (1<<1)
+/// Called when a carbon breathes out (breath (the exhale))
+#define COMSIG_CARBON_BREATH_EXHALE "carbon_breath_exhale"
+	/// Return if the exhale was handled, or I guess to send the exhale into the void
+	#define BREATHE_EXHALE_HANDLED (1<<0)
 ///Called when a carbon updates their mood
 #define COMSIG_CARBON_MOOD_UPDATE "carbon_mood_update"
 ///Called when a carbon attempts to eat (eating)
@@ -154,6 +158,12 @@
 /// Sent at the very end of human character setup
 #define COMSIG_HUMAN_CHARACTER_SETUP "after_human_setup"
 
+/// Carbon is steppin
+#define COMSIG_CARBON_STEP "carbon_step"
+/// Carbon is steppin on a painful limb
+#define COMSIG_CARBON_PAINED_STEP "carbon_pain_step"
+	/// Stop the pain from happening
+	#define STOP_PAIN (1<<0)
 /// from /datum/status_effect/limp/proc/check_step()
 #define COMSIG_CARBON_LIMPING "mob_limp_check"
 	#define COMPONENT_CANCEL_LIMP (1<<0)

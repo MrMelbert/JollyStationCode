@@ -48,6 +48,10 @@
 		if(data["boozepwr"])
 			boozepwr = data["boozepwr"]
 	addiction_types = list(/datum/addiction/alcohol = 0.05 * boozepwr)
+	if(boozepwr >= 1 && isnull(pain_modifier))
+		var/new_pain_modifier = 12 / (boozepwr * 0.2)
+		if(new_pain_modifier < 1)
+			pain_modifier = new_pain_modifier
 	return ..()
 
 /datum/reagent/consumable/ethanol/on_mob_life(mob/living/carbon/drinker, seconds_per_tick, times_fired)
@@ -101,15 +105,7 @@
 		return
 
 	exposed_mob.adjust_fire_stacks(reac_volume / 15)
-
-	if(!iscarbon(exposed_mob))
-		return
-
-	var/mob/living/carbon/exposed_carbon = exposed_mob
-	var/power_multiplier = boozepwr / 65 // Weak alcohol has less sterilizing power
-
-	for(var/datum/surgery/surgery as anything in exposed_carbon.surgeries)
-		surgery.speed_modifier = max(0.1 * power_multiplier, surgery.speed_modifier)
+	exposed_mob.add_timed_surgery_speed_mod(type, clamp(round(20 / (15 + sqrt(max(1, boozepwr))), 0.01), 0.25, 1.25), reac_volume * 1 MINUTES)
 
 /datum/reagent/consumable/ethanol/beer
 	name = "Beer"
@@ -158,6 +154,7 @@
 		drinker.add_atom_colour(color, TEMPORARY_COLOUR_PRIORITY)
 
 /datum/reagent/consumable/ethanol/beer/green/on_mob_end_metabolize(mob/living/drinker)
+	. = ..()
 	drinker.remove_atom_colour(TEMPORARY_COLOUR_PRIORITY, color)
 
 /datum/reagent/consumable/ethanol/beer/green/overdose_process(mob/living/affected_mob, seconds_per_tick, times_fired)
@@ -2257,6 +2254,7 @@
 	quality = DRINK_NICE
 	taste_description = "sugary tartness"
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
+	pain_modifier = 0.75
 
 /datum/reagent/consumable/ethanol/pina_colada
 	name = "Pina Colada"

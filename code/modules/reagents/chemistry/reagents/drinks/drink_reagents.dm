@@ -150,6 +150,10 @@
 	affected_mob.emote("laugh")
 	affected_mob.add_mood_event("chemical_laughter", /datum/mood_event/chemical_laughter)
 
+/datum/reagent/consumable/laughter/on_mob_metabolize(mob/living/carbon/user)
+	pain_modifier = pick(0.8, 1, 1, 1, 1, 1.2)
+	return ..()
+
 /datum/reagent/consumable/superlaughter
 	name = "Super Laughter"
 	description = "Funny until you're the one laughing."
@@ -276,8 +280,15 @@
 	affected_mob.adjust_drowsiness(-6 SECONDS * REM * seconds_per_tick)
 	affected_mob.AdjustSleeping(-40 * REM * seconds_per_tick)
 	affected_mob.adjust_body_temperature(1.5 * WARM_DRINK * REM * seconds_per_tick, max_temp = affected_mob.standard_body_temperature)
-	if(holder.has_reagent(/datum/reagent/consumable/frostoil))
-		holder.remove_reagent(/datum/reagent/consumable/frostoil, 5 * REM * seconds_per_tick)
+	holder.remove_reagent(/datum/reagent/consumable/frostoil, 5 * REM * seconds_per_tick)
+
+/datum/reagent/consumable/coffee/on_mob_metabolize(mob/living/carbon/user)
+	. = ..()
+	ADD_TRAIT(user, TRAIT_HEART_RATE_BOOST, type)
+
+/datum/reagent/consumable/coffee/on_mob_end_metabolize(mob/living/carbon/user)
+	. = ..()
+	REMOVE_TRAIT(user, TRAIT_HEART_RATE_BOOST, type)
 
 /datum/reagent/consumable/tea
 	name = "Tea"

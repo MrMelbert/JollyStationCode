@@ -112,7 +112,7 @@
 	return ..()
 
 /mob/living/basic/check_projectile_armor(def_zone, obj/projectile/impacting_projectile, is_silent)
-	return 0
+	return impacting_projectile.grazing ? 50 : 0
 
 /mob/living/basic/ex_act(severity, target, origin)
 	. = ..()
@@ -161,12 +161,12 @@
 /mob/living/basic/update_stat()
 	if(status_flags & GODMODE)
 		return
-	if(stat != DEAD)
-		if(health <= 0)
-			death()
-		else
-			set_stat(CONSCIOUS)
-	med_hud_set_status()
+	if(stat == DEAD)
+		return
+	if(health <= 0)
+		death()
+	else
+		set_stat(CONSCIOUS)
 
 /mob/living/basic/emp_act(severity)
 	. = ..()

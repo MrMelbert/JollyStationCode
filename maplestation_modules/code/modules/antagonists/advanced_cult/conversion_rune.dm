@@ -101,7 +101,7 @@
 			return FALSE
 
 		if(convertee.getStaminaLoss() <= 100)
-			convertee.apply_damage(50, STAMINA, BODY_ZONE_CHEST)
+			convertee.apply_damage(50, PAIN, BODY_ZONE_CHEST)
 		convertee.adjust_stutter(20 SECONDS)
 		user.say(invocations[i], language = /datum/language/common, ignore_spam = TRUE, forced = "cult invocation")
 
@@ -171,7 +171,7 @@
 	if(ishuman(convertee))
 		var/mob/living/carbon/human/human_convertee = convertee
 		if(!protected)
-			human_convertee.ForceContractDisease(new /datum/disease/shock(), FALSE, TRUE)
+			human_convertee.adjust_traumatic_shock(SHOCK_HEART_ATTACK_THRESHOLD)
 		human_convertee.cause_pain(BODY_ZONES_ALL, 65)
 
 	ADD_TRAIT(convertee, TRAIT_WAS_ON_CONVERSION_RUNE, REF(user))

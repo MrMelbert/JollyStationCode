@@ -19,7 +19,7 @@
 	severity = WOUND_SEVERITY_LOSS
 	status_effect_type = null
 	scar_keyword = "dismember"
-	wound_flags = null
+	wound_flags = NONE
 	already_scarred = TRUE // We manually assign scars for dismembers through endround missing limbs and aheals
 
 	/// The wounding_type of the attack that caused us. Used to generate the description of our scar. Currently unused, but primarily exists in case non-biological wounds are added.

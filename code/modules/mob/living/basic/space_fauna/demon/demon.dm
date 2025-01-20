@@ -25,6 +25,8 @@
 	combat_mode = TRUE
 	attack_sound = 'sound/magic/demon_attack1.ogg'
 	attack_vis_effect = ATTACK_EFFECT_CLAW
+	sharpness = SHARP_EDGED
+	wound_bonus = -15
 	faction = list(FACTION_HELL)
 
 	maxHealth = 200

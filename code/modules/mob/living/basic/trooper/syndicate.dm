@@ -34,6 +34,7 @@
 	attack_verb_simple = "slash"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	attack_vis_effect = ATTACK_EFFECT_SLASH
+	sharpness = SHARP_EDGED
 	r_hand = /obj/item/knife/combat/survival
 	var/projectile_deflect_chance = 0
 

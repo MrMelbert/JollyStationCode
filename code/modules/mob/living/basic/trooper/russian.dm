@@ -12,6 +12,8 @@
 	attack_verb_simple = "slash"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	attack_vis_effect = ATTACK_EFFECT_SLASH
+	sharpness = SHARP_EDGED
+	wound_bonus = 0
 
 	mob_spawner = /obj/effect/mob_spawn/corpse/human/russian
 	r_hand = /obj/item/knife/kitchen

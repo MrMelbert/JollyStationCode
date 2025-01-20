@@ -567,15 +567,13 @@
 	else if(istype(user) && user.dna.check_mutation(/datum/mutation/human/telekinesis))
 		to_chat(user, span_notice("You telekinetically remove the light [fitting]."))
 	else
-		var/obj/item/bodypart/affecting = user.get_bodypart("[(user.active_hand_index % 2 == 0) ? "r" : "l" ]_arm")
-		if(affecting?.receive_damage( 0, 5 )) // 5 burn damage
-			user.update_damage_overlays()
+		user.apply_damage(5, BURN, user.get_active_hand())
 		if(HAS_TRAIT(user, TRAIT_LIGHTBULB_REMOVER))
-			to_chat(user, span_notice("You feel your [affecting] burning, and the light beginning to budge."))
+			to_chat(user, span_notice("You feel your hand burning, but the light [fitting] begins to budge."))
 			if(!do_after(user, 5 SECONDS, target = src))
 				return
-			if(affecting?.receive_damage( 0, 10 )) // 10 more burn damage
-				user.update_damage_overlays()
+
+			user.apply_damage(10, BURN, user.get_active_hand())
 			to_chat(user, span_notice("You manage to remove the light [fitting], shattering it in process."))
 			break_light_tube()
 		else

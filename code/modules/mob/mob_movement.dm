@@ -5,9 +5,9 @@
  */
 /client/verb/drop_item()
 	set hidden = TRUE
-	if(!iscyborg(mob) && mob.stat == CONSCIOUS)
+	if(!iscyborg(mob) && !mob.incapacitated())
 		mob.dropItemToGround(mob.get_active_held_item())
-	return
+
 /**
  * Move a client in a direction
  *

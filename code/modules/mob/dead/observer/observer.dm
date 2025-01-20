@@ -872,7 +872,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 	update_appearance()
 
-/mob/dead/observer/can_perform_action(atom/movable/target, action_bitflags)
+/mob/dead/observer/can_perform_action(atom/target, action_bitflags)
 	return isAdminGhostAI(usr)
 
 /mob/dead/observer/is_literate()

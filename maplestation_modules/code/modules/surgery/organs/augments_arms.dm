@@ -9,10 +9,12 @@
 	. = ..()
 	if(. & EMP_PROTECT_SELF)
 		return
+	if(isnull(owner))
+		return
 	var/obj/item/bodypart/real_hand = hand
 	if(!istype(real_hand))
 		return
-	real_hand.receive_damage(burn = 10 / severity, wound_bonus = 10, damage_source = src)
+	owner.apply_damage(10 / severity, BURN, real_hand, attacking_item = src)
 	to_chat(owner, span_warning("You feel your [parse_zone(zone)] begin to burn up!"))
 
 /obj/item/organ/internal/cyberimp/arm/lighter/on_mob_insert(mob/living/carbon/arm_owner)

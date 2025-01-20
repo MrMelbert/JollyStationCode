@@ -113,7 +113,7 @@
 		if(HAS_TRAIT(user, TRAIT_CLUMSY) && prob(clumsy_chance))
 			playsound(src, 'sound/effects/bang.ogg', 50, TRUE)
 			to_chat(user, span_warning("Your hand slips, causing the [name] to smash you!"))
-			user.take_bodypart_damage(rand(2, 5))
+			user.damage_random_bodypart(rand(2, 5))
 			end_workout()
 			return
 
@@ -121,7 +121,7 @@
 		if(user.get_drunk_amount() > SAFE_DRUNK_LEVEL && prob(min(user.get_drunk_amount(), 99)))
 			playsound(src,'sound/effects/bang.ogg', 50, TRUE)
 			to_chat(user, span_warning(drunk_message))
-			user.take_bodypart_damage(rand(5, 10), wound_bonus = 10)
+			user.damage_random_bodypart(rand(5, 10), wound_bonus = 10)
 			end_workout()
 			return
 
@@ -160,6 +160,9 @@
 	animate(pixel_y = user.base_pixel_y, time = WORKOUT_LENGTH * 0.5)
 
 	if(!iscarbon(user) || isnull(user.mind))
+		return TRUE
+	if(user.getStaminaLoss() > 100)
+		end_workout()
 		return TRUE
 	// the amount of workouts you can do before you hit stamcrit
 	var/workout_reps = total_workout_reps[user.mind.get_skill_level(/datum/skill/fitness)]

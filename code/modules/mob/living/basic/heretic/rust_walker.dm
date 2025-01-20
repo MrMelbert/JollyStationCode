@@ -39,7 +39,7 @@
 	icon_living = icon_state
 
 /mob/living/basic/heretic_summon/rust_walker/Life(seconds_per_tick = SSMOBS_DT, times_fired)
-	if(stat == DEAD)
+	if(stat == DEAD || health == maxHealth)
 		return ..()
 	var/turf/our_turf = get_turf(src)
 	if(HAS_TRAIT(our_turf, TRAIT_RUSTY))

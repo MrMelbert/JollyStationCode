@@ -270,7 +270,7 @@
 	plane = HUD_PLANE
 
 /atom/movable/screen/drop/Click()
-	if(usr.stat == CONSCIOUS)
+	if(!usr.incapacitated())
 		usr.dropItemToGround(usr.get_active_held_item())
 
 /atom/movable/screen/combattoggle
@@ -715,10 +715,18 @@
 			// calculate what icon state (1-5, or 0 if undamaged) to use based on damage
 			icon_key = clamp(ceil(damage * 5), 0, 5)
 
-		if(length(body_part.wounds))
+		// NON-MODULE CHANGE
+		var/has_noticable_wound = FALSE
+		for(var/datum/wound/wound as anything in body_part.wounds)
+			if(wound.wound_flags & ALERTS_VICTIM)
+				has_noticable_wound = TRUE
+				break
+
+		if(has_noticable_wound)
 			LAZYSET(animated_zones, part_zone, TRUE)
 		else
 			LAZYREMOVE(animated_zones, part_zone)
+
 		limbs[part_zone].icon_state = "[part_zone][icon_key]"
 	// handle leftovers
 	for(var/missing_zone in owner.get_missing_limbs())

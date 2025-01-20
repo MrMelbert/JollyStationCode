@@ -37,7 +37,13 @@
 		span_notice("[user] begins to fix [target]'s brain."),
 		span_notice("[user] begins to perform surgery on [target]'s brain."),
 	)
-	display_pain(target, "Your head pounds with unimaginable pain!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "Your head pounds with unimaginable pain!",
+		pain_amount = SURGERY_PAIN_CRITICAL,
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
 
 /datum/surgery_step/pacify/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	display_results(
@@ -47,7 +53,14 @@
 		span_notice("[user] successfully fixes [target]'s brain!"),
 		span_notice("[user] completes the surgery on [target]'s brain."),
 	)
-	display_pain(target, "Your head pounds... the concept of violence flashes in your head, and nearly makes you hurl!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "Your head pounds... the concept of violence flashes in your head, and nearly makes you hurl!",
+		pain_amount = SURGERY_PAIN_CRITICAL,
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
+	target.adjust_disgust(DISGUST_LEVEL_DISGUSTED)
 	target.gain_trauma(/datum/brain_trauma/severe/pacifism, TRAUMA_RESILIENCE_LOBOTOMY)
 	return ..()
 
@@ -59,6 +72,12 @@
 		span_warning("[user] screws up, causing brain damage!"),
 		span_notice("[user] completes the surgery on [target]'s brain."),
 	)
-	display_pain(target, "Your head pounds, and it feels like it's getting worse!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "Your head pounds, and it feels like it's getting worse!",
+		pain_amount = SURGERY_PAIN_CRITICAL,
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
 	target.gain_trauma_type(BRAIN_TRAUMA_SEVERE, TRAUMA_RESILIENCE_LOBOTOMY)
 	return FALSE

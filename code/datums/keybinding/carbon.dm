@@ -42,6 +42,7 @@
 		return
 	var/mob/living/carbon/carbon_user = user.mob
 	carbon_user.throw_mode_off(THROW_MODE_HOLD)
+
 /datum/keybinding/carbon/give
 	hotkey_keys = list("G")
 	name = "Give_Item"

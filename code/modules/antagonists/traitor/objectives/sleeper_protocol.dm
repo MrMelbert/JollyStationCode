@@ -119,7 +119,12 @@
 		span_notice("[user] begins to fix [target]'s brain."),
 		span_notice("[user] begins to perform surgery on [target]'s brain."),
 	)
-	display_pain(target, "Your head pounds with unimaginable pain!", target_zone = target_zone) // NON-MODULE CHANGE // Same message as other brain surgeries
+	display_pain(
+		target = target,
+		target_zone = BODY_ZONE_HEAD,
+		pain_message = "Your head pounds with unimaginable pain!", // Same message as other brain surgeries
+		pain_amount = SURGERY_PAIN_SEVERE,
+	)
 
 /datum/surgery_step/brainwash/sleeper_agent/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	if(target.stat == DEAD)

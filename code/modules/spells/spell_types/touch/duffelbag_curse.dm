@@ -37,7 +37,7 @@
 	// To get it started, stun and knockdown the person being hit
 	victim.flash_act()
 	victim.Immobilize(5 SECONDS)
-	victim.apply_damage(80, STAMINA)
+	victim.apply_damage(80, PAIN)
 	victim.Knockdown(5 SECONDS)
 
 	// If someone's already cursed, don't try to give them another

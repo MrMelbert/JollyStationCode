@@ -7,7 +7,7 @@
 
 	var/scanning = FALSE
 	var/health_scan
-	var/alarm_health = HEALTH_THRESHOLD_CRIT
+	var/alarm_health = HEALTH_THRESHOLD_LIKELY_CRIT
 
 /obj/item/assembly/health/examine(mob/user)
 	. = ..()
@@ -38,11 +38,11 @@
 	return secured
 
 /obj/item/assembly/health/AltClick(mob/living/user)
-	if(alarm_health == HEALTH_THRESHOLD_CRIT)
-		alarm_health = HEALTH_THRESHOLD_DEAD
+	if(alarm_health == HEALTH_THRESHOLD_LIKELY_CRIT)
+		alarm_health = HEALTH_THRESHOLD_LIKELY_DEAD
 		to_chat(user, span_notice("You toggle [src] to \"detect death\" mode."))
 	else
-		alarm_health = HEALTH_THRESHOLD_CRIT
+		alarm_health = HEALTH_THRESHOLD_LIKELY_CRIT
 		to_chat(user, span_notice("You toggle [src] to \"detect critical state\" mode."))
 
 /obj/item/assembly/health/process()

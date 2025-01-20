@@ -370,7 +370,7 @@ GLOBAL_LIST_INIT(orion_events, generate_orion_events())
 	if(obj_flags & EMAGGED)
 		to_chat(gamer, span_userdanger("You're never going to make it to Orion..."))
 		gamer.investigate_log("has been killed by an emagged Orion Trail game.", INVESTIGATE_DEATHS)
-		gamer.death()
+		gamer.death(null, "a skill issue")
 		obj_flags &= ~EMAGGED //removes the emagged status after you lose
 		gamer.log_message("lost a Realism Mode Orion Trail game, changing the machine back to normal.", LOG_GAME)
 		gameStatus = ORION_STATUS_START
@@ -433,7 +433,7 @@ GLOBAL_LIST_INIT(orion_events, generate_orion_events())
 		say("The last crewmember [sheriff], shot themselves, GAME OVER!")
 		if(obj_flags & EMAGGED)
 			gamer.investigate_log("has been killed by an emagged Orion Trail game.", INVESTIGATE_DEATHS)
-			gamer.death()
+			gamer.death(null, "a skill issue")
 		set_game_over(gamer, "Your last pioneer committed suicide.")
 		if(killed_crew >= ORION_STARTING_CREW_COUNT)
 			gamer.mind?.adjust_experience(/datum/skill/gaming, -15)//no cheating by spamming game overs
@@ -442,7 +442,7 @@ GLOBAL_LIST_INIT(orion_events, generate_orion_events())
 		if(findtext(gamer.name, sheriff))
 			say("The crew of the ship chose to kill [gamer]!")
 			gamer.investigate_log("has been killed by an emagged Orion Trail game.", INVESTIGATE_DEATHS)
-			gamer.death()
+			gamer.death(null, "a skill issue")
 
 /**
  * Creates a new mood icon for each settler

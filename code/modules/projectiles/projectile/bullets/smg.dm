@@ -2,6 +2,7 @@
 
 /obj/projectile/bullet/c45
 	name = ".45 bullet"
+	generic_name = "bullet"
 	damage = 30
 	wound_bonus = -10
 	wound_falloff_tile = -10
@@ -17,6 +18,7 @@
 
 /obj/projectile/bullet/incendiary/c45
 	name = ".45 incendiary bullet"
+	generic_name = "bullet"
 	damage = 15
 	fire_stacks = 2
 
@@ -24,18 +26,20 @@
 
 /obj/projectile/bullet/c46x30mm
 	name = "4.6x30mm bullet"
+	generic_name = "bullet"
 	damage = 20
 	wound_bonus = -5
 	bare_wound_bonus = 5
-	embed_falloff_tile = -4
+	embed_falloff_tile = 2
 
 /obj/projectile/bullet/c46x30mm/ap
 	name = "4.6x30mm armor-piercing bullet"
 	damage = 15
 	armour_penetration = 40
-	embedding = null
+	embed_type = null
 
 /obj/projectile/bullet/incendiary/c46x30mm
 	name = "4.6x30mm incendiary bullet"
+	generic_name = "bullet"
 	damage = 10
 	fire_stacks = 1

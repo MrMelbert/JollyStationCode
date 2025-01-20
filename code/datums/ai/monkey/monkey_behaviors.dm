@@ -4,11 +4,18 @@
 /datum/ai_behavior/monkey_equip
 	behavior_flags = AI_BEHAVIOR_REQUIRE_MOVEMENT | AI_BEHAVIOR_REQUIRE_REACH
 
-/datum/ai_behavior/monkey_equip/finish_action(datum/ai_controller/controller, success)
+/datum/ai_behavior/monkey_equip/setup(datum/ai_controller/controller, target_key)
+	. = ..()
+	var/obj/target = controller.blackboard[target_key]
+	if(QDELETED(target))
+		return FALSE
+	set_movement_target(controller, target)
+
+/datum/ai_behavior/monkey_equip/finish_action(datum/ai_controller/controller, success, target_key)
 	. = ..()
 
 	if(!success) //Don't try again on this item if we failed
-		controller.set_blackboard_key_assoc(BB_MONKEY_BLACKLISTITEMS, controller.blackboard[BB_MONKEY_PICKUPTARGET], TRUE)
+		controller.set_blackboard_key_assoc(BB_MONKEY_BLACKLISTITEMS, controller.blackboard[target_key], TRUE)
 
 	controller.clear_blackboard_key(BB_MONKEY_PICKUPTARGET)
 
@@ -58,13 +65,13 @@
 /datum/ai_behavior/monkey_equip/ground
 	required_distance = 0
 
-/datum/ai_behavior/monkey_equip/ground/perform(seconds_per_tick, datum/ai_controller/controller)
+/datum/ai_behavior/monkey_equip/ground/perform(seconds_per_tick, datum/ai_controller/controller, target_key)
 	. = ..()
 	equip_item(controller)
 
 /datum/ai_behavior/monkey_equip/pickpocket
 
-/datum/ai_behavior/monkey_equip/pickpocket/perform(seconds_per_tick, datum/ai_controller/controller)
+/datum/ai_behavior/monkey_equip/pickpocket/perform(seconds_per_tick, datum/ai_controller/controller, target_key)
 	. = ..()
 	if(controller.blackboard[BB_MONKEY_PICKPOCKETING]) //We are pickpocketing, don't do ANYTHING!!!!
 		return
@@ -78,8 +85,6 @@
 	if(!istype(victim))
 		finish_action(controller, FALSE)
 		return
-
-
 
 	victim.visible_message(span_warning("[living_pawn] starts trying to take [target] from [victim]!"), span_danger("[living_pawn] tries to take [target]!"))
 
@@ -107,29 +112,14 @@
 	controller.set_blackboard_key(BB_MONKEY_PICKPOCKETING, FALSE)
 	controller.clear_blackboard_key(BB_MONKEY_PICKUPTARGET)
 
-/datum/ai_behavior/monkey_flee
+/datum/ai_behavior/run_away_from_target/monkey
+	run_distance = MONKEY_FLEE_VISION
 
-/datum/ai_behavior/monkey_flee/perform(seconds_per_tick, datum/ai_controller/controller)
-	. = ..()
-
+/datum/ai_behavior/run_away_from_target/monkey/stop_running_from(datum/ai_controller/controller, atom/target)
 	var/mob/living/living_pawn = controller.pawn
-
-	if(living_pawn.health >= MONKEY_FLEE_HEALTH)
-		finish_action(controller, TRUE) //we're back in bussiness
-		return
-
-	var/mob/living/target = null
-
-	// flee from anyone who attacked us and we didn't beat down
-	for(var/mob/living/L in view(living_pawn, MONKEY_FLEE_VISION))
-		if(controller.blackboard[BB_MONKEY_ENEMIES][L] && L.stat == CONSCIOUS)
-			target = L
-			break
-
-	if(target)
-		SSmove_manager.move_away(living_pawn, target, max_dist=MONKEY_ENEMY_VISION, delay=5)
-	else
-		finish_action(controller, TRUE)
+	if(living_pawn.consciousness >= MONKEY_FLEE_HEALTH)
+		return FALSE
+	return ..()
 
 /datum/ai_behavior/monkey_attack_mob
 	behavior_flags = AI_BEHAVIOR_REQUIRE_MOVEMENT | AI_BEHAVIOR_MOVE_AND_PERFORM //performs to increase frustration
@@ -148,20 +138,22 @@
 		finish_action(controller, TRUE) //Target == owned
 		return
 
-	if(isturf(target.loc) && !IS_DEAD_OR_INCAP(living_pawn)) // Check if they're a valid target
+	if(IS_DEAD_OR_INCAP(living_pawn) || living_pawn.consciousness < MONKEY_FLEE_HEALTH)
+		finish_action(controller, FALSE) // We're dead (or about to be) let's get out of here
+		return
+
+	if(isturf(target.loc)) // Check if they're a valid target
 		// check if target has a weapon
-		var/obj/item/W
-		for(var/obj/item/I in target.held_items)
-			if(!(I.item_flags & ABSTRACT))
-				W = I
-				break
+		for(var/obj/item/weapon in target.held_items)
+			if(weapon.item_flags & ABSTRACT)
+				continue
 
-		// if the target has a weapon, chance to disarm them
-		if(W && SPT_PROB(MONKEY_ATTACK_DISARM_PROB, seconds_per_tick))
-			monkey_attack(controller, target, seconds_per_tick, TRUE)
-		else
-			monkey_attack(controller, target, seconds_per_tick, FALSE)
+			// if the target has a weapon, chance to disarm them
+			if(weapon && SPT_PROB(MONKEY_ATTACK_DISARM_PROB, seconds_per_tick))
+				monkey_attack(controller, target, seconds_per_tick, TRUE)
+				return
 
+		monkey_attack(controller, target, seconds_per_tick, FALSE)
 
 /datum/ai_behavior/monkey_attack_mob/finish_action(datum/ai_controller/controller, succeeded, target_key)
 	. = ..()

@@ -30,7 +30,7 @@
 		living_target.flash_act(1, TRUE, visual = TRUE, length = 6 SECONDS)
 	else
 		living_target.Knockdown(1 SECONDS)
-	living_target.apply_damage(75, STAMINA, BODY_ZONE_CHEST)
+	living_target.apply_damage(75, PAIN, BODY_ZONE_CHEST)
 	new /obj/effect/temp_visual/clock/disable(get_turf(victim))
 	var/final_hit = living_target.getStaminaLoss() >= 100
 

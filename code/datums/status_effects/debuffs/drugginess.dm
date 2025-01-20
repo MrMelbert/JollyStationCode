@@ -4,6 +4,9 @@
 	alert_type = /atom/movable/screen/alert/status_effect/high
 	remove_on_fullheal = TRUE
 
+	var/mood_type = /datum/mood_event/high
+	var/granted_language = /datum/language/beachbum
+
 /datum/status_effect/drugginess/on_creation(mob/living/new_owner, duration = 10 SECONDS)
 	src.duration = duration
 	return ..()
@@ -11,10 +14,11 @@
 /datum/status_effect/drugginess/on_apply()
 	RegisterSignal(owner, COMSIG_LIVING_DEATH, PROC_REF(remove_drugginess))
 
-	owner.add_mood_event(id, /datum/mood_event/high)
+	owner.add_mood_event(id, mood_type)
 	owner.overlay_fullscreen(id, /atom/movable/screen/fullscreen/high)
 	owner.sound_environment_override = SOUND_ENVIRONMENT_DRUGGED
-	owner.grant_language(/datum/language/beachbum, source = id)
+	if(granted_language)
+		owner.grant_language(granted_language, source = id)
 	return TRUE
 
 /datum/status_effect/drugginess/on_remove()
@@ -24,7 +28,8 @@
 	owner.clear_fullscreen(id)
 	if(owner.sound_environment_override == SOUND_ENVIRONMENT_DRUGGED)
 		owner.sound_environment_override = SOUND_ENVIRONMENT_NONE
-	owner.remove_language(/datum/language/beachbum, source = id)
+	if(granted_language)
+		owner.remove_language(granted_language, source = id)
 
 /// Removes all of our drugginess (self delete) on signal
 /datum/status_effect/drugginess/proc/remove_drugginess(datum/source, admin_revive)

@@ -1,7 +1,7 @@
 // -- Implements and equipment to help reduce pain. --
 // Temperature pack stuff - things you can press to people to help reduce pain.
 /// Heal rate and modifier for generic items that are frozen.
-#define FROZEN_ITEM_PAIN_RATE 1
+#define FROZEN_ITEM_PAIN_RATE 2
 #define FROZEN_ITEM_PAIN_MODIFIER 0.5
 #define FROZEN_ITEM_TEMPERATURE_CHANGE -5
 
@@ -123,7 +123,7 @@
 	name = "heat pack"
 	desc = "A heat pack. Crack it to turn it on and apply it to an aching limb to reduce joint stress and moderate pain."
 	temperature_change = 5
-	pain_heal_amount = 1.2
+	pain_heal_amount = 2
 	pain_limb_modifier = 0.5
 
 // Cold packs heal more, but have a weaker modifier.
@@ -131,7 +131,7 @@
 	name = "cold pack"
 	desc = "A cold pack. Crack it on and apply it to a hurt limb to abate sharp pain."
 	temperature_change = -5
-	pain_heal_amount = 2
+	pain_heal_amount = 3
 	pain_limb_modifier = 0.75
 
 /obj/item/reagent_containers/pill/aspirin
@@ -361,10 +361,11 @@
 
 	AddElement(/datum/element/bed_tuckable, 0, 0, 0)
 	AddElement(/datum/element/attack_equip)
+	AddElement(/datum/element/pat_out_fire)
 
 /obj/item/shock_blanket/examine(mob/user)
 	. = ..()
-	. += span_notice("To use: Apply to a patient experiencing shock or loss of body temperature. Keep patient still and lying down for maximum effect.")
+	. += span_notice("To use: Apply to a patient experiencing hypothermia. Keep patient still and lying down for maximum effect.")
 
 /obj/item/shock_blanket/attack_self(mob/user, modifiers)
 	. = ..()
@@ -384,8 +385,8 @@
 		return
 
 	if(slot_flags & slot)
-		RegisterSignal(user, list(COMSIG_LIVING_SET_BODY_POSITION, COMSIG_LIVING_SET_BUCKLED), PROC_REF(check_protection))
-		RegisterSignal(user, list(COMSIG_QDELETING, COMSIG_MOVABLE_PRE_MOVE), PROC_REF(disable_protection))
+		RegisterSignals(user, list(COMSIG_LIVING_SET_BODY_POSITION, COMSIG_LIVING_SET_BUCKLED), PROC_REF(check_protection))
+		RegisterSignals(user, list(COMSIG_QDELETING, COMSIG_MOVABLE_PRE_MOVE), PROC_REF(disable_protection))
 		try_enable(user)
 
 /obj/item/shock_blanket/dropped(mob/user, silent)
@@ -460,7 +461,7 @@
 		wearer.adjust_body_temperature(-0.25 KELVIN * seconds_per_tick, min_temp = wearer.standard_body_temperature)
 
 /obj/item/shock_blanket/emergency
-	desc = "An emergency variant shock blanket intended to be placed in medkits for field treatment. Faster to apply to patients, but more restrictive to movement."
+	desc = "An variant of shock blanket intended to be placed in medkits for field treatment. Faster to apply to patients, but more restrictive to movement."
 	slowdown = 2.5
 	equip_delay_self = 1.2 SECONDS
 	equip_delay_other = 1.2 SECONDS
@@ -468,64 +469,6 @@
 /obj/item/shock_blanket/emergency/Initialize(mapload)
 	. = ..()
 	name = "emergency [name]"
-
-// Change the contents of first-aid kids.
-/obj/item/storage/medkit/emergency/Initialize(mapload)
-	. = ..()
-	atom_storage.max_specific_storage = WEIGHT_CLASS_SMALL
-	atom_storage.max_slots = 12
-	atom_storage.max_total_storage = 16
-
-/obj/item/storage/medkit/emergency/PopulateContents()
-	if(empty)
-		return
-	var/static/list/items_inside = list(
-		/obj/item/healthanalyzer/simple = 1,
-		/obj/item/stack/medical/gauze = 1,
-		/obj/item/stack/medical/suture/emergency = 1,
-		/obj/item/stack/medical/ointment = 1,
-		/obj/item/reagent_containers/hypospray/medipen/ekit = 2,
-		/obj/item/reagent_containers/hypospray/medipen/emergency_painkiller = 2,
-		/obj/item/storage/pill_bottle/iron = 1,
-		/obj/item/shock_blanket/emergency = 1,
-	)
-	generate_items_inside(items_inside, src)
-
-/obj/item/storage/medkit/regular/PopulateContents()
-	if(empty)
-		return
-	var/static/list/items_inside = list(
-		/obj/item/stack/medical/gauze = 1,
-		/obj/item/stack/medical/suture = 2,
-		/obj/item/stack/medical/mesh = 2,
-		/obj/item/reagent_containers/hypospray/medipen = 1,
-		/obj/item/reagent_containers/hypospray/medipen/morphine = 1,
-	)
-	generate_items_inside(items_inside, src)
-
-/obj/item/storage/medkit/brute/PopulateContents()
-	if(empty)
-		return
-	var/static/list/items_inside = list(
-		/obj/item/reagent_containers/pill/patch/libital = 3,
-		/obj/item/stack/medical/gauze = 1,
-		/obj/item/storage/pill_bottle/probital = 1,
-		/obj/item/reagent_containers/hypospray/medipen/salacid = 1,
-		/obj/item/reagent_containers/hypospray/medipen/brute_painkiller = 1,
-	)
-	generate_items_inside(items_inside, src)
-
-/obj/item/storage/medkit/fire/PopulateContents()
-	if(empty)
-		return
-	var/static/list/items_inside = list(
-		/obj/item/reagent_containers/pill/patch/aiuri = 3,
-		/obj/item/reagent_containers/spray/hercuri = 1,
-		/obj/item/stack/medical/ointment = 1,
-		/obj/item/reagent_containers/hypospray/medipen/oxandrolone = 1,
-		/obj/item/reagent_containers/hypospray/medipen/burn_painkiller = 1,
-	)
-	generate_items_inside(items_inside, src)
 
 /obj/item/storage/medkit/advanced/PopulateContents()
 	if(empty)
@@ -556,7 +499,7 @@
 			"name" = "Pain",
 			"icon" = "pills",
 			"products" = list(
-				/obj/item/shock_blanket/emergency = 3,
+				/obj/item/shock_blanket = 3,
 				/obj/item/temperature_pack/cold = 2,
 				/obj/item/temperature_pack/heat = 2,
 			)
@@ -569,7 +512,7 @@
 			"name" = "Pain",
 			"icon" = "pills",
 			"products" = list(
-				/obj/item/shock_blanket/emergency = 2,
+				/obj/item/shock_blanket = 2,
 				/obj/item/temperature_pack/cold = 1,
 				/obj/item/temperature_pack/heat = 1,
 			)

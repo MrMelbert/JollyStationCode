@@ -55,9 +55,9 @@
 	M.adjustBruteLoss(-0.2 * REM * seconds_per_tick, FALSE)
 	M.adjustFireLoss(-0.1 * REM * seconds_per_tick, FALSE)
 	// Morphine heals pain, dur
-	M.cause_pain(BODY_ZONES_ALL, -0.3)
+	M.cause_pain(BODY_ZONES_ALL, -0.5 * REM * seconds_per_tick)
 	// Morphine causes a bit of disgust
-	if(M.disgust < DISGUST_LEVEL_VERYGROSS && SPT_PROB(50 * max(1 - creation_purity, 0.5), seconds_per_tick))
+	if(M.disgust < DISGUST_LEVEL_VERYGROSS && SPT_PROB(50 * (2 - creation_purity), seconds_per_tick))
 		M.adjust_disgust(2 * REM * seconds_per_tick)
 
 	// The longer we're metabolzing it, the more we get sleepy
@@ -67,20 +67,21 @@
 		if(16) //~3u
 			to_chat(M, span_warning("You start to feel tired..."))
 			M.adjust_eye_blur(2 SECONDS * REM * seconds_per_tick) // just a hint teehee
-			if(prob(50))
+			if(SPT_PROB(66, seconds_per_tick))
 				M.emote("yawn")
 
 		if(24 to 36) // 5u to 7.5u
-			if(SPT_PROB(33, seconds_per_tick))
-				M.adjust_drowsiness_up_to(1 * REM * seconds_per_tick, 6 SECONDS)
+			if(SPT_PROB(66 * (2 - creation_purity), seconds_per_tick))
+				M.adjust_drowsiness_up_to(1 SECONDS * REM * seconds_per_tick, 12 SECONDS)
 
 		if(36 to 48) // 7.5u to 10u
-			if(SPT_PROB(66, seconds_per_tick))
-				M.adjust_drowsiness_up_to(1 * REM * seconds_per_tick, 12 SECONDS)
+			M.adjust_drowsiness_up_to(1 SECONDS * REM * seconds_per_tick, 12 SECONDS)
 
 		if(48 to INFINITY) //10u onward
-			M.adjust_drowsiness_up_to(1 * REM * seconds_per_tick, 20 SECONDS)
-			M.Sleeping(4 SECONDS * REM * seconds_per_tick)
+			M.adjust_drowsiness_up_to(2 SECONDS * REM * seconds_per_tick, 20 SECONDS)
+			// doesn't scale from purity - at this point it tries to guarantee sleep
+			if(SPT_PROB(30 * (48 - current_cycle), seconds_per_tick))
+				M.Sleeping(4 SECONDS * REM * seconds_per_tick)
 
 	..()
 	return TRUE
@@ -110,9 +111,9 @@
 	M.adjustBruteLoss(-0.1 * REM * seconds_per_tick, FALSE)
 	M.adjustFireLoss(-0.05 * REM * seconds_per_tick, FALSE)
 	// Numbers seem low, but our metabolism is very slow
-	M.cause_pain(BODY_ZONE_HEAD, -0.02 * REM * seconds_per_tick)
-	M.cause_pain(BODY_ZONES_LIMBS, -0.04 * REM * seconds_per_tick)
-	M.cause_pain(BODY_ZONE_CHEST, -0.08 * REM * seconds_per_tick)
+	M.cause_pain(BODY_ZONE_HEAD, -0.04 * REM * seconds_per_tick)
+	M.cause_pain(BODY_ZONES_LIMBS, -0.08 * REM * seconds_per_tick)
+	M.cause_pain(BODY_ZONE_CHEST, -0.16 * REM * seconds_per_tick)
 	// Okay at fevers.
 	M.adjust_body_temperature(-0.1 KELVIN * REM * seconds_per_tick, M.standard_body_temperature)
 	if(M.disgust < DISGUST_LEVEL_VERYGROSS && SPT_PROB(66 * max(1 - creation_purity, 0.5), seconds_per_tick))
@@ -162,7 +163,7 @@
 	M.adjustBruteLoss(-0.05 * REM * seconds_per_tick, FALSE)
 	M.adjustFireLoss(-0.05 * REM * seconds_per_tick, FALSE)
 	M.adjustToxLoss(-0.05 * REM * seconds_per_tick, FALSE)
-	M.cause_pain(BODY_ZONES_ALL, -0.05 * REM * seconds_per_tick)
+	M.cause_pain(BODY_ZONES_ALL, -0.1 * REM * seconds_per_tick)
 	// Not very good at treating fevers.
 	M.adjust_body_temperature(-0.05 KELVIN * REM * seconds_per_tick, M.standard_body_temperature)
 	// Causes liver damage - higher dosages causes more liver damage.
@@ -202,9 +203,9 @@
 	M.adjustBruteLoss(-0.05 * REM * seconds_per_tick, FALSE)
 	M.adjustToxLoss(-0.1 * REM * seconds_per_tick, FALSE)
 	// Heals pain, numbers seem low but our metabolism is very slow
-	M.cause_pain(BODY_ZONE_HEAD, -0.08 * REM * seconds_per_tick)
-	M.cause_pain(BODY_ZONE_CHEST, -0.04 * REM * seconds_per_tick)
-	M.cause_pain(BODY_ZONES_LIMBS, -0.02 * REM * seconds_per_tick)
+	M.cause_pain(BODY_ZONE_HEAD, -0.16 * REM * seconds_per_tick)
+	M.cause_pain(BODY_ZONE_CHEST, -0.08 * REM * seconds_per_tick)
+	M.cause_pain(BODY_ZONES_LIMBS, -0.04 * REM * seconds_per_tick)
 	// Causes flat liver damage.
 	M.adjustOrganLoss(ORGAN_SLOT_LIVER, 0.25 * REM * seconds_per_tick)
 	// Really good at treating fevers.
@@ -254,7 +255,7 @@
 	if(volume <= 10)
 		// Number looks high, compared to other painkillers,
 		// but we have a comparatively much higher metabolism than them.
-		M.cause_pain(BODY_ZONES_ALL, -0.8 * REM * seconds_per_tick)
+		M.cause_pain(BODY_ZONES_ALL, -1.5 * REM * seconds_per_tick)
 	// Mildly toxic in higher dosages.
 	else if(SPT_PROB(volume * 3, seconds_per_tick))
 		M.apply_damage(3 * REM * seconds_per_tick, TOX)
@@ -278,7 +279,7 @@
 /datum/reagent/medicine/painkiller/oxycodone/on_mob_life(mob/living/carbon/M, seconds_per_tick, times_fired)
 	M.adjustBruteLoss(-0.3 * REM * seconds_per_tick, FALSE)
 	M.adjustFireLoss(-0.2 * REM * seconds_per_tick, FALSE)
-	M.cause_pain(BODY_ZONES_ALL, -0.6 * REM * seconds_per_tick)
+	M.cause_pain(BODY_ZONES_ALL, -1.25 * REM * seconds_per_tick)
 	M.set_drugginess(20 SECONDS * REM * seconds_per_tick)
 	if(M.disgust < DISGUST_LEVEL_VERYGROSS && SPT_PROB(40, seconds_per_tick))
 		M.adjust_disgust(2 * REM * seconds_per_tick)
@@ -308,14 +309,14 @@
 			if(3)
 				human_mob.drop_all_held_items()
 			if(4)
-				to_chat(human_mob, span_danger("You feel your heart skip a beat."))
+				to_chat(human_mob, span_userdanger("You feel your heart skip a beat."))
 				human_mob.set_jitter_if_lower(6 SECONDS * REM * seconds_per_tick)
 			if(5)
 				to_chat(human_mob, span_danger("You feel the world spin."))
 				human_mob.set_dizzy_if_lower(6 SECONDS * REM * seconds_per_tick)
 			if(6)
 				to_chat(human_mob, span_userdanger("You feel your heart seize and stop completely!"))
-				if(human_mob.stat == CONSCIOUS)
+				if(!human_mob.incapacitated())
 					human_mob.visible_message(span_userdanger("[human_mob] clutches at [human_mob.p_their()] chest as if [human_mob.p_their()] heart stopped!"), ignored_mobs = human_mob)
 				human_mob.emote("scream")
 				human_mob.set_heartattack(TRUE)
@@ -338,7 +339,7 @@
 	addiction_types = list(/datum/addiction/opioids = 15) //5u = 50 progress, 60u = addiction
 
 	/// How much pain we restore on life ticks, modified by modifiers (yeah?)
-	var/pain_heal_amount = 0.8
+	var/pain_heal_amount = 1.5
 	/// What type of pain are we looking for? If we aren't experiencing this type, it will be 10x less effective
 	var/pain_type_to_look_for
 	/// What type of wound are we looking for? If our bodypart has this wound, it will be 1.5x more effective

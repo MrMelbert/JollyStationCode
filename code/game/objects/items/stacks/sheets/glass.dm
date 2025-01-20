@@ -305,9 +305,18 @@ GLOBAL_LIST_INIT(plastitaniumglass_recipes, list(
 	var/shiv_type = /obj/item/knife/shiv
 	var/craft_time = 3.5 SECONDS
 	var/obj/item/stack/sheet/weld_material = /obj/item/stack/sheet/glass
-	embedding = list("embed_chance" = 65)
+	embed_type = /datum/embed_data/shard
 	drop_sound = 'maplestation_modules/sound/items/drop/glass_small.ogg'
 	pickup_sound = 'maplestation_modules/sound/items/pickup/glass_small.ogg'
+
+/datum/embed_data/shard
+	embed_chance = 65
+
+/datum/embed_data/glass_candy
+	embed_chance = 100
+	ignore_throwspeed_threshold = TRUE
+	impact_pain_mult = 1
+	pain_chance = 5
 
 /datum/armor/item_shard
 	melee = 100

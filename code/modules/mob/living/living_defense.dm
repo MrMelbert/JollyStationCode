@@ -107,41 +107,92 @@
 
 	// we need a second, silent armor check to actually know how much to reduce damage taken, as opposed to
 	// on [/atom/proc/bullet_act] where it's just to pass it to the projectile's on_hit().
-	var/armor_check = check_projectile_armor(def_zone, hitting_projectile, is_silent = TRUE)
+	var/armor_check = min(ARMOR_MAX_BLOCK, check_projectile_armor(def_zone, hitting_projectile, is_silent = TRUE))
 
-	apply_damage(
+	var/damage_done = apply_damage(
 		damage = hitting_projectile.damage,
 		damagetype = hitting_projectile.damage_type,
 		def_zone = def_zone,
-		blocked = min(ARMOR_MAX_BLOCK, armor_check),  //cap damage reduction at 90%
+		blocked = armor_check,
 		wound_bonus = hitting_projectile.wound_bonus,
 		bare_wound_bonus = hitting_projectile.bare_wound_bonus,
 		sharpness = hitting_projectile.sharpness,
-		attack_direction = get_dir(hitting_projectile.starting, src),
+		attack_direction = hitting_projectile.dir,
 	)
+	if(hitting_projectile.stamina)
+		apply_damage(
+			damage = hitting_projectile.stamina,
+			damagetype = STAMINA,
+			def_zone = def_zone,
+			blocked = armor_check,
+			attack_direction = hitting_projectile.dir,
+		)
+	if(hitting_projectile.pain)
+		apply_damage(
+			damage = hitting_projectile.pain,
+			damagetype = PAIN,
+			def_zone = def_zone,
+			// blocked = armor_check, // Batons don't factor in armor, soooo we shouldn't?
+			attack_direction = hitting_projectile.dir,
+		)
+
+	var/extra_paralyze = 0 SECONDS
+	var/extra_knockdown = 0 SECONDS
+	if(hitting_projectile.damage_type == BRUTE && !hitting_projectile.grazing)
+		// melbert todo scale on pain of bodypart?
+		if(damage_done >= 60)
+			if(!IsParalyzed() && prob(damage_done))
+				extra_paralyze += 0.4 SECONDS
+				extra_knockdown += 0.8 SECONDS
+		else if(damage_done >= 20)
+			if(!IsKnockdown() && prob(damage_done * 2))
+				extra_knockdown += 0.4 SECONDS
+
 	apply_effects(
 		stun = hitting_projectile.stun,
-		knockdown = hitting_projectile.knockdown,
+		knockdown = hitting_projectile.knockdown + extra_knockdown,
 		unconscious = hitting_projectile.unconscious,
 		slur = (mob_biotypes & MOB_ROBOTIC) ? 0 SECONDS : hitting_projectile.slur, // Don't want your cyborgs to slur from being ebow'd
 		stutter = (mob_biotypes & MOB_ROBOTIC) ? 0 SECONDS : hitting_projectile.stutter, // Don't want your cyborgs to stutter from being tazed
 		eyeblur = hitting_projectile.eyeblur,
 		drowsy = hitting_projectile.drowsy,
 		blocked = armor_check,
-		stamina = hitting_projectile.stamina,
 		jitter = (mob_biotypes & MOB_ROBOTIC) ? 0 SECONDS : hitting_projectile.jitter, // Cyborgs can jitter but not from being shot
-		paralyze = hitting_projectile.paralyze,
+		paralyze = hitting_projectile.paralyze + extra_paralyze,
 		immobilize = hitting_projectile.immobilize,
 	)
-	if(hitting_projectile.dismemberment)
+	if(hitting_projectile.dismemberment > 0 && !hitting_projectile.grazing)
 		check_projectile_dismemberment(hitting_projectile, def_zone)
 	return BULLET_ACT_HIT
 
 /mob/living/check_projectile_armor(def_zone, obj/projectile/impacting_projectile, is_silent)
-	return run_armor_check(def_zone, impacting_projectile.armor_flag, "","",impacting_projectile.armour_penetration, "", is_silent, impacting_projectile.weak_against_armour)
+	. = run_armor_check(
+		def_zone = def_zone,
+		attack_flag = impacting_projectile.armor_flag,
+		armour_penetration = impacting_projectile.armour_penetration,
+		silent = is_silent,
+		weak_against_armour = impacting_projectile.weak_against_armour,
+	)
+	if(impacting_projectile.grazing)
+		. += 50
+	return .
 
-/mob/living/proc/check_projectile_dismemberment(obj/projectile/P, def_zone)
-	return 0
+/// Attempts to dismember a limb if hit with a projectile that has a dismemberment value.
+/mob/living/proc/check_projectile_dismemberment(obj/projectile/incoming_projectile, def_zone)
+	var/obj/item/bodypart/affecting = get_bodypart(def_zone)
+	if(isnull(affecting) || !affecting.can_dismember())
+		return
+	if((100 * (affecting.get_damage() / affecting.max_damage)) < (100 - incoming_projectile.dismemberment))
+		return
+	affecting.dismember(incoming_projectile.damtype)
+	if(incoming_projectile.catastropic_dismemberment)
+		//stops a projectile blowing off a limb effectively doing no damage. Mostly relevant for sniper rifles.
+		apply_damage(
+			incoming_projectile.damage,
+			incoming_projectile.damtype,
+			BODY_ZONE_CHEST,
+			wound_bonus = incoming_projectile.wound_bonus,
+		)
 
 /obj/item/proc/get_volume_by_throwforce_and_or_w_class()
 		if(throwforce && w_class)
@@ -408,7 +459,7 @@
 	return ..()
 
 /mob/living/acid_act(acidpwr, acid_volume)
-	take_bodypart_damage(acidpwr * min(1, acid_volume * 0.1))
+	damage_random_bodypart(acidpwr * min(1, acid_volume * 0.1))
 	return TRUE
 
 ///As the name suggests, this should be called to apply electric shocks.
@@ -422,9 +473,10 @@
 	if(shock_damage < 1)
 		return FALSE
 	if(!(flags & SHOCK_ILLUSION))
-		adjustFireLoss(shock_damage)
+		set_timed_pain_mod(PAIN_MOD_RECENT_SHOCK, 0.5, 30 SECONDS)
+		apply_damage(shock_damage, BURN, spread_damage = TRUE, wound_bonus = CANT_WOUND)
 	else
-		adjustStaminaLoss(shock_damage)
+		apply_damage(shock_damage, STAMINA, spread_damage = TRUE, wound_bonus = CANT_WOUND)
 	if(!(flags & SHOCK_SUPPRESS_MESSAGE))
 		visible_message(
 			span_danger("[src] was shocked by \the [source]!"), \
@@ -671,3 +723,33 @@
 		return TRUE
 
 	return FALSE
+
+/// Adds a modifier to the mob's surgery and updates any ongoing surgeries.
+/// Multiplicative, so two 0.8 modifiers would result in a 0.64 speed modifier, meaning surgery is 0.64x faster.
+/mob/living/proc/add_surgery_speed_mod(id, speed_mod)
+	if(LAZYACCESS(mob_surgery_speed_mods, id) == speed_mod)
+		return FALSE
+	if(LAZYACCESS(mob_surgery_speed_mods, id))
+		remove_surgery_speed_mod(id)
+
+	LAZYSET(mob_surgery_speed_mods, id, speed_mod)
+	for(var/datum/surgery/ongoing as anything in surgeries)
+		ongoing.speed_modifier *= speed_mod
+	return TRUE
+
+/// Removes a modifier from the mob's surgery and updates any ongoing surgeries.
+/mob/living/proc/remove_surgery_speed_mod(id)
+	var/removing_mod = LAZYACCESS(mob_surgery_speed_mods, id)
+	if(!removing_mod)
+		return FALSE
+
+	LAZYREMOVE(mob_surgery_speed_mods, id)
+	for(var/datum/surgery/ongoing as anything in surgeries)
+		ongoing.speed_modifier /= removing_mod
+	return TRUE
+
+/// Helper to add a surgery speed modifier which is removed after a set duration.
+/mob/living/proc/add_timed_surgery_speed_mod(id, speed_mod, duration)
+	if(!add_surgery_speed_mod(id, speed_mod))
+		return
+	addtimer(CALLBACK(src, PROC_REF(remove_surgery_speed_mod), id), duration)

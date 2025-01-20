@@ -87,6 +87,8 @@
 	var/fallback_icon_state
 	/// When ordered in a restaurant, what custom order do we create?
 	var/restaurant_order = /datum/custom_order/reagent/drink
+	/// Modifier applied by this reagent to how much pain the mob is feeling
+	var/pain_modifier = null
 
 /datum/reagent/New()
 	SHOULD_CALL_PARENT(TRUE)
@@ -200,11 +202,15 @@ Primarily used in reagents/reaction_agents
 
 /// Called when this reagent first starts being metabolized by a liver
 /datum/reagent/proc/on_mob_metabolize(mob/living/affected_mob)
-	return
+	SHOULD_CALL_PARENT(TRUE)
+	if(isnum(pain_modifier))
+		affected_mob.set_pain_mod("[PAIN_MOD_CHEMS]-[name]", pain_modifier)
 
 /// Called when this reagent stops being metabolized by a liver
 /datum/reagent/proc/on_mob_end_metabolize(mob/living/affected_mob)
-	return
+	SHOULD_CALL_PARENT(TRUE)
+	if(isnum(pain_modifier))
+		affected_mob.unset_pain_mod("[PAIN_MOD_CHEMS]-[name]")
 
 /**
  * Called when a reagent is inside of a mob when they are dead if the reagent has the REAGENT_DEAD_PROCESS flag

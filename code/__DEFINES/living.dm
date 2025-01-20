@@ -36,14 +36,22 @@
 /// Amount of pain gained (to chest) from surgically removed limb
 #define PAIN_LIMB_REMOVED 30
 
-/// Soft max pains for bodyparts, adds up to 500
-#define PAIN_LIMB_MAX 70
-#define PAIN_CHEST_MAX 120
-#define PAIN_HEAD_MAX 100
+// Defines for pain (and shock) gained by surgery
+#define SURGERY_PAIN_TRIVIAL 6
+#define SURGERY_PAIN_LOW 12
+#define SURGERY_PAIN_MEDIUM 18
+#define SURGERY_PAIN_HIGH 24
+#define SURGERY_PAIN_SEVERE 36
+#define SURGERY_PAIN_CRITICAL 48
+
+/// Cap on shock level
+#define MAX_TRAUMATIC_SHOCK 200
+
+/// Checks if a mob can feel pain.
+#define CAN_FEEL_PAIN(mob) (mob?.stat <= SOFT_CRIT && mob?.pain_controller?.pain_modifier > 0.33)
 
 // Keys for pain modifiers
 #define PAIN_MOD_CHEMS "chems"
-#define PAIN_MOD_LYING "lying"
 #define PAIN_MOD_NEAR_DEATH "near-death"
 #define PAIN_MOD_KOD "ko-d"
 #define PAIN_MOD_RECENT_SHOCK "recently-shocked"
@@ -58,14 +66,24 @@
 
 /// If the mob enters shock, they will have +1 cure condition (helps cure it faster)
 #define TRAIT_ABATES_SHOCK "shock_abated"
-/// Pain effects, such as stuttering or feedback messages ("Everything hurts") are disabled.
-#define TRAIT_NO_PAIN_EFFECTS "no_pain_effects"
-/// Shock buildup does not increase, only decrease. No effect if already in shock (unlike abates_shock)
-#define TRAIT_NO_SHOCK_BUILDUP "no_shock_buildup"
+/// All this trait does is change your stat to soft crit, which itself doesn't do much,
+/// but as your stat is changed many stat checks will block you (such as using the radio)
+#define TRAIT_SOFT_CRIT "soft_crit"
+/// Skip a breath once in every x breaths (where x is ticks between breaths)
+#define TRAIT_LABOURED_BREATHING "laboured_breathing"
+/// Blocks losebreath from accumulating from things such as heart attacks or choking
+#define TRAIT_ASSISTED_BREATHING "assisted_breathing"
+/// Stops organs from decaying while dead
+#define TRAIT_NO_ORGAN_DECAY "no_organ_decay"
 /// Don't get slowed down by aggro grabbing (or above)
 #define TRAIT_NO_GRAB_SPEED_PENALTY "no_grab_speed_penalty"
 /// Doesn't let a mob shift this atom around with move_pulled
 #define TRAIT_NO_MOVE_PULL "no_move_pull"
+
+/// Boosts the heart rate of the mob
+#define TRAIT_HEART_RATE_BOOST "heart_rate_boost"
+/// Slows the heart rate of the mob
+#define TRAIT_HEART_RATE_SLOW "heart_rate_slow"
 
 /// The trait that determines if someone has the robotic limb reattachment quirk.
 #define TRAIT_ROBOTIC_LIMBATTACHMENT "trait_robotic_limbattachment"
@@ -77,6 +95,16 @@
 
 #define COLOR_BLOOD "#c90000"
 
+/// Checks if the value is "left"
+/// Used primarily for hand or foot indexes
+#define IS_RIGHT(value) (value % 2 == 0)
+/// Checks if the value is "right"
+/// Used primarily for hand or foot indexes
+#define IS_LEFT(value) (value % 2 != 0)
+/// Helper for picking between left or right when given a value
+/// Used primarily for hand or foot indexes
+#define SELECT_LEFT_OR_RIGHT(value, left, right) (IS_LEFT(value) ? left : right)
+
 // Used in ready menu anominity
 /// Hide ckey
 #define CKEY_ANON (1<<0)
@@ -84,3 +112,36 @@
 #define NAME_ANON (1<<1)
 /// Hide top job preference
 #define JOB_ANON (1<<2)
+
+/// Calculates oxyloss cap
+#define MAX_OXYLOSS(maxHealth) (maxHealth * 2)
+
+// Some source defines for pain and consciousness
+// Consciousness ones are human readable because of laziness (they are shown in cause of death)
+#define PAINSHOCK "traumatic shock"
+#define PAINCRIT "paincrit"
+#define PAIN "pain"
+#define HUNGER "starvation"
+#define BRAIN_DAMAGE "brain damage"
+#define BLOOD_LOSS "blood loss"
+#define BLUNT_DAMAGE "blunt force trauma"
+#define BURN_DAMAGE "severe burns"
+#define OXY_DAMAGE "suffocation"
+#define TOX_DAMAGE "toxic poisoning"
+
+// For SShealth_updates
+/// Call update_damage_hud()
+#define UPDATE_SELF_DAMAGE (1 << 0)
+/// Call update_health_hud()
+#define UPDATE_SELF_HEALTH (1 << 1)
+/// Call med_hud_set_health()
+#define UPDATE_MEDHUD_HEALTH (1 << 2)
+/// Call med_hud_set_status()
+#define UPDATE_MEDHUD_STATUS (1 << 3)
+/// Call update_conscisouness()
+#define UPDATE_CON (1 << 4)
+
+/// Updates the entire medhud
+#define UPDATE_MEDHUD (UPDATE_MEDHUD_HEALTH | UPDATE_MEDHUD_STATUS)
+/// Updates associated self-huds on the mob
+#define UPDATE_SELF (UPDATE_SELF_DAMAGE | UPDATE_SELF_HEALTH)

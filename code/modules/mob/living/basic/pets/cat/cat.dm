@@ -33,6 +33,8 @@
 	attack_verb_simple = "claw"
 	attack_sound = 'sound/weapons/slash.ogg'
 	attack_vis_effect = ATTACK_EFFECT_CLAW
+	sharpness = SHARP_EDGED
+	wound_bonus = -10
 	///can this cat breed?
 	var/can_breed = TRUE
 	///can hold items?

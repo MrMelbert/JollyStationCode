@@ -48,7 +48,12 @@
 		span_notice("[user] begins to fix [target]'s brain."),
 		span_notice("[user] begins to perform surgery on [target]'s brain."),
 	)
-	display_pain(target, "Your head pounds with unimaginable pain!", target_zone = target_zone) // NON-MODULE CHANGE // Same message as other brain surgeries
+	display_pain(
+		target = target,
+		target_zone = BODY_ZONE_HEAD,
+		pain_message = "Your head pounds with unimaginable pain!",
+		pain_amount = SURGERY_PAIN_SEVERE,
+	)
 
 /datum/surgery_step/brainwash/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	if(!target.mind)
@@ -81,7 +86,12 @@
 			span_warning("[user] screws up, causing brain damage!"),
 			span_notice("[user] completes the surgery on [target]'s brain."),
 		)
-		display_pain(target, "Your head throbs with horrible pain!", target_zone = target_zone) // NON-MODULE CHANGE
+		display_pain(
+			target = target,
+			target_zone = BODY_ZONE_HEAD,
+			pain_message = "Your head throbs with horrible pain!",
+			pain_amount = SURGERY_PAIN_SEVERE,
+		)
 		target.adjustOrganLoss(ORGAN_SLOT_BRAIN, 40)
 	else
 		user.visible_message(span_warning("[user] suddenly notices that the brain [user.p_they()] [user.p_were()] working on is not there anymore."), span_warning("You suddenly notice that the brain you were working on is not there anymore."))

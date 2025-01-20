@@ -3,8 +3,8 @@
 		return
 
 	if(damageoverlaytemp)
-		damageoverlaytemp = 0
 		update_damage_hud()
+		damageoverlaytemp = 0
 
 	if(HAS_TRAIT(src, TRAIT_STASIS))
 		. = ..()
@@ -24,11 +24,7 @@
 		if(stat != DEAD)
 			handle_brain_damage(seconds_per_tick, times_fired)
 
-	if(stat == DEAD)
-		stop_sound_channel(CHANNEL_HEARTBEAT)
-	else
-		if(getStaminaLoss() > 0 && stam_regen_start_time <= world.time)
-			adjustStaminaLoss(-INFINITY)
+	if(stat != DEAD)
 		handle_bodyparts(seconds_per_tick, times_fired)
 
 	if(. && mind) //. == not dead
@@ -44,86 +40,85 @@
 
 // Start of a breath chain, calls [carbon/proc/breathe()]
 /mob/living/carbon/handle_breathing(seconds_per_tick, times_fired)
+	if(HAS_TRAIT(src, TRAIT_NOBREATH))
+		return
+
 	var/next_breath = 4
-	var/obj/item/organ/internal/lungs/L = get_organ_slot(ORGAN_SLOT_LUNGS)
-	var/obj/item/organ/internal/heart/H = get_organ_slot(ORGAN_SLOT_HEART)
-	if(L)
-		if(L.damage > L.high_threshold)
-			next_breath--
-	if(H)
-		if(H.damage > H.high_threshold)
-			next_breath--
+	var/obj/item/organ/internal/lungs/lungs = get_organ_slot(ORGAN_SLOT_LUNGS)
+	var/obj/item/organ/internal/heart/heart = get_organ_slot(ORGAN_SLOT_HEART)
+	if(lungs?.damage > lungs?.high_threshold)
+		next_breath -= 1
+	if(heart?.damage > heart?.high_threshold)
+		next_breath -= 1
 
 	if((times_fired % next_breath) == 0 || failed_last_breath)
-		breathe(seconds_per_tick, times_fired) //Breathe per 4 ticks if healthy, down to 2 if our lungs or heart are damaged, unless suffocating
+		// Breathe per 4 ticks if healthy, down to 2 if our lungs or heart are damaged, unless suffocating
+		breathe(seconds_per_tick, times_fired, failed_last_breath ? 1 : next_breath)
 		if(failed_last_breath)
 			add_mood_event("suffocation", /datum/mood_event/suffocation)
 		else
 			clear_mood_event("suffocation")
-	else
-		if(isobj(loc))
-			var/obj/location_as_object = loc
-			location_as_object.handle_internal_lifeform(src,0)
+	else if(isobj(loc))
+		var/obj/location_as_object = loc
+		location_as_object.handle_internal_lifeform(src, 0)
 
 // Second link in a breath chain, calls [carbon/proc/check_breath()]
-/mob/living/carbon/proc/breathe(seconds_per_tick, times_fired)
-	var/obj/item/organ/internal/lungs = get_organ_slot(ORGAN_SLOT_LUNGS)
-	if(SEND_SIGNAL(src, COMSIG_CARBON_ATTEMPT_BREATHE) & COMSIG_CARBON_BLOCK_BREATH)
-		return
-
-	SEND_SIGNAL(src, COMSIG_CARBON_PRE_BREATHE)
-
-	var/datum/gas_mixture/environment
-	if(loc)
-		environment = loc.return_air()
-
+/mob/living/carbon/proc/breathe(seconds_per_tick, times_fired, next_breath = 4)
+	var/datum/gas_mixture/environment = loc?.return_air()
 	var/datum/gas_mixture/breath
 
-	if(!get_organ_slot(ORGAN_SLOT_BREATHING_TUBE))
-		if(health <= HEALTH_THRESHOLD_FULLCRIT || (pulledby?.grab_state >= GRAB_KILL) || (lungs?.organ_flags & ORGAN_FAILING))
-			losebreath++  //You can't breath at all when in critical or when being choked, so you're going to miss a breath
+	if(!HAS_TRAIT(src, TRAIT_ASSISTED_BREATHING))
+		if(stat == HARD_CRIT && !internal && !external) // being on internals function as a ventilator + also makes anesthetic function (revisit later)
+			losebreath = max(losebreath, 1)
+		else if(HAS_TRAIT(src, TRAIT_LABOURED_BREATHING))
+			losebreath += (1 / next_breath)
 
-		else if(health <= crit_threshold)
-			losebreath += 0.25 //You're having trouble breathing in soft crit, so you'll miss a breath one in four times
+	if(losebreath < 1)
+		var/pre_sig_return = SEND_SIGNAL(src, COMSIG_CARBON_ATTEMPT_BREATHE, seconds_per_tick, times_fired)
+		if(pre_sig_return & BREATHE_BLOCK_BREATH)
+			return
 
-	//Suffocate
-	if(losebreath >= 1) //You've missed a breath, take oxy damage
-		losebreath--
-		if(prob(10))
-			emote("gasp")
+		if(pre_sig_return & BREATHE_SKIP_BREATH)
+			losebreath = max(losebreath, 1)
+
+	// Suffocate
+	var/skip_breath = FALSE
+	if(losebreath >= 1)
+		losebreath -= 1
+		if(prob(10) && consciousness > 10)
+			pain_emote("gasp", 1 SECONDS)
 		if(isobj(loc))
 			var/obj/loc_as_obj = loc
-			loc_as_obj.handle_internal_lifeform(src,0)
-	else
-		//Breathe from internal
+			loc_as_obj.handle_internal_lifeform(src, 0)
+		skip_breath = TRUE
+
+	// Breathe from internals or externals (name is misleading)
+	else if(internal || external)
 		breath = get_breath_from_internal(BREATH_VOLUME)
 
-		if(isnull(breath)) //in case of 0 pressure internals
+		if(breath == SKIP_INTERNALS) //in case of 0 pressure internals
+			breath = get_breath_from_surroundings(environment, BREATH_VOLUME)
 
-			if(isobj(loc)) //Breathe from loc as object
-				var/obj/loc_as_obj = loc
-				breath = loc_as_obj.handle_internal_lifeform(src, BREATH_VOLUME)
+		else if(isobj(loc)) //Breathe from loc as obj again
+			var/obj/loc_as_obj = loc
+			loc_as_obj.handle_internal_lifeform(src, 0)
 
-			else if(isturf(loc)) //Breathe from loc as turf
-				var/breath_moles = 0
-				if(environment)
-					breath_moles = environment.total_moles()*BREATH_PERCENTAGE
+	// Breathe from air
+	else
+		breath = get_breath_from_surroundings(environment, BREATH_VOLUME)
 
-				breath = loc.remove_air(breath_moles)
-		else //Breathe from loc as obj again
-			if(isobj(loc))
-				var/obj/loc_as_obj = loc
-				loc_as_obj.handle_internal_lifeform(src,0)
-
-	check_breath(breath)
+	check_breath(breath, skip_breath)
 
 	if(breath)
-		loc.assume_air(breath)
+		exhale_breath(breath)
+
+/mob/living/carbon/proc/exhale_breath(datum/gas_mixture/breath)
+	if(SEND_SIGNAL(src, COMSIG_CARBON_BREATH_EXHALE, breath) & BREATHE_EXHALE_HANDLED)
+		return
+	loc.assume_air(breath)
 
 /mob/living/carbon/proc/has_smoke_protection()
-	if(HAS_TRAIT(src, TRAIT_NOBREATH))
-		return TRUE
-	return FALSE
+	return HAS_TRAIT(src, TRAIT_NOBREATH)
 
 /**
  * This proc tests if the lungs can breathe, if the mob can breathe a given gas mixture, and throws/clears gas alerts.
@@ -134,314 +129,56 @@
  *
  * Arguments:
  * * breath: A gas mixture to test, or null.
+ * * skip_breath: Used to differentiate between a failed breath and a lack of breath.
+ * A mob suffocating due to being in a vacuum may be treated differently than a mob suffocating due to lung failure.
  */
-/mob/living/carbon/proc/check_breath(datum/gas_mixture/breath)
-	. = TRUE
-
-	if(status_flags & GODMODE)
-		failed_last_breath = FALSE
-		clear_alert(ALERT_NOT_ENOUGH_OXYGEN)
-		return
-
-	if(HAS_TRAIT(src, TRAIT_NOBREATH))
-		return
-
-	// Breath may be null, so use a fallback "empty breath" for convenience.
-	if(!breath)
-		/// Fallback "empty breath" for convenience.
-		var/static/datum/gas_mixture/immutable/empty_breath = new(BREATH_VOLUME)
-		breath = empty_breath
-
-	// Ensure gas volumes are present.
-	breath.assert_gases(/datum/gas/bz, /datum/gas/carbon_dioxide, /datum/gas/freon, /datum/gas/plasma, /datum/gas/pluoxium, /datum/gas/miasma, /datum/gas/nitrous_oxide, /datum/gas/nitrium, /datum/gas/oxygen)
-
-	/// The list of gases in the breath.
-	var/list/breath_gases = breath.gases
-	/// Indicates if there are moles of gas in the breath.
-	var/has_moles = breath.total_moles() != 0
-
-	var/obj/item/organ/internal/lungs = get_organ_slot(ORGAN_SLOT_LUNGS)
-	// Indicates if lungs can breathe without gas.
-	var/can_breathe_vacuum = FALSE
-	if(lungs)
-		// Breathing with lungs.
-		// Check for vacuum-adapted lungs.
-		can_breathe_vacuum = HAS_TRAIT(lungs, TRAIT_SPACEBREATHING)
-	else
-		// Lungs are missing! Can't breathe.
-		// Simulates breathing zero moles of gas.
-		has_moles = FALSE
-		// Extra damage, let God sort ’em out!
-		adjustOxyLoss(2)
-
-	/// Minimum O2 before suffocation.
-	var/safe_oxygen_min = 16
-	/// Maximum CO2 before side-effects.
-	var/safe_co2_max = 10
-	/// Maximum Plasma before side-effects.
-	var/safe_plas_max = 0.05
-	/// Maximum Pluoxum before side-effects.
-	var/gas_stimulation_min = 0.002 // For Pluoxium
-	// Vars for N2O induced euphoria, stun, and sleep.
-	var/n2o_euphoria = EUPHORIA_LAST_FLAG
-	var/n2o_para_min = 1
-	var/n2o_sleep_min = 5
-
-	// Partial pressures in our breath
-	// Main gases.
-	var/pluoxium_pp = 0
-	var/o2_pp = 0
-	var/plasma_pp = 0
-	var/co2_pp = 0
-	// Trace gases ordered alphabetically.
-	var/bz_pp = 0
-	var/freon_pp = 0
-	var/n2o_pp = 0
-	var/nitrium_pp = 0
-	var/miasma_pp = 0
-
-	// Check for moles of gas and handle partial pressures / special conditions.
-	if(has_moles)
-		// Breath has more than 0 moles of gas.
-		// Partial pressures of "main gases".
-		pluoxium_pp = breath.get_breath_partial_pressure(breath_gases[/datum/gas/pluoxium][MOLES])
-		o2_pp = breath.get_breath_partial_pressure(breath_gases[/datum/gas/oxygen][MOLES] + (PLUOXIUM_PROPORTION * pluoxium_pp))
-		plasma_pp = breath.get_breath_partial_pressure(breath_gases[/datum/gas/plasma][MOLES])
-		co2_pp = breath.get_breath_partial_pressure(breath_gases[/datum/gas/carbon_dioxide][MOLES])
-		// Partial pressures of "trace" gases.
-		bz_pp = breath.get_breath_partial_pressure(breath_gases[/datum/gas/bz][MOLES])
-		freon_pp = breath.get_breath_partial_pressure(breath_gases[/datum/gas/freon][MOLES])
-		miasma_pp = breath.get_breath_partial_pressure(breath_gases[/datum/gas/miasma][MOLES])
-		n2o_pp = breath.get_breath_partial_pressure(breath_gases[/datum/gas/nitrous_oxide][MOLES])
-		nitrium_pp = breath.get_breath_partial_pressure(breath_gases[/datum/gas/nitrium][MOLES])
-
-	// Breath has 0 moles of gas.
-	else if(can_breathe_vacuum)
-		// The mob can breathe anyways. What are you? Some bottom-feeding, scum-sucking algae eater?
-		failed_last_breath = FALSE
-		// Vacuum-adapted lungs regenerate oxyloss even when breathing nothing.
-		if(health >= crit_threshold)
-			adjustOxyLoss(-5)
-	else
-		// Can't breathe! Lungs are missing, and/or breath is empty.
-		. = FALSE
-		failed_last_breath = TRUE
-
-	//-- PLUOXIUM --//
-	// Behaves like Oxygen with 8X efficacy, but metabolizes into a reagent.
-	if(pluoxium_pp)
-		// Inhale Pluoxium. Exhale nothing.
-		breath_gases[/datum/gas/pluoxium][MOLES] = 0
-		// Metabolize to reagent.
-		if(pluoxium_pp > gas_stimulation_min)
-			var/existing = reagents.get_reagent_amount(/datum/reagent/pluoxium)
-			reagents.add_reagent(/datum/reagent/pluoxium, max(0, 1 - existing))
-
-	//-- OXYGEN --//
-	// Carbons need only Oxygen to breathe properly.
-	var/oxygen_used = 0
-	// Minimum Oxygen effects. "Too little oxygen!"
-	if(!can_breathe_vacuum && (o2_pp < safe_oxygen_min))
-		// Breathe insufficient amount of O2.
-		oxygen_used = handle_suffocation(o2_pp, safe_oxygen_min, breath_gases[/datum/gas/oxygen][MOLES])
-		throw_alert(ALERT_NOT_ENOUGH_OXYGEN, /atom/movable/screen/alert/not_enough_oxy)
-	else
-		// Enough oxygen to breathe.
-		failed_last_breath = FALSE
-		clear_alert(ALERT_NOT_ENOUGH_OXYGEN)
-		if(o2_pp)
-			// Inhale O2.
-			oxygen_used = breath_gases[/datum/gas/oxygen][MOLES]
-			// Heal mob if not in crit.
-			if(health >= crit_threshold)
-				adjustOxyLoss(-5)
-	// Exhale equivalent amount of CO2.
-	if(o2_pp)
-		breath_gases[/datum/gas/oxygen][MOLES] -= oxygen_used
-		breath_gases[/datum/gas/carbon_dioxide][MOLES] += oxygen_used
-
-	//-- CARBON DIOXIDE --//
-	// Maximum CO2 effects. "Too much CO2!"
-	if(co2_pp > safe_co2_max)
-		// CO2 side-effects.
-		// Give the mob a chance to notice.
-		if(prob(20))
-			emote("cough")
-		// If it's the first breath with too much CO2 in it, lets start a counter, then have them pass out after 12s or so.
-		if(!co2overloadtime)
-			co2overloadtime = world.time
-		else if((world.time - co2overloadtime) > 12 SECONDS)
-			throw_alert(ALERT_TOO_MUCH_CO2, /atom/movable/screen/alert/too_much_co2)
-			Unconscious(6 SECONDS)
-			// Lets hurt em a little, let them know we mean business.
-			adjustOxyLoss(3)
-			// They've been in here 30s now, start to kill them for their own good!
-			if((world.time - co2overloadtime) > 30 SECONDS)
-				adjustOxyLoss(8)
-	else
-		// Reset side-effects.
-		co2overloadtime = 0
-		clear_alert(ALERT_TOO_MUCH_CO2)
-
-	//-- PLASMA --//
-	// Maximum Plasma effects. "Too much Plasma!"
-	if(plasma_pp > safe_plas_max)
-		// Plasma side-effects.
-		var/ratio = (breath_gases[/datum/gas/plasma][MOLES] / safe_plas_max) * 10
-		adjustToxLoss(clamp(ratio, MIN_TOXIC_GAS_DAMAGE, MAX_TOXIC_GAS_DAMAGE))
-		throw_alert(ALERT_TOO_MUCH_PLASMA, /atom/movable/screen/alert/too_much_plas)
-	else
-		// Reset side-effects.
-		clear_alert(ALERT_TOO_MUCH_PLASMA)
-
-	//-- TRACES --//
-	// If there's some other funk in the air lets deal with it here.
-
-	//-- BZ --//
-	// (Facepunch port of their Agent B)
-	if(bz_pp)
-		if(bz_pp > 1)
-			adjust_hallucinations(20 SECONDS)
-		else if(bz_pp > 0.01)
-			adjust_hallucinations(10 SECONDS)
-
-	//-- FREON --//
-	if(freon_pp)
-		adjustFireLoss(freon_pp * 0.25)
-
-	//-- MIASMA --//
-	if(!miasma_pp)
-	// Clear moodlet if no miasma at all.
-		clear_mood_event("smell")
-	else
-		// Miasma sickness
-		if(prob(1 * miasma_pp))
-			var/datum/disease/advance/miasma_disease = new /datum/disease/advance/random(max_symptoms = 2, max_level = 3)
-			miasma_disease.name = "Unknown"
-			ForceContractDisease(miasma_disease, make_copy = TRUE, del_on_fail = TRUE)
-		// Miasma side-effects.
-		switch(miasma_pp)
-			if(0.25 to 5)
-				// At lower pp, give out a little warning
-				clear_mood_event("smell")
-				if(prob(5))
-					to_chat(src, span_notice("There is an unpleasant smell in the air."))
-			if(5 to 20)
-				//At somewhat higher pp, warning becomes more obvious
-				if(prob(15))
-					to_chat(src, span_warning("You smell something horribly decayed inside this room."))
-					add_mood_event("smell", /datum/mood_event/disgust/bad_smell)
-			if(15 to 30)
-				//Small chance to vomit. By now, people have internals on anyway
-				if(prob(5))
-					to_chat(src, span_warning("The stench of rotting carcasses is unbearable!"))
-					add_mood_event("smell", /datum/mood_event/disgust/nauseating_stench)
-					vomit(VOMIT_CATEGORY_DEFAULT)
-			if(30 to INFINITY)
-				//Higher chance to vomit. Let the horror start
-				if(prob(25))
-					to_chat(src, span_warning("The stench of rotting carcasses is unbearable!"))
-					add_mood_event("smell", /datum/mood_event/disgust/nauseating_stench)
-					vomit(VOMIT_CATEGORY_DEFAULT)
-			else
-				clear_mood_event("smell")
-
-	//-- NITROUS OXIDE --//
-	if(n2o_pp > n2o_para_min)
-		// More N2O, more severe side-effects. Causes stun/sleep.
-		n2o_euphoria = EUPHORIA_ACTIVE
-		throw_alert(ALERT_TOO_MUCH_N2O, /atom/movable/screen/alert/too_much_n2o)
-		// give them one second of grace to wake up and run away a bit!
-		if(!HAS_TRAIT(src, TRAIT_SLEEPIMMUNE))
-			Unconscious(6 SECONDS)
-		// Enough to make the mob sleep.
-		if(n2o_pp > n2o_sleep_min)
-			Sleeping(max(AmountSleeping() + 40, 200))
-	else if(n2o_pp > 0.01)
-		// No alert for small amounts, but the mob randomly feels euphoric.
-		if(prob(20))
-			n2o_euphoria = EUPHORIA_ACTIVE
-			emote(pick("giggle","laugh"))
-		else
-			n2o_euphoria = EUPHORIA_INACTIVE
-	else
-	// Reset side-effects, for zero or extremely small amounts of N2O.
-		n2o_euphoria = EUPHORIA_INACTIVE
-		clear_alert(ALERT_TOO_MUCH_N2O)
-
-	//-- NITRIUM --//
-	if(nitrium_pp)
-		var/need_mob_update = FALSE
-		if(nitrium_pp > 0.5)
-			need_mob_update += adjustFireLoss(nitrium_pp * 0.15, updating_health = FALSE)
-		if(nitrium_pp > 5)
-			need_mob_update += adjustToxLoss(nitrium_pp * 0.05, updating_health = FALSE)
-		if(need_mob_update)
-			updatehealth()
-
-	// Handle chemical euphoria mood event, caused by N2O.
-	if (n2o_euphoria == EUPHORIA_ACTIVE)
-		add_mood_event("chemical_euphoria", /datum/mood_event/chemical_euphoria)
-	else if (n2o_euphoria == EUPHORIA_INACTIVE)
-		clear_mood_event("chemical_euphoria")
-	// Activate mood on first flag, remove on second, do nothing on third.
-
-	if(has_moles)
-		handle_breath_temperature(breath)
-
-	breath.garbage_collect()
-
-/// Applies suffocation side-effects to a given Human, scaling based on ratio of required pressure VS "true" pressure.
-/// If pressure is greater than 0, the return value will represent the amount of gas successfully breathed.
-/mob/living/carbon/proc/handle_suffocation(breath_pp = 0, safe_breath_min = 0, true_pp = 0)
-	. = 0
-	// Can't suffocate without minimum breath pressure.
-	if(!safe_breath_min)
-		return
-	// Mob is suffocating.
-	failed_last_breath = TRUE
-	// Give them a chance to notice something is wrong.
-	if(prob(20))
-		emote("gasp")
-	// Mob is at critical health, check if they can be damaged further.
-	if(health < crit_threshold)
-		// Mob is immune to damage at critical health.
-		if(HAS_TRAIT(src, TRAIT_NOCRITDAMAGE))
-			return
-		// Reagents like Epinephrine stop suffocation at critical health.
-		if(reagents.has_reagent(/datum/reagent/medicine/epinephrine, needs_metabolizing = TRUE))
-			return
-	// Low pressure.
-	if(breath_pp)
-		var/ratio = safe_breath_min / breath_pp
-		adjustOxyLoss(min(5 * ratio, 3))
-		return true_pp * ratio / 6
-	// Zero pressure.
-	if(health >= crit_threshold)
-		adjustOxyLoss(3)
-	else
-		adjustOxyLoss(1)
+/mob/living/carbon/proc/check_breath(datum/gas_mixture/breath, skip_breath = FALSE)
+	return
 
 /// Fourth and final link in a breath chain
 /mob/living/carbon/proc/handle_breath_temperature(datum/gas_mixture/breath)
 	// The air you breathe out should match your body temperature
 	breath.temperature = body_temperature
 
-/// Attempts to take a breath from the external or internal air tank.
+/**
+ * Attempts to take a breath from the external or internal air tank.
+ *
+ * Return a gas mixture datum if a breath was taken
+ * Return null if there was no gas inside the tank or no gas was distributed
+ * Return SKIP_INTERNALS to skip using internals entirely and get a normal breath
+ */
 /mob/living/carbon/proc/get_breath_from_internal(volume_needed)
 	if(invalid_internals())
 		// Unexpectely lost breathing apparatus and ability to breathe from the internal air tank.
 		cutoff_internals()
-		return
+		return SKIP_INTERNALS
+
 	if (external)
 		. = external.remove_air_volume(volume_needed)
 	else if (internal)
 		. = internal.remove_air_volume(volume_needed)
 	else
 		// Return without taking a breath if there is no air tank.
-		return
-	// To differentiate between no internals and active, but empty internals.
-	return . || FALSE
+		stack_trace("get_breath_from_internal called on a mob without internals or externals")
+		return SKIP_INTERNALS
+
+	return .
+
+/**
+ * Attempts to take a breath from the surroundings.
+ *
+ * Returns a gas mixture datum if a breath was taken.
+ * Returns null if there was no gas in the surroundings or no gas was distributed.
+ */
+/mob/living/carbon/proc/get_breath_from_surroundings(datum/gas_mixture/environment, volume_needed)
+	if(isobj(loc)) //Breathe from loc as object
+		var/obj/loc_as_obj = loc
+		. = loc_as_obj.handle_internal_lifeform(src, volume_needed)
+
+	else if(isturf(loc)) //Breathe from loc as turf
+		. = loc.remove_air((environment?.total_moles() * BREATH_PERCENTAGE) || 0)
+
+	return .
 
 /mob/living/carbon/proc/handle_blood(seconds_per_tick, times_fired)
 	return
@@ -452,8 +189,6 @@
 
 /mob/living/carbon/proc/handle_organs(seconds_per_tick, times_fired)
 	if(stat == DEAD)
-		if(reagents && (reagents.has_reagent(/datum/reagent/toxin/formaldehyde, 1) || reagents.has_reagent(/datum/reagent/cryostylane))) // No organ decay if the body contains formaldehyde.
-			return
 		for(var/obj/item/organ/internal/organ in organs)
 			// On-death is where organ decay is handled
 			if(organ?.owner) // organ + owner can be null due to reagent metabolization causing organ shuffling
@@ -705,7 +440,7 @@
  * Returns TRUE if heart status was changed (heart attack -> no heart attack, or visa versa)
  */
 /mob/living/carbon/proc/set_heartattack(status)
-	if(!can_heartattack())
+	if(status && !can_heartattack())
 		return FALSE
 
 	var/obj/item/organ/internal/heart/heart = get_organ_slot(ORGAN_SLOT_HEART)

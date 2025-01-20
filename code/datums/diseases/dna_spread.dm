@@ -46,7 +46,7 @@
 			if(SPT_PROB(0.5, seconds_per_tick))
 				to_chat(affected_mob, span_danger("Your muscles ache."))
 				if(prob(20))
-					affected_mob.take_bodypart_damage(1, updating_health = FALSE)
+					affected_mob.damage_random_bodypart(1)
 			if(SPT_PROB(0.5, seconds_per_tick))
 				to_chat(affected_mob, span_danger("Your stomach hurts."))
 				if(prob(20))

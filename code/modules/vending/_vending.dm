@@ -802,10 +802,9 @@
 					if(prob(30))
 						carbon_target.apply_damage(max(0, adjusted_damage), damage_type, blocked = blocked, forced = TRUE, spread_damage = TRUE, attack_direction = crush_dir) // the 30% chance to spread the damage means you escape breaking any bones
 					else
-						var/brute = (damage_type == BRUTE ? damage : 0) * 0.5
-						var/burn = (damage_type == BURN ? damage : 0) * 0.5
-						carbon_target.take_bodypart_damage(brute, burn, check_armor = TRUE, wound_bonus = 5) // otherwise, deal it to 2 random limbs (or the same one) which will likely shatter something
-						carbon_target.take_bodypart_damage(brute, burn, check_armor = TRUE, wound_bonus = 5)
+						for(var/i in 1 to rand(2, 4))
+							carbon_target.damage_random_bodypart(damage * 0.5, damage_type, check_armor = TRUE, wound_bonus = 5) // otherwise, deal it to 2 random limbs (or the same one) which will likely shatter something
+
 					carbon_target.AddElement(/datum/element/squish, 80 SECONDS)
 				else
 					living_target.apply_damage(adjusted_damage, damage_type, blocked = blocked, forced = TRUE, attack_direction = crush_dir)
@@ -928,13 +927,10 @@
 				return FALSE
 			var/mob/living/carbon/carbon_target = atom_target
 			carbon_target.bleed(150)
-			var/obj/item/bodypart/leg/left/left_leg = carbon_target.get_bodypart(BODY_ZONE_L_LEG)
-			if(left_leg)
-				left_leg.receive_damage(brute = 200)
-			var/obj/item/bodypart/leg/right/right_leg = carbon_target.get_bodypart(BODY_ZONE_R_LEG)
-			if(right_leg)
-				right_leg.receive_damage(brute = 200)
-			if(left_leg || right_leg)
+			var/dam = 0
+			dam += carbon_target.apply_damage(200, BRUTE, BODY_ZONE_L_LEG)
+			dam += carbon_target.apply_damage(200, BRUTE, BODY_ZONE_R_LEG)
+			if(dam)
 				carbon_target.visible_message(span_danger("[carbon_target]'s legs shatter with a sickening crunch!"), span_userdanger("Your legs shatter with a sickening crunch!"))
 			return TRUE
 		if(CRUSH_CRIT_PARAPALEGIC) // paralyze this binch
@@ -952,7 +948,7 @@
 			for(var/obj/item/bodypart/squish_part in carbon_target.bodyparts)
 				var/severity = pick(WOUND_SEVERITY_MODERATE, WOUND_SEVERITY_SEVERE, WOUND_SEVERITY_CRITICAL)
 				if (!carbon_target.cause_wound_of_type_and_severity(WOUND_BLUNT, squish_part, severity, wound_source = "crushed by [src]"))
-					squish_part.receive_damage(brute = 30)
+					carbon_target.apply_damage(30, BRUTE, squish_part)
 			carbon_target.visible_message(span_danger("[carbon_target]'s body is maimed underneath the mass of [src]!"), span_userdanger("Your body is maimed underneath the mass of [src]!"))
 			return TRUE
 		if(CRUSH_CRIT_HEADGIB) // skull squish!
@@ -983,11 +979,9 @@
 			var/mob/living/carbon/carbon_target = atom_target
 			for(var/i in 1 to num_shards)
 				var/obj/item/shard/shard = new /obj/item/shard(get_turf(carbon_target))
-				shard.embedding = list(embed_chance = 100, ignore_throwspeed_threshold = TRUE, impact_pain_mult = 1, pain_chance = 5)
-				shard.updateEmbedding()
+				shard.set_embed(/datum/embed_data/glass_candy)
 				carbon_target.hitby(shard, skipcatch = TRUE, hitpush = FALSE)
-				shard.embedding = list()
-				shard.updateEmbedding()
+				shard.set_embed(initial(shard.embed_type))
 			return TRUE
 		if (VENDOR_CRUSH_CRIT_PIN) // pin them beneath the machine until someone untilts it
 			if (!isliving(atom_target))

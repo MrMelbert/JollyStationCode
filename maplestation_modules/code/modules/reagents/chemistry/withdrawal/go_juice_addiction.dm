@@ -22,6 +22,8 @@
 	. = ..()
 	affected_carbon.set_pain_mod(PAIN_MOD_GOJUICE_ADDICT, 1.5)
 	affected_carbon.add_movespeed_modifier(/datum/movespeed_modifier/reagent/gojuice_addiction)
+	affected_carbon.add_max_consciousness_value(type, 145)
+	affected_carbon.add_consciousness_modifier(type, -5)
 
 /datum/addiction/gojuice/withdrawal_stage_1_process(mob/living/carbon/affected_carbon, seconds_per_tick)
 	. = ..()
@@ -32,6 +34,8 @@
 	affected_carbon.become_nearsighted(type)
 	affected_carbon.set_pain_mod(PAIN_MOD_GOJUICE_ADDICT, 2)
 	affected_carbon.add_movespeed_modifier(/datum/movespeed_modifier/reagent/gojuice_addiction)
+	affected_carbon.add_max_consciousness_value(type, 140)
+	affected_carbon.add_consciousness_modifier(type, -10)
 
 /datum/addiction/gojuice/withdrawal_stage_2_process(mob/living/carbon/affected_carbon, seconds_per_tick)
 	. = ..()
@@ -45,6 +49,8 @@
 	. = ..()
 	affected_carbon.set_pain_mod(PAIN_MOD_GOJUICE_ADDICT, 3)
 	affected_carbon.add_movespeed_modifier(/datum/movespeed_modifier/reagent/gojuice_addiction)
+	affected_carbon.add_max_consciousness_value(type, 130)
+	affected_carbon.add_consciousness_modifier(type, -20)
 
 /datum/addiction/gojuice/withdrawal_stage_3_process(mob/living/carbon/affected_carbon, seconds_per_tick)
 	. = ..()
@@ -59,3 +65,5 @@
 	affected_carbon.cure_nearsighted(type)
 	affected_carbon.unset_pain_mod(PAIN_MOD_GOJUICE_ADDICT)
 	affected_carbon.remove_movespeed_modifier(/datum/movespeed_modifier/reagent/gojuice_addiction)
+	affected_carbon.remove_consciousness_modifier(type)
+	affected_carbon.remove_max_consciousness_value(type)

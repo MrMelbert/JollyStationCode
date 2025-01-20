@@ -6,6 +6,8 @@
 #define STATUS_EFFECT_REPLACE 2
 /// if it only allows one, and new instances just instead refresh the timer
 #define STATUS_EFFECT_REFRESH 3
+/// Like [STATUS_EFFECT_REPLACE] but only for differing types - Only replace if the new effect is of a different typepath
+#define STATUS_EFFECT_LOOSE_REPLACE 4
 
 ///Processing flags - used to define the speed at which the status will work
 ///This is fast - 0.2s between ticks (I believe!)

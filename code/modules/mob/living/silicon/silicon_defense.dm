@@ -117,9 +117,9 @@
 		return
 	switch(severity)
 		if(1)
-			src.take_bodypart_damage(20)
+			src.apply_damage(20, BRUTE)
 		if(2)
-			src.take_bodypart_damage(10)
+			src.apply_damage(10, BRUTE)
 	to_chat(src, span_userdanger("*BZZZT*"))
 	for(var/mob/living/M in buckled_mobs)
 		if(prob(severity*50))

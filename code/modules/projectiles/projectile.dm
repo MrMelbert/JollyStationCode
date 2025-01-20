@@ -14,12 +14,16 @@
 	generic_canpass = FALSE
 	blocks_emissive = EMISSIVE_BLOCK_GENERIC
 	layer = MOB_LAYER
+
+	var/generic_name
 	//The sound this plays on impact.
 	var/hitsound = 'sound/weapons/pierce.ogg'
 	var/hitsound_wall = ""
 
 	resistance_flags = LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
 	var/def_zone = "" //Aiming at
+	/// Set to TRUE if we're grazing, which affects the message / embed chance / damage / effects
+	var/grazing = FALSE
 	var/atom/movable/firer = null//Who shot it
 	var/datum/fired_from = null // the thing that the projectile was fired from (gun, turret, spell)
 	var/suppressed = FALSE //Attack message
@@ -173,13 +177,18 @@
 	var/jitter = 0 SECONDS
 	/// Extra stamina damage applied on projectile hit (in addition to the main damage)
 	var/stamina = 0
+	/// Bonus pain, like stamina damage
+	var/pain = 0
 	/// Stuttering applied on projectile hit
 	var/stutter = 0 SECONDS
 	/// Slurring applied on projectile hit
 	var/slur = 0 SECONDS
 
-	var/dismemberment = 0 //The higher the number, the greater the bonus to dismembering. 0 will not dismember at all.
-	var/catastropic_dismemberment = FALSE //If TRUE, this projectile deals its damage to the chest if it dismembers a limb.
+	/// If we hit a limb and damage it beyond this threshold, ie (100 - this %) it will dismember. 0 = will never dismember
+	var/dismemberment = 0
+	/// If TRUE, this projectile deals its damage to the chest if it dismembers a limb.
+	var/catastropic_dismemberment = FALSE
+
 	var/impact_effect_type //what type of impact effect to show when hitting something
 	var/log_override = FALSE //is this type spammed enough to not log? (KAs)
 	/// We ignore mobs with these factions.
@@ -188,8 +197,10 @@
 	///If defined, on hit we create an item of this type then call hitby() on the hit target with this, mainly used for embedding items (bullets) in targets
 	var/shrapnel_type
 	///If we have a shrapnel_type defined, these embedding stats will be passed to the spawned shrapnel type, which will roll for embedding on the target
-	var/list/embedding
-	///If TRUE, hit mobs even if they're on the floor and not our target
+	var/embed_type
+	///Saves embedding data
+	VAR_FINAL/datum/embed_data/embed_data
+	///If TRUE, hit mobs, even if they are lying on the floor and are not our target within MAX_RANGE_HIT_PRONE_TARGETS tiles
 	var/hit_prone_targets = FALSE
 	///For what kind of brute wounds we're rolling for, if we're doing such a thing. Lasers obviously don't care since they do burn instead.
 	var/sharpness = NONE
@@ -213,8 +224,8 @@
 /obj/projectile/Initialize(mapload)
 	. = ..()
 	decayedRange = range
-	if(embedding)
-		updateEmbedding()
+	if(get_embed())
+		AddElement(/datum/element/embed)
 	AddElement(/datum/element/connect_loc, projectile_connections)
 
 /obj/projectile/proc/Range()
@@ -222,8 +233,8 @@
 	if(wound_bonus != CANT_WOUND)
 		wound_bonus += wound_falloff_tile
 		bare_wound_bonus = max(0, bare_wound_bonus + wound_falloff_tile)
-	if(embedding)
-		embedding["embed_chance"] += embed_falloff_tile
+	if(get_embed())
+		set_embed(embed_data.generate_with_values(embed_data.embed_chance + embed_falloff_tile)) // Should be rewritten in projecitle refactor
 	if(damage_falloff_tile && damage >= 0)
 		damage += damage_falloff_tile
 	if(stamina_falloff_tile && stamina >= 0)
@@ -239,17 +250,6 @@
 /obj/projectile/proc/on_range() //if we want there to be effects when they reach the end of their range
 	SEND_SIGNAL(src, COMSIG_PROJECTILE_RANGE_OUT)
 	qdel(src)
-
-/// Returns the string form of the def_zone we have hit.
-/mob/living/proc/check_hit_limb_zone_name(hit_zone)
-	if(has_limbs)
-		return hit_zone
-
-/mob/living/carbon/check_hit_limb_zone_name(hit_zone)
-	if(get_bodypart(hit_zone))
-		return hit_zone
-	else //when a limb is missing the damage is actually passed to the chest
-		return BODY_ZONE_CHEST
 
 /**
  * Called when the projectile hits something
@@ -270,15 +270,9 @@
 /obj/projectile/proc/on_hit(atom/target, blocked = 0, pierce_hit)
 	SHOULD_CALL_PARENT(TRUE)
 
-	// i know that this is probably more with wands and gun mods in mind, but it's a bit silly that the projectile on_hit signal doesn't ping the projectile itself.
-	// maybe we care what the projectile thinks! See about combining these via args some time when it's not 5AM
-	var/hit_limb_zone
-	if(isliving(target))
-		var/mob/living/L = target
-		hit_limb_zone = L.check_hit_limb_zone_name(def_zone)
 	if(fired_from)
-		SEND_SIGNAL(fired_from, COMSIG_PROJECTILE_ON_HIT, firer, target, Angle, hit_limb_zone, blocked)
-	SEND_SIGNAL(src, COMSIG_PROJECTILE_SELF_ON_HIT, firer, target, Angle, hit_limb_zone, blocked)
+		SEND_SIGNAL(fired_from, COMSIG_PROJECTILE_ON_HIT, firer, target, Angle, def_zone, blocked)
+	SEND_SIGNAL(src, COMSIG_PROJECTILE_SELF_ON_HIT, firer, target, Angle, def_zone, blocked)
 
 	if(QDELETED(src)) // in case one of the above signals deleted the projectile for whatever reason
 		return BULLET_ACT_BLOCK
@@ -312,19 +306,16 @@
 	var/mob/living/living_target = target
 
 	if(blocked != 100) // not completely blocked
-		var/obj/item/bodypart/hit_bodypart = living_target.get_bodypart(hit_limb_zone)
+		var/obj/item/bodypart/hit_bodypart = living_target.get_bodypart(def_zone)
 		if (damage && damage_type == BRUTE)
-			if (living_target.blood_volume && (isnull(hit_bodypart) || hit_bodypart.can_bleed()))
-				var/splatter_dir = dir
-				if(starting)
-					splatter_dir = get_dir(starting, target_turf)
-				living_target.do_splatter_effect(splatter_dir) // NON-MODULE CHANGE
+			if (living_target.get_blood_type() && (isnull(hit_bodypart) || hit_bodypart.can_bleed()))
+				living_target.do_splatter_effect(dir) // NON-MODULE CHANGE
 				if(prob(33))
 					living_target.add_splatter_floor(target_turf)
+
 			else if (hit_bodypart?.biological_state & (BIO_METAL|BIO_WIRED))
 				var/random_damage_mult = RANDOM_DECIMAL(0.85, 1.15) // SOMETIMES you can get more or less sparks
 				var/damage_dealt = ((damage / (1 - (blocked / 100))) * random_damage_mult)
-
 				var/spark_amount = round((damage_dealt / PROJECTILE_DAMAGE_PER_ROBOTIC_SPARK))
 				if (spark_amount > 0)
 					do_sparks(spark_amount, FALSE, living_target)
@@ -333,19 +324,24 @@
 			new impact_effect_type(target_turf, hitx, hity)
 
 		var/organ_hit_text = ""
-		if(hit_limb_zone)
-			organ_hit_text = " in \the [parse_zone(hit_limb_zone)]"
+		if(def_zone)
+			organ_hit_text = " in \the [parse_zone(def_zone)]"
 		if(suppressed == SUPPRESSED_VERY)
 			playsound(loc, hitsound, 5, TRUE, -1)
 		else if(suppressed)
 			playsound(loc, hitsound, 5, TRUE, -1)
-			to_chat(living_target, span_userdanger("You're shot by \a [src][organ_hit_text]!"))
+			to_chat(living_target, span_userdanger("You're [grazing ? "grazed" : "hit"] by \a [generic_name || src][organ_hit_text]!"))
 		else
 			playsound(loc, hitsound, vol_by_damage(), TRUE, -1)
-			living_target.visible_message(span_danger("[living_target] is hit by \a [src][organ_hit_text]!"), \
-					span_userdanger("You're hit by \a [src][organ_hit_text]!"), null, COMBAT_MESSAGE_RANGE)
+			living_target.visible_message(
+				span_danger("[living_target] is [grazing ? "grazed" : "hit"] by \a [generic_name || src][organ_hit_text]!"),
+				span_userdanger("You're [grazing ? "grazed" : "hit"] by \a [generic_name || src][organ_hit_text]!"),
+				span_hear("You hear a woosh."),
+				// vision_distance = COMBAT_MESSAGE_RANGE,
+				visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE
+			)
 			if(living_target.is_blind())
-				to_chat(living_target, span_userdanger("You feel something hit you[organ_hit_text]!"))
+				to_chat(living_target, span_userdanger("You feel something [grazing ? "graze" : "hit"] you[organ_hit_text]!"))
 
 	var/reagent_note
 	if(reagents?.reagent_list)
@@ -465,9 +461,24 @@
 				store_hitscan_collision(point_cache)
 			return TRUE
 
-	if(!HAS_TRAIT(src, TRAIT_ALWAYS_HIT_ZONE))
-		var/distance = get_dist(T, starting) // Get the distance between the turf shot from and the mob we hit and use that for the calculations.
-		def_zone = ran_zone(def_zone, max(100-(7*distance), 5)) //Lower accurancy/longer range tradeoff. 7 is a balanced number to use.
+	if(!HAS_TRAIT(src, TRAIT_ALWAYS_HIT_ZONE) && isliving(A))
+		var/mob/living/who_is_shot = A
+		var/distance = decayedRange - range
+		var/hit_prob = max(100 - (7 * distance), 5)
+		if(who_is_shot.body_position == LYING_DOWN)
+			hit_prob *= 1.2
+		// melbert todo : make people more skilled with weapons have a lower miss chance
+		if(!prob(hit_prob))
+			def_zone = who_is_shot.get_random_valid_zone(def_zone, 0) // Lower accurancy/longer range tradeoff. 7 is a balanced number to use.
+			grazing = !prob(hit_prob) // jeez you missed twice? that's a graze
+			var/datum/embed_data/data = get_embed()
+			if(data?.embed_chance > 10)
+				set_embed(data.generate_with_values(
+					embed_chance = grazing ? 0 : max(10, data.embed_chance - distance),
+				))
+			if(grazing)
+				wound_bonus = CANT_WOUND
+				bare_wound_bonus = CANT_WOUND
 
 	return process_hit(T, select_target(T, A, A), A) // SELECT TARGET FIRST!
 
@@ -1103,26 +1114,6 @@
 /obj/projectile/experience_pressure_difference()
 	return
 
-///Like [/obj/item/proc/updateEmbedding] but for projectiles instead, call this when you want to add embedding or update the stats on the embedding element
-/obj/projectile/proc/updateEmbedding()
-	if(!shrapnel_type || !LAZYLEN(embedding))
-		return
-
-	AddElement(/datum/element/embed,\
-		embed_chance = (!isnull(embedding["embed_chance"]) ? embedding["embed_chance"] : EMBED_CHANCE),\
-		fall_chance = (!isnull(embedding["fall_chance"]) ? embedding["fall_chance"] : EMBEDDED_ITEM_FALLOUT),\
-		pain_chance = (!isnull(embedding["pain_chance"]) ? embedding["pain_chance"] : EMBEDDED_PAIN_CHANCE),\
-		pain_mult = (!isnull(embedding["pain_mult"]) ? embedding["pain_mult"] : EMBEDDED_PAIN_MULTIPLIER),\
-		remove_pain_mult = (!isnull(embedding["remove_pain_mult"]) ? embedding["remove_pain_mult"] : EMBEDDED_UNSAFE_REMOVAL_PAIN_MULTIPLIER),\
-		rip_time = (!isnull(embedding["rip_time"]) ? embedding["rip_time"] : EMBEDDED_UNSAFE_REMOVAL_TIME),\
-		ignore_throwspeed_threshold = (!isnull(embedding["ignore_throwspeed_threshold"]) ? embedding["ignore_throwspeed_threshold"] : FALSE),\
-		impact_pain_mult = (!isnull(embedding["impact_pain_mult"]) ? embedding["impact_pain_mult"] : EMBEDDED_IMPACT_PAIN_MULTIPLIER),\
-		jostle_chance = (!isnull(embedding["jostle_chance"]) ? embedding["jostle_chance"] : EMBEDDED_JOSTLE_CHANCE),\
-		jostle_pain_mult = (!isnull(embedding["jostle_pain_mult"]) ? embedding["jostle_pain_mult"] : EMBEDDED_JOSTLE_PAIN_MULTIPLIER),\
-		pain_stam_pct = (!isnull(embedding["pain_stam_pct"]) ? embedding["pain_stam_pct"] : EMBEDDED_PAIN_STAM_PCT),\
-		projectile_payload = shrapnel_type)
-	return TRUE
-
 /**
  * Is this projectile considered "hostile"?
  *
@@ -1142,7 +1133,7 @@
 
 ///Checks if the projectile can embed into someone
 /obj/projectile/proc/can_embed_into(atom/hit)
-	return embedding && shrapnel_type && iscarbon(hit) && !HAS_TRAIT(hit, TRAIT_PIERCEIMMUNE)
+	return get_embed() && shrapnel_type && iscarbon(hit) && !HAS_TRAIT(hit, TRAIT_PIERCEIMMUNE)
 
 /// Reflects the projectile off of something
 /obj/projectile/proc/reflect(atom/hit_atom)
@@ -1186,3 +1177,16 @@
 	bullet.preparePixelProjectile(target, src)
 	bullet.fire()
 	return bullet
+
+/// Fetches embedding data
+/obj/projectile/proc/get_embed()
+	return embed_type ? (embed_data ||= get_embed_by_type(embed_type)) : null
+
+/obj/projectile/proc/set_embed(datum/embed_data/embed)
+	if(embed_data == embed)
+		return
+	// GLOB.embed_by_type stores shared "default" embedding values of datums
+	// Dynamically generated embeds use the base class and thus are not present in there, and should be qdeleted upon being discarded
+	if(!isnull(embed_data) && !GLOB.embed_by_type[embed_data.type])
+		qdel(embed_data)
+	embed_data = ispath(embed) ? get_embed_by_type(armor) : embed

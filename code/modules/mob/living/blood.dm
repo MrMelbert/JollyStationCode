@@ -11,6 +11,7 @@
 /mob/living/carbon/human/handle_blood(seconds_per_tick, times_fired)
 
 	if(HAS_TRAIT(src, TRAIT_NOBLOOD) || HAS_TRAIT(src, TRAIT_FAKEDEATH))
+		remove_max_consciousness_value(BLOOD_LOSS)
 		return
 
 	if(body_temperature < BLOOD_STOP_TEMP || HAS_TRAIT(src, TRAIT_HUSK)) //cold or husked people do not pump the blood.
@@ -40,12 +41,6 @@
 			adjust_nutrition(-nutrition_ratio * HUNGER_FACTOR * seconds_per_tick)
 			blood_volume = min(blood_volume + (BLOOD_REGEN_FACTOR * nutrition_ratio * seconds_per_tick), BLOOD_VOLUME_NORMAL)
 
-	// // we call lose_blood() here rather than quirk/process() to make sure that the blood loss happens in sync with life()
-	// if(HAS_TRAIT(src, TRAIT_BLOOD_DEFICIENCY))
-	// 	var/datum/quirk/blooddeficiency/blooddeficiency = get_quirk(/datum/quirk/blooddeficiency)
-	// 	if(!isnull(blooddeficiency))
-	// 		blooddeficiency.lose_blood(seconds_per_tick)
-
 	//Effects of bloodloss
 	if(!(sigreturn & HANDLE_BLOOD_NO_EFFECTS))
 		var/word = pick("dizzy","woozy","faint")
@@ -64,21 +59,44 @@
 			if(BLOOD_VOLUME_OKAY to BLOOD_VOLUME_SAFE)
 				if(SPT_PROB(2.5, seconds_per_tick))
 					to_chat(src, span_warning("You feel [word]."))
-				adjustOxyLoss(round(0.005 * (BLOOD_VOLUME_NORMAL - blood_volume) * seconds_per_tick, 1))
+				var/threshold = 50 * ((BLOOD_VOLUME_SAFE - blood_volume) / (BLOOD_VOLUME_SAFE - BLOOD_VOLUME_OKAY))
+				if(getOxyLoss() < threshold)
+					adjustOxyLoss(1)
 			if(BLOOD_VOLUME_BAD to BLOOD_VOLUME_OKAY)
-				adjustOxyLoss(round(0.01 * (BLOOD_VOLUME_NORMAL - blood_volume) * seconds_per_tick, 1))
+				add_max_consciousness_value(BLOOD_LOSS, CONSCIOUSNESS_MAX * 0.9)
+				add_consciousness_modifier(BLOOD_LOSS, -10)
+				adjust_traumatic_shock(0.5 * seconds_per_tick)
+				if(getOxyLoss() < 100)
+					adjustOxyLoss(2) // Keep in mind if they're still breathing while bleeding - some of this will be recovered
 				if(SPT_PROB(2.5, seconds_per_tick))
 					set_eye_blur_if_lower(12 SECONDS)
 					to_chat(src, span_warning("You feel very [word]."))
 			if(BLOOD_VOLUME_SURVIVE to BLOOD_VOLUME_BAD)
-				adjustOxyLoss(2.5 * seconds_per_tick)
+				add_max_consciousness_value(BLOOD_LOSS, CONSCIOUSNESS_MAX * 0.6)
+				add_consciousness_modifier(BLOOD_LOSS, -20)
+				adjust_traumatic_shock(1 * seconds_per_tick)
+				if(getOxyLoss() < 150)
+					adjustOxyLoss(3)
+				set_eye_blur_if_lower(6 SECONDS)
 				if(SPT_PROB(7.5, seconds_per_tick))
-					Unconscious(rand(20,60))
+					Unconscious(rand(2, 6) * 1 SECONDS)
+					losebreath += 1
 					to_chat(src, span_warning("You feel extremely [word]."))
 			if(-INFINITY to BLOOD_VOLUME_SURVIVE)
-				if(!HAS_TRAIT(src, TRAIT_NODEATH))
-					investigate_log("has died of bloodloss.", INVESTIGATE_DEATHS)
-					death()
+				add_max_consciousness_value(BLOOD_LOSS, CONSCIOUSNESS_MAX * 0.2)
+				add_consciousness_modifier(BLOOD_LOSS, -50)
+				adjust_traumatic_shock(3 * seconds_per_tick)
+				set_eye_blur_if_lower(20 SECONDS)
+				// Unconscious(10 SECONDS)
+				var/how_screwed_are_we = 1 - ((BLOOD_VOLUME_SURVIVE - blood_volume) / BLOOD_VOLUME_SURVIVE)
+				adjustOxyLoss(max(5, 50 * how_screwed_are_we))
+				// if(!HAS_TRAIT(src, TRAIT_NODEATH))
+				// 	investigate_log("has died of bloodloss.", INVESTIGATE_DEATHS)
+				// 	death()
+
+	if(blood_volume > BLOOD_VOLUME_OKAY)
+		remove_max_consciousness_value(BLOOD_LOSS)
+		remove_consciousness_modifier(BLOOD_LOSS)
 
 	// NON-MODULE CHANGE END for blood
 
@@ -89,7 +107,7 @@
 		temp_bleed += iter_bleed_rate * seconds_per_tick
 
 		if(iter_part.generic_bleedstacks) // If you don't have any bleedstacks, don't try and heal them
-			iter_part.adjustBleedStacks(-1, 0)
+			iter_part.adjustBleedStacks(-1)
 
 	if(temp_bleed)
 		bleed(temp_bleed)
@@ -101,19 +119,16 @@
 		iter_part.update_part_wound_overlay()
 
 //Makes a blood drop, leaking amt units of blood from the mob
-/mob/living/carbon/proc/bleed(amt)
-	// NON-MODULE CHANGE for blood
+/mob/living/carbon/proc/bleed(amt, drip = TRUE)
 	if((status_flags & GODMODE) || HAS_TRAIT(src, TRAIT_NOBLOOD))
 		return
 	blood_volume = max(blood_volume - amt, 0)
 
-	//Blood loss still happens in locker, floor stays clean
-	if(isturf(loc) && prob(sqrt(amt)*BLOOD_DRIP_RATE_MOD))
+	if(drip && isturf(loc) && prob(sqrt(amt) * BLOOD_DRIP_RATE_MOD))
 		add_splatter_floor(loc, (amt <= 10))
 
-/mob/living/carbon/human/bleed(amt)
+/mob/living/carbon/human/bleed(amt, drip = TRUE)
 	amt *= physiology.bleed_mod
-	// NON-MODULE CHANGE for blood
 	return ..()
 
 /// A helper to see how much blood we're losing per tick
@@ -135,15 +150,12 @@
  * * bleed_amt- When we run this from [/mob/living/carbon/human/proc/handle_blood] we already know how much blood we're losing this tick, so we can skip tallying it again with this
  * * forced-
  */
-/mob/living/carbon/proc/bleed_warn(bleed_amt = 0, forced = FALSE)
+/mob/living/carbon/proc/bleed_warn(bleed_amt = get_bleed_rate(), forced = FALSE)
 	// NON-MODULE CHANGE for blood
 	if(!client || HAS_TRAIT(src, TRAIT_NOBLOOD))
 		return
-	if(!COOLDOWN_FINISHED(src, bleeding_message_cd) && !forced)
+	if((!COOLDOWN_FINISHED(src, bleeding_message_cd) || HAS_TRAIT(src, TRAIT_KNOCKEDOUT)) && !forced)
 		return
-
-	if(!bleed_amt) // if we weren't provided the amount of blood we lost this tick in the args
-		bleed_amt = get_bleed_rate()
 
 	var/bleeding_severity = ""
 	var/next_cooldown = BLEEDING_MESSAGE_BASE_CD
@@ -171,8 +183,7 @@
 		rate_of_change = ", but it's clotting up quickly!"
 	else
 		// flick through our wounds to see if there are any bleeding ones getting worse or holding flow (maybe move this to handle_blood and cache it so we don't need to cycle through the wounds so much)
-		for(var/i in all_wounds)
-			var/datum/wound/iter_wound = i
+		for(var/datum/wound/iter_wound as anything in all_wounds)
 			if(!iter_wound.blood_flow)
 				continue
 			var/iter_wound_roc = iter_wound.get_bleed_rate_of_change()

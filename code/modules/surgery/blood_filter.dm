@@ -57,9 +57,14 @@
 		target,
 		span_notice("You begin filtering [target]'s blood..."),
 		span_notice("[user] uses [tool] to filter [target]'s blood."),
-		span_notice("[user] uses [tool] on [target]'s chest."),
+		span_notice("[user] uses [tool] on [target]'s [parse_zone(target_zone)]."),
 	)
-	display_pain(target, "You feel a throbbing pain in your chest!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "You feel a throbbing pain in your [parse_zone(target_zone)]!",
+		pain_amount = SURGERY_PAIN_LOW,
+	)
 
 /datum/surgery_step/filter_blood/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	var/obj/item/blood_filter/bloodfilter = tool

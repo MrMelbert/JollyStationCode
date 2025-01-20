@@ -3,8 +3,6 @@
 	name = "Adrenal Crisis"
 	max_stages = 2
 	cure_text = "Trauma"
-	cures = list(/datum/reagent/determination)
-	cure_chance = 10
 	agent = "Shitty Adrenal Glands"
 	viable_mobtypes = list(/mob/living/carbon/human)
 	spreading_modifier = 1
@@ -15,7 +13,14 @@
 	visibility_flags = HIDDEN_PANDEMIC
 	bypasses_immunity = TRUE
 
+/datum/disease/adrenal_crisis/has_cure()
+	return TRUE //snowflaked in stage_act
+
 /datum/disease/adrenal_crisis/stage_act(seconds_per_tick, times_fired)
+	var/datum/status_effect/determined/determination = affected_mob.has_status_effect(__IMPLIED_TYPE__)
+	var/how_much = world.time - (determination?.start_time || world.time)
+	cure_chance = 100 * (how_much / WOUND_DETERMINATION_MAX)
+
 	. = ..()
 	if(!.)
 		return

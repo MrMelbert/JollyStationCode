@@ -110,7 +110,7 @@
 		to_chat(victim, span_userdanger("A bright yellow flash obscures your vision and dazes you!"))
 
 	victim.flash_act(1, affect_silicon = TRUE, visual = TRUE, length = 4 SECONDS)
-	victim.apply_damage(50, STAMINA, BODY_ZONE_CHEST)
+	victim.apply_damage(50, PAIN, BODY_ZONE_CHEST)
 	victim.adjust_dizzy(30 SECONDS)
 	victim.adjust_confusion(40 SECONDS)
 

@@ -347,7 +347,7 @@
 			//Death
 			selected_turf.visible_message(span_userdanger("[user] suddenly dies!"))
 			user.investigate_log("has been killed by a die of fate.", INVESTIGATE_DEATHS)
-			user.death()
+			user.death(null, "magic")
 		if(3)
 			//Swarm of creatures
 			selected_turf.visible_message(span_userdanger("A swarm of creatures surrounds [user]!"))

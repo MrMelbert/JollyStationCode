@@ -103,8 +103,9 @@
 	if(sprint_length > 0)
 		return
 
-	// Okay you're gonna stamcrit yourself, slow your roll
-	if(getStaminaLoss() >= maxHealth * 0.9)
+	// Okay we're tired now
+	if(getStaminaLoss() >= maxHealth * 0.66)
+		to_chat(src, span_warning("You're too tired to keep sprinting!"))
 		set_move_intent(MOVE_INTENT_WALK)
 		return
 
@@ -119,10 +120,4 @@
 /mob/living/carbon/human/adjustStaminaLoss(amount, updating_stamina, forced, required_biotype)
 	. = ..()
 	if(amount < 0 && amount >= -20)
-		adjust_sprint_left(amount * 0.25)
-
-// Entering stamina critical will drain your sprint capacity entirely
-/mob/living/carbon/human/enter_stamcrit()
-	. = ..()
-	if(HAS_TRAIT_FROM(src, TRAIT_FLOORED, STAMINA))
-		adjust_sprint_left(-INFINITY)
+		adjust_sprint_left(amount * 0.25) // melbert todo : passive stamina regen is triggering this

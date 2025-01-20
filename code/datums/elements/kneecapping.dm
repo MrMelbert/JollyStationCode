@@ -84,9 +84,7 @@
 		var/min_wound = leg.get_wound_threshold_of_wound_type(WOUND_BLUNT, WOUND_SEVERITY_SEVERE, return_value_if_no_wound = 30, wound_source = weapon)
 		var/max_wound = leg.get_wound_threshold_of_wound_type(WOUND_BLUNT, WOUND_SEVERITY_CRITICAL, return_value_if_no_wound = 50, wound_source = weapon)
 
-		leg.receive_damage(brute = weapon.force, wound_bonus = rand(min_wound, max_wound + 10), damage_source = "kneecapping")
-		target.emote("scream")
+		target.apply_damage(weapon.force, weapon.damtype, wound_bonus = rand(min_wound, max_wound + 10), attacking_item = weapon)
 		log_combat(attacker, target, "broke the kneecaps of", weapon)
-		target.update_damage_overlays()
 		attacker.do_attack_animation(target, used_item = weapon)
-		playsound(source = get_turf(weapon), soundin = weapon.hitsound, vol = weapon.get_clamped_volume(), vary = TRUE)
+		playsound(weapon, weapon.hitsound, weapon.get_clamped_volume(), vary = TRUE)

@@ -19,13 +19,8 @@
 		/datum/surgery_step/dress,
 	)
 
-/datum/surgery/debride/can_start(mob/living/user, mob/living/carbon/target)
-	if(!istype(target))
-		return FALSE
-	if(..())
-		var/obj/item/bodypart/targeted_bodypart = target.get_bodypart(user.zone_selected)
-		var/datum/wound/burn/flesh/burn_wound = targeted_bodypart.get_wound_type(targetable_wound)
-		return(burn_wound && burn_wound.infestation > 0)
+/datum/surgery/debride/is_valid_wound(datum/wound/burn/flesh/wound)
+	return ..() && wound.infestation > 0
 
 //SURGERY STEPS
 
@@ -70,20 +65,26 @@
 	if(surgery.operated_wound)
 		var/datum/wound/burn/flesh/burn_wound = surgery.operated_wound
 		if(burn_wound.infestation <= 0)
-			to_chat(user, span_notice("[target]'s [parse_zone(user.zone_selected)] has no infected flesh to remove!"))
+			to_chat(user, span_notice("[target]'s [parse_zone(target_zone)] has no infected flesh to remove!"))
 			surgery.status++
 			repeatable = FALSE
 			return
 		display_results(
 			user,
 			target,
-			span_notice("You begin to excise infected flesh from [target]'s [parse_zone(user.zone_selected)]..."),
-			span_notice("[user] begins to excise infected flesh from [target]'s [parse_zone(user.zone_selected)] with [tool]."),
-			span_notice("[user] begins to excise infected flesh from [target]'s [parse_zone(user.zone_selected)]."),
+			span_notice("You begin to excise infected flesh from [target]'s [parse_zone(target_zone)]..."),
+			span_notice("[user] begins to excise infected flesh from [target]'s [parse_zone(target_zone)] with [tool]."),
+			span_notice("[user] begins to excise infected flesh from [target]'s [parse_zone(target_zone)]."),
 		)
-		display_pain(target, "The infection in your [parse_zone(user.zone_selected)] stings like hell! It feels like you're being stabbed!", target_zone = target_zone) // NON-MODULE CHANGE
+		display_pain(
+			target = target,
+			target_zone = target_zone,
+			pain_message = "The infection in your [parse_zone(target_zone)] stings like hell! It feels like you're being stabbed!",
+			pain_amount = SURGERY_PAIN_LOW,
+			pain_type = BURN,
+		)
 	else
-		user.visible_message(span_notice("[user] looks for [target]'s [parse_zone(user.zone_selected)]."), span_notice("You look for [target]'s [parse_zone(user.zone_selected)]..."))
+		user.visible_message(span_notice("[user] looks for [target]'s [parse_zone(target_zone)]."), span_notice("You look for [target]'s [parse_zone(target_zone)]..."))
 
 /datum/surgery_step/debride/success(mob/living/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	var/datum/wound/burn/flesh/burn_wound = surgery.operated_wound
@@ -97,7 +98,7 @@
 			span_notice("[user] successfully excises some of the infected flesh from  [target]'s [parse_zone(target_zone)]!"),
 		)
 		log_combat(user, target, "excised infected flesh in", addition="COMBAT MODE: [uppertext(user.combat_mode)]")
-		surgery.operated_bodypart.receive_damage(brute=3, wound_bonus=CANT_WOUND)
+		target.apply_damage(3, BRUTE, surgery.operated_bodypart, wound_bonus = CANT_WOUND, attacking_item = tool)
 		burn_wound.infestation -= infestation_removed
 		burn_wound.sanitization += sanitization_added
 		if(burn_wound.infestation <= 0)
@@ -115,7 +116,7 @@
 		span_notice("[user] carves away some of the healthy flesh from [target]'s [parse_zone(target_zone)] with [tool]!"),
 		span_notice("[user] carves away some of the healthy flesh from  [target]'s [parse_zone(target_zone)]!"),
 	)
-	surgery.operated_bodypart.receive_damage(brute=rand(4,8), sharpness=TRUE)
+	target.apply_damage(rand(4, 8), BRUTE, surgery.operated_bodypart, wound_bonus = 10, sharpness = SHARP_EDGED, attacking_item = tool)
 
 /datum/surgery_step/debride/initiate(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, try_to_fail = FALSE)
 	if(!..())
@@ -144,13 +145,17 @@
 		display_results(
 			user,
 			target,
-			span_notice("You begin to dress the burns on [target]'s [parse_zone(user.zone_selected)]..."),
-			span_notice("[user] begins to dress the burns on [target]'s [parse_zone(user.zone_selected)] with [tool]."),
-			span_notice("[user] begins to dress the burns on [target]'s [parse_zone(user.zone_selected)]."),
+			span_notice("You begin to dress the burns on [target]'s [parse_zone(target_zone)]..."),
+			span_notice("[user] begins to dress the burns on [target]'s [parse_zone(target_zone)] with [tool]."),
+			span_notice("[user] begins to dress the burns on [target]'s [parse_zone(target_zone)]."),
 		)
-		display_pain(target, "The burns on your [parse_zone(user.zone_selected)] sting like hell!", target_zone = target_zone) // NON-MODULE CHANGE
+		display_pain(
+			target = target,
+			target_zone = target_zone,
+			pain_message = "The infection in your [parse_zone(target_zone)] stings like hell!",
+		)
 	else
-		user.visible_message(span_notice("[user] looks for [target]'s [parse_zone(user.zone_selected)]."), span_notice("You look for [target]'s [parse_zone(user.zone_selected)]..."))
+		user.visible_message(span_notice("[user] looks for [target]'s [parse_zone(target_zone)]."), span_notice("You look for [target]'s [parse_zone(target_zone)]..."))
 
 /datum/surgery_step/dress/success(mob/living/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	var/datum/wound/burn/flesh/burn_wound = surgery.operated_wound

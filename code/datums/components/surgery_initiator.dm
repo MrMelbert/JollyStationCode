@@ -142,8 +142,7 @@
 		patient.balloon_alert(user, "need a [is_robotic ? "screwdriver": "cautery"] in your inactive hand to stop the surgery!")
 		return
 
-	if(the_surgery.operated_bodypart)
-		the_surgery.operated_bodypart.adjustBleedStacks(-5)
+	the_surgery.operated_bodypart?.adjustBleedStacks(-5)
 
 	patient.surgeries -= the_surgery
 	REMOVE_TRAIT(patient, TRAIT_ALLOWED_HONORBOUND_ATTACK, ELEMENT_TRAIT(type))

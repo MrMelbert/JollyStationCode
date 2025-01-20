@@ -290,7 +290,7 @@
 ///All of our pellets are accounted for, time to go target by target and tell them how many things they got hit by.
 /datum/component/pellet_cloud/proc/finalize()
 	var/obj/projectile/P = projectile_type
-	var/proj_name = initial(P.name)
+	var/proj_name = initial(P.generic_name) || initial(P.name)
 
 	for(var/atom/target in targets_hit)
 		var/num_hits = targets_hit[target]["hits"]
@@ -320,7 +320,7 @@
 							armor_factor *= ARMOR_WEAKENED_MULTIPLIER
 						damage_dealt *= max(0, 1 - armor_factor*0.01)
 
-					hit_part.painless_wound_roll(wounding_type, damage_dealt, w_bonus, bw_bonus, initial(P.sharpness))
+					hit_part.check_wounding(wounding_type, damage_dealt, w_bonus, bw_bonus, null, initial(P.name), initial(P.sharpness))
 
 		var/limb_hit_text = ""
 		if(hit_part)

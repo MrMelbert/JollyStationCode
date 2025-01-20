@@ -11,9 +11,13 @@
 		test_reagent(human, reagent_type)
 
 /datum/unit_test/metabolization/proc/test_reagent(mob/living/carbon/C, reagent_type)
+	C.fully_heal(ADMIN_HEAL_ALL)
 	C.reagents.add_reagent(reagent_type, 10)
 	C.reagents.metabolize(C, SSMOBS_DT, 0, can_overdose = TRUE)
 	C.reagents.clear_reagents()
+	if(C.stat == DEAD)
+		TEST_NOTICE(src, "[reagent_type] killed [C] somehow!")
+		C.revive(ADMIN_HEAL_ALL)
 
 /datum/unit_test/metabolization/Destroy()
 	SSmobs.ignite()

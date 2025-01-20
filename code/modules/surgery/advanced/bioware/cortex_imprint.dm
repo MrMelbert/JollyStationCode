@@ -33,7 +33,13 @@
 		span_notice("[user] starts carving [target]'s outer cerebral cortex into a self-imprinting pattern."),
 		span_notice("[user] begins to perform surgery on [target]'s brain."),
 	)
-	display_pain(target, "Your head throbs with gruesome pain, it's nearly too much to handle!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = BODY_ZONE_HEAD,
+		pain_message = "Your head throbs with gruesome pain, it's nearly too much to handle!",
+		pain_amount = SURGERY_PAIN_CRITICAL,
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
 
 /datum/surgery_step/imprint_cortex/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	display_results(
@@ -43,7 +49,12 @@
 		span_notice("[user] reshapes [target]'s outer cerebral cortex into a self-imprinting pattern!"),
 		span_notice("[user] completes the surgery on [target]'s brain."),
 	)
-	display_pain(target, "Your brain feels stronger... more resillient!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = BODY_ZONE_HEAD,
+		pain_message = "Your brain feels stronger... more resillient!",
+		surgery_moodlet = /datum/mood_event/surgery/major,
+	)
 	new /datum/bioware/cortex_imprint(target)
 	return ..()
 
@@ -56,7 +67,13 @@
 			span_warning("[user] screws up, damaging the brain!"),
 			span_notice("[user] completes the surgery on [target]'s brain."),
 		)
-		display_pain(target, "Your brain throbs with intense pain; Thinking hurts!", target_zone = target_zone) // NON-MODULE CHANGE
+		display_pain(
+			target = target,
+			target_zone = BODY_ZONE_HEAD,
+			pain_message = "Your brain throbs with intense pain; thinking hurts!",
+			pain_amount = SURGERY_PAIN_CRITICAL,
+			surgery_moodlet = /datum/mood_event/surgery/major,
+		)
 		target.adjustOrganLoss(ORGAN_SLOT_BRAIN, 60)
 		target.gain_trauma_type(BRAIN_TRAUMA_SEVERE, TRAUMA_RESILIENCE_LOBOTOMY)
 	else

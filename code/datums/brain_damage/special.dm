@@ -16,7 +16,7 @@
 	if(SPT_PROB(2, seconds_per_tick))
 		if(prob(33) && (owner.IsStun() || owner.IsParalyzed() || owner.IsUnconscious()))
 			speak("unstun", TRUE)
-		else if(prob(60) && owner.health <= owner.crit_threshold)
+		else if(prob(60) && owner.health <= 10)
 			speak("heal", TRUE)
 		else if(prob(30) && owner.combat_mode)
 			speak("aggressive")
@@ -267,11 +267,13 @@
 
 /datum/brain_trauma/special/tenacity/on_gain()
 	owner.add_traits(list(TRAIT_NOSOFTCRIT, TRAIT_NOHARDCRIT), TRAUMA_TRAIT)
-	..()
+	owner.set_pain_mod(type, 0)
+	return ..()
 
 /datum/brain_trauma/special/tenacity/on_lose()
 	owner.remove_traits(list(TRAIT_NOSOFTCRIT, TRAIT_NOHARDCRIT), TRAUMA_TRAIT)
-	..()
+	owner.unset_pain_mod(type)
+	return ..()
 
 /datum/brain_trauma/special/death_whispers
 	name = "Functional Cerebral Necrosis"

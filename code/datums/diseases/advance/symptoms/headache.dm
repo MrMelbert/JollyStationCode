@@ -42,13 +42,24 @@
 	. = ..()
 	if(!.)
 		return
+
 	var/mob/living/M = A.affected_mob
+	if(!CAN_FEEL_PAIN(M))
+		return
+
 	if(power < 2)
 		if(prob(base_message_chance) || A.stage >= 4)
 			to_chat(M, span_warning("[pick("Your head hurts.", "Your head pounds.")]"))
 	if(power >= 2 && A.stage >= 4)
 		to_chat(M, span_warning("[pick("Your head hurts a lot.", "Your head pounds incessantly.")]"))
-		M.adjustStaminaLoss(25)
 	if(power >= 3 && A.stage >= 5)
 		to_chat(M, span_userdanger("[pick("Your head hurts!", "You feel a burning knife inside your brain!", "A wave of pain fills your head!")]"))
 		M.Stun(35)
+
+	switch(A.stage)
+		if(4)
+			M.sharp_pain(BODY_ZONE_HEAD, 3 * power)
+			M.flash_pain_overlay(1)
+		if(5)
+			M.sharp_pain(BODY_ZONE_HEAD, 5 * power)
+			M.flash_pain_overlay(2)

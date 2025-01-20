@@ -20,6 +20,9 @@
 		adjust_nutrition(-1 * hunger_loss)
 
 	// NON-MODULE CHANGE START
+	if(!moving_diagonally)
+		SEND_SIGNAL(src, COMSIG_CARBON_STEP, NewLoc, direct)
+
 	if(move_intent == MOVE_INTENT_RUN && !(movement_type & FLYING) && (mobility_flags & (MOBILITY_MOVE|MOBILITY_STAND)) && !pulledby)
 		drain_sprint()
 	if(momentum_dir & direct)

@@ -62,7 +62,7 @@
 			living_target.flash_act(1, TRUE, visual = TRUE, length = 3 SECONDS)
 		else
 			living_target.Knockdown(1 SECONDS)
-		living_target.apply_damage(75, STAMINA, BODY_ZONE_CHEST)
+		living_target.apply_damage(75, PAIN, BODY_ZONE_CHEST)
 
 		if(!HAS_TRAIT_FROM(target, TRAIT_NO_FUNNY_HAND_SIDE_EFFECTS, REF(user)))
 			applied_effects = TRUE

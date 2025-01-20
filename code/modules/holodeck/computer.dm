@@ -315,7 +315,7 @@ GLOBAL_LIST_INIT(typecache_holodeck_linked_floorcheck_ok, typecacheof(list(/turf
 	spawned |= holo_atom
 	if(!(obj_flags & EMAGGED) && isitem(holo_atom))
 		var/obj/item/to_be_nerfed = holo_atom
-		to_be_nerfed.damtype = STAMINA
+		to_be_nerfed.damtype = PAIN
 	finalize_spawned(holo_atom)
 
 ///this qdels holoitems that should no longer exist for whatever reason

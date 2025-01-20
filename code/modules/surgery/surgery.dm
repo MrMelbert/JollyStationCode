@@ -32,7 +32,7 @@
 	///The types of bodyparts that this surgery can have performed on it. Used for augmented surgeries.
 	var/requires_bodypart_type = BODYTYPE_ORGANIC
 	///The speed modifier given to the surgery through external means.
-	var/speed_modifier = 0
+	var/speed_modifier = 1
 	///Whether the surgery requires research to do. You need to add a design if using this!
 	var/requires_tech = FALSE
 	///typepath of a surgery that will, once researched, replace this surgery in the operating menu.
@@ -67,22 +67,32 @@
 	operated_bodypart = null
 	return ..()
 
+/datum/surgery/proc/is_valid_wound(datum/wound/wound)
+	return istype(wound, targetable_wound)
 
 /datum/surgery/proc/can_start(mob/user, mob/living/patient) //FALSE to not show in list
-	. = TRUE
 	if(replaced_by == /datum/surgery)
 		return FALSE
 
+	if(targetable_wound)
+		var/any_wound = FALSE
+		var/obj/item/bodypart/targeted_bodypart = patient.get_bodypart(user.zone_selected)
+		for(var/datum/wound/found_wound as anything in targeted_bodypart?.wounds)
+			if(is_valid_wound(found_wound))
+				any_wound = TRUE
+				break
+
+		if(!any_wound)
+			return FALSE
+
 	// True surgeons (like abductor scientists) need no instructions
 	if(HAS_MIND_TRAIT(user, TRAIT_SURGEON))
-		if(replaced_by) // only show top-level surgeries
-			return FALSE
-		else
-			return TRUE
+		return !replaced_by
 
 	if(!requires_tech && !replaced_by)
 		return TRUE
 
+	. = TRUE
 	if(requires_tech)
 		. = FALSE
 
@@ -92,16 +102,15 @@
 	if(surgery_signal & COMPONENT_CANCEL_SURGERY)
 		return FALSE
 
-	var/turf/patient_turf = get_turf(patient)
-
 	//Get the relevant operating computer
-	var/obj/machinery/computer/operating/opcomputer = locate_operating_computer(patient_turf)
+	var/obj/machinery/computer/operating/opcomputer = locate_operating_computer(get_turf(patient))
 	if (isnull(opcomputer))
 		return .
 	if(replaced_by in opcomputer.advanced_surgeries)
 		return FALSE
 	if(type in opcomputer.advanced_surgeries)
 		return TRUE
+	return .
 
 /datum/surgery/proc/next_step(mob/living/user, modifiers)
 	if(location != user.zone_selected)

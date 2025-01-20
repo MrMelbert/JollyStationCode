@@ -14,8 +14,6 @@
 			//handle active mutations
 			for(var/datum/mutation/human/human_mutation as anything in dna.mutations)
 				human_mutation.on_life(seconds_per_tick, times_fired)
-			//heart attack stuff
-			// handle_heart(seconds_per_tick, times_fired) // NON-MODULE CHANGE
 			//handles liver failure effects, if we lack a liver
 			handle_liver(seconds_per_tick, times_fired)
 
@@ -49,19 +47,10 @@
 		return (occupied_space.contents_pressure_protection * ONE_ATMOSPHERE + (1 - occupied_space.contents_pressure_protection) * pressure)
 	return pressure
 
-/mob/living/carbon/human/breathe()
-	if(!HAS_TRAIT(src, TRAIT_NOBREATH))
-		return ..()
-
-/mob/living/carbon/human/check_breath(datum/gas_mixture/breath)
+/mob/living/carbon/human/check_breath(datum/gas_mixture/breath, skip_breath = FALSE)
 	var/obj/item/organ/internal/lungs/human_lungs = get_organ_slot(ORGAN_SLOT_LUNGS)
 	if(human_lungs)
-		return human_lungs.check_breath(breath, src)
-
-	if(health >= crit_threshold)
-		adjustOxyLoss(HUMAN_MAX_OXYLOSS + 1)
-	else if(!HAS_TRAIT(src, TRAIT_NOCRITDAMAGE))
-		adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS)
+		return human_lungs.check_breath(breath, src, skip_breath)
 
 	failed_last_breath = TRUE
 
@@ -103,15 +92,3 @@
 		if(CH.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
 			return TRUE
 	return ..()
-
-/mob/living/carbon/human/proc/handle_heart(seconds_per_tick, times_fired)
-	var/we_breath = !HAS_TRAIT_FROM(src, TRAIT_NOBREATH, SPECIES_TRAIT)
-
-	if(!undergoing_cardiac_arrest())
-		return
-
-	if(we_breath)
-		adjustOxyLoss(4 * seconds_per_tick)
-		Unconscious(80)
-	// Tissues die without blood circulation
-	adjustBruteLoss(1 * seconds_per_tick)

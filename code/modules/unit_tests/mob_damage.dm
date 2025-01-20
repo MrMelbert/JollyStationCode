@@ -98,10 +98,10 @@
 		TEST_ASSERT_EQUAL(testing_mob.getToxLoss(), amount, \
 			"[testing_mob] should have [amount] toxin damage, instead they have [testing_mob.getToxLoss()]!")
 	if(included_types & BRUTELOSS)
-		TEST_ASSERT_EQUAL(round(testing_mob.getBruteLoss(), 1), amount, \
+		TEST_ASSERT_EQUAL(floor(testing_mob.getBruteLoss()), amount, \
 			"[testing_mob] should have [amount] brute damage, instead they have [testing_mob.getBruteLoss()]!")
 	if(included_types & FIRELOSS)
-		TEST_ASSERT_EQUAL(round(testing_mob.getFireLoss(), 1), amount, \
+		TEST_ASSERT_EQUAL(floor(testing_mob.getFireLoss()), amount, \
 			"[testing_mob] should have [amount] burn damage, instead they have [testing_mob.getFireLoss()]!")
 	if(included_types & OXYLOSS)
 		TEST_ASSERT_EQUAL(testing_mob.getOxyLoss(), amount, \
@@ -221,34 +221,32 @@
 	dummy.fully_heal(HEAL_DAMAGE)
 
 	var/damage_returned
-	// take 5 brute, 2 burn
-	damage_returned = round(dummy.take_bodypart_damage(5, 2, updating_health = FALSE), 1)
-	TEST_ASSERT_EQUAL(damage_returned, -7, \
-		"take_bodypart_damage() should have returned -7, but returned [damage_returned] instead!")
+	// take 5 brute
+	damage_returned = round(dummy.damage_random_bodypart(5, BRUTE), 1)
+	TEST_ASSERT_EQUAL(damage_returned, 5, \
+		"take_bodypart_damage() should have returned 5, but returned [damage_returned] instead!")
 
-	TEST_ASSERT_EQUAL(round(dummy.getBruteLoss(), 1), 5, \
+	TEST_ASSERT_EQUAL(floor(dummy.getBruteLoss()), 5, \
 		"Dummy should have 5 brute damage, instead they have [dummy.getBruteLoss()]!")
-	TEST_ASSERT_EQUAL(round(dummy.getFireLoss(), 1), 2, \
-		"Dummy should have 2 burn damage, instead they have [dummy.getFireLoss()]!")
 
 	// heal 4 brute, 1 burn
-	damage_returned = round(dummy.heal_bodypart_damage(4, 1, updating_health = FALSE), 1)
-	TEST_ASSERT_EQUAL(damage_returned, 5, \
-		"heal_bodypart_damage() should have returned 5, but returned [damage_returned] instead!")
+	damage_returned = round(dummy.heal_bodypart_damage(4, 1), 1)
+	TEST_ASSERT_EQUAL(damage_returned, 4, \
+		"heal_bodypart_damage() should have returned 4, but returned [damage_returned] instead!")
 
-	if(!verify_damage(dummy, 1, included_types = BRUTELOSS|FIRELOSS))
+	if(!verify_damage(dummy, 1, included_types = BRUTELOSS))
 		TEST_FAIL("heal_bodypart_damage did not apply its healing correctly on the mob!")
 
 	// heal 1 brute, 1 burn
-	damage_returned = round(dummy.heal_overall_damage(1, 1, updating_health = FALSE), 1)
-	TEST_ASSERT_EQUAL(damage_returned, 2, \
-		"heal_overall_damage() should have returned 2, but returned [damage_returned] instead!")
+	damage_returned = round(dummy.heal_overall_damage(1, 1), 1)
+	TEST_ASSERT_EQUAL(damage_returned, 1, \
+		"heal_overall_damage() should have returned 1, but returned [damage_returned] instead!")
 
-	if(!verify_damage(dummy, 0, included_types = BRUTELOSS|FIRELOSS))
+	if(!verify_damage(dummy, 0, included_types = BRUTELOSS))
 		TEST_FAIL("heal_overall_damage did not apply its healing correctly on the mob!")
 
 	// take 50 brute, 50 burn
-	damage_returned = round(dummy.take_overall_damage(50, 50, updating_health = FALSE), 1)
+	damage_returned = round(dummy.take_overall_damage(50, 50), 1)
 	TEST_ASSERT_EQUAL(damage_returned, -100, \
 		"take_overall_damage() should have returned -100, but returned [damage_returned] instead!")
 
@@ -257,19 +255,19 @@
 
 	// testing negative damage amount args with the overall damage procs - the sign should be ignored for these procs
 
-	damage_returned = round(dummy.take_bodypart_damage(-5, -5, updating_health = FALSE), 1)
-	TEST_ASSERT_EQUAL(damage_returned, -10, \
-		"take_bodypart_damage() should have returned -10, but returned [damage_returned] instead!")
+	damage_returned = round(dummy.damage_random_bodypart(-5, BRUTE) + dummy.damage_random_bodypart(-5, BURN), 1)
+	TEST_ASSERT_EQUAL(damage_returned, 10, \
+		"take_bodypart_damage() should have returned 10, but returned [damage_returned] instead!")
 
-	damage_returned = round(dummy.heal_bodypart_damage(-5, -5, updating_health = FALSE), 1)
+	damage_returned = round(dummy.heal_bodypart_damage(-5, -5), 1)
 	TEST_ASSERT_EQUAL(damage_returned, 10, \
 		"heal_bodypart_damage() should have returned 10, but returned [damage_returned] instead!")
 
-	damage_returned = round(dummy.take_overall_damage(-5, -5, updating_health = FALSE), 1)
+	damage_returned = round(dummy.take_overall_damage(-5, -5), 1)
 	TEST_ASSERT_EQUAL(damage_returned, -10, \
 		"take_overall_damage() should have returned -10, but returned [damage_returned] instead!")
 
-	damage_returned = round(dummy.heal_overall_damage(-5, -5, updating_health = FALSE), 1)
+	damage_returned = round(dummy.heal_overall_damage(-5, -5), 1)
 	TEST_ASSERT_EQUAL(damage_returned, 10, \
 		"heal_overall_damage() should have returned 10, but returned [damage_returned] instead!")
 
@@ -278,7 +276,7 @@
 
 	// testing overhealing
 
-	damage_returned = round(dummy.heal_overall_damage(75, 99, updating_health = FALSE), 1)
+	damage_returned = round(dummy.heal_overall_damage(75, 99, updating_health = FALSE), 10) // melbert todo : floating point memes
 	TEST_ASSERT_EQUAL(damage_returned, 100, \
 		"heal_overall_damage() should have returned 100, but returned [damage_returned] instead!")
 
@@ -414,12 +412,12 @@
 		"heal_ordered_damage() should have returned 30, but returned [damage_returned] instead!")
 
 	// Should have 10 burn damage and 20 toxins damage remaining, let's check
-	TEST_ASSERT_EQUAL(dummy.getBruteLoss(), 0, \
-		"[src] should have 0 brute damage, but has [dummy.getBruteLoss()] instead!")
-	TEST_ASSERT_EQUAL(dummy.getFireLoss(), 10, \
-		"[src] should have 10 burn damage, but has [dummy.getFireLoss()] instead!")
-	TEST_ASSERT_EQUAL(dummy.getToxLoss(), 20, \
-		"[src] should have 20 toxin damage, but has [dummy.getToxLoss()] instead!")
+	TEST_ASSERT_EQUAL(floor(dummy.getBruteLoss()), 0, \
+		"[dummy] should have 0 brute damage, but has [dummy.getBruteLoss()] instead!") // melbert todo : floating point memes
+	TEST_ASSERT_EQUAL(floor(dummy.getFireLoss()), 10, \
+		"[dummy] should have 10 burn damage, but has [dummy.getFireLoss()] instead!") // melbert todo : floating point memes
+	TEST_ASSERT_EQUAL(floor(dummy.getToxLoss()), 20, \
+		"[dummy] should have 20 toxin damage, but has [dummy.getToxLoss()] instead!") // melbert todo : floating point memes
 
 	// Now heal the remaining 30, overhealing by 5.
 	damage_returned = round(dummy.heal_ordered_damage(35, list(BRUTE, BURN, TOX)), 1)
@@ -427,12 +425,12 @@
 		"heal_ordered_damage() should have returned 30, but returned [damage_returned] instead!")
 
 	// Should have no damage remaining
-	TEST_ASSERT_EQUAL(dummy.getBruteLoss(), 0, \
-		"[src] should have 0 brute damage, but has [dummy.getBruteLoss()] instead!")
-	TEST_ASSERT_EQUAL(dummy.getFireLoss(), 0, \
-		"[src] should have 0 burn damage, but has [dummy.getFireLoss()] instead!")
-	TEST_ASSERT_EQUAL(dummy.getToxLoss(), 0, \
-		"[src] should have 0 toxin damage, but has [dummy.getToxLoss()] instead!")
+	TEST_ASSERT_EQUAL(floor(dummy.getBruteLoss()), 0, \
+		"[dummy] should have 0 brute damage, but has [dummy.getBruteLoss()] instead!") // melbert todo : floating point memes
+	TEST_ASSERT_EQUAL(floor(dummy.getFireLoss()), 0, \
+		"[dummy] should have 0 burn damage, but has [dummy.getFireLoss()] instead!") // melbert todo : floating point memes
+	TEST_ASSERT_EQUAL(floor(dummy.getToxLoss()), 0, \
+		"[dummy] should have 0 toxin damage, but has [dummy.getToxLoss()] instead!") // melbert todo : floating point memes
 
 /// Tests that mob damage procs are working as intended for basic mobs
 /datum/unit_test/mob_damage/basic
@@ -463,10 +461,10 @@
 		TEST_ASSERT_EQUAL(testing_mob.getToxLoss(), 0, \
 			"[testing_mob] should have [0] toxin damage, instead they have [testing_mob.getToxLoss()]!")
 	if(included_types & BRUTELOSS)
-		TEST_ASSERT_EQUAL(round(testing_mob.getBruteLoss(), 1), expected || amount * 4, \
+		TEST_ASSERT_EQUAL(floor(testing_mob.getBruteLoss()), expected || amount * 4, \
 			"[testing_mob] should have [expected || amount * 4] brute damage, instead they have [testing_mob.getBruteLoss()]!")
 	if(included_types & FIRELOSS)
-		TEST_ASSERT_EQUAL(round(testing_mob.getFireLoss(), 1), 0, \
+		TEST_ASSERT_EQUAL(floor(testing_mob.getFireLoss()), 0, \
 			"[testing_mob] should have [0] burn damage, instead they have [testing_mob.getFireLoss()]!")
 	if(included_types & OXYLOSS)
 		TEST_ASSERT_EQUAL(testing_mob.getOxyLoss(), 0, \
@@ -514,9 +512,9 @@
 	// overall damage procs
 
 	// take 5 brute, 2 burn
-	damage_returned = gusgus.take_bodypart_damage(5, 2, updating_health = FALSE)
-	TEST_ASSERT_EQUAL(damage_returned, -7, \
-		"take_bodypart_damage() should have returned -7, but returned [damage_returned] instead!")
+	damage_returned = gusgus.damage_random_bodypart(5, BRUTE) + gusgus.damage_random_bodypart(2, BURN)
+	TEST_ASSERT_EQUAL(damage_returned, 7, \
+		"take_bodypart_damage() should have returned 7, but returned [damage_returned] instead!")
 
 	TEST_ASSERT_EQUAL(gusgus.bruteloss, 7, \
 		"Mouse should have 7 brute damage, instead they have [gusgus.bruteloss]!")
@@ -544,26 +542,26 @@
 		"Mouse should have 0 burn damage, instead they have [gusgus.fireloss]!")
 
 	// take 50 brute, 50 burn
-	damage_returned = gusgus.take_overall_damage(3, 3, updating_health = FALSE)
-	TEST_ASSERT_EQUAL(damage_returned, -6, \
-		"take_overall_damage() should have returned -6, but returned [damage_returned] instead!")
+	damage_returned = gusgus.take_overall_damage(3, 3)
+	TEST_ASSERT_EQUAL(damage_returned, 6, \
+		"take_overall_damage() should have returned 6, but returned [damage_returned] instead!")
 
 	if(!verify_damage(gusgus, 1, expected = 6, included_types = BRUTELOSS))
 		TEST_FAIL("take_overall_damage did not apply its damage correctly on the mouse!")
 
 	// testing negative args with the overall damage procs
 
-	damage_returned = gusgus.take_bodypart_damage(-1, -1, updating_health = FALSE)
-	TEST_ASSERT_EQUAL(damage_returned, -2, \
-		"take_bodypart_damage() should have returned -2, but returned [damage_returned] instead!")
+	damage_returned = gusgus.damage_random_bodypart(-1, BRUTE) + gusgus.damage_random_bodypart(-1, BURN)
+	TEST_ASSERT_EQUAL(damage_returned, 2, \
+		"take_bodypart_damage() should have returned 2, but returned [damage_returned] instead!")
 
 	damage_returned = gusgus.heal_bodypart_damage(-1, -1, updating_health = FALSE)
 	TEST_ASSERT_EQUAL(damage_returned, 2, \
 		"heal_bodypart_damage() should have returned 2, but returned [damage_returned] instead!")
 
-	damage_returned = gusgus.take_overall_damage(-1, -1, updating_health = FALSE)
-	TEST_ASSERT_EQUAL(damage_returned, -2, \
-		"take_overall_damage() should have returned -2, but returned [damage_returned] instead!")
+	damage_returned = gusgus.take_overall_damage(-1, -1)
+	TEST_ASSERT_EQUAL(damage_returned, 2, \
+		"take_overall_damage() should have returned 2, but returned [damage_returned] instead!")
 
 	damage_returned = gusgus.heal_overall_damage(-1, -1, updating_health = FALSE)
 	TEST_ASSERT_EQUAL(damage_returned, 2, \

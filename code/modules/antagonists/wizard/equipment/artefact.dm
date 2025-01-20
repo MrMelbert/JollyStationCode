@@ -157,7 +157,7 @@
 	C.vomit(VOMIT_CATEGORY_BLOOD, lost_nutrition = 0, distance = 3)
 	C.spew_organ(3, 2)
 	C.investigate_log("has died from using telekinesis on a tear in reality.", INVESTIGATE_DEATHS)
-	C.death()
+	C.death(null, "magic")
 
 #undef TEAR_IN_REALITY_CONSUME_RANGE
 #undef TEAR_IN_REALITY_SINGULARITY_SIZE

@@ -145,10 +145,10 @@
 			wearer.set_heartattack(FALSE)
 			final_damage = min(final_damage * 25, 20)
 
-		chest.receive_damage(brute = final_damage, damage_source = "automatic chest compressions")
-		wearer.cause_pain(BODY_ZONE_CHEST, final_damage)
+		wearer.apply_damage(final_damage, BRUTE, chest, wound_bonus = CANT_WOUND, attacking_item = "automatic chest compressions")
 
 	wearer.apply_status_effect(/datum/status_effect/cpr_applied)
+	wearer.adjustOxyLoss(-0.5)
 
 	if(cell.charge < charge_per_pulse)
 		playsound(src, 'sound/machines/defib_failed.ogg', 50, vary = TRUE, frequency = 0.75)

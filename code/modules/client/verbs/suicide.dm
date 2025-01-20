@@ -76,7 +76,7 @@
 		apply_suicide_damage()
 
 	suicide_log(suicide_tool)
-	death(FALSE)
+	death(FALSE, "suicide")
 	ghostize(FALSE)
 
 /// Send all suicide-related messages out to the world. message_type can be used to change out the dispatched suicide message depending on the suicide context.

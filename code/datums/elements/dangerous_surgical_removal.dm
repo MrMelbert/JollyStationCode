@@ -22,7 +22,7 @@
 		return
 	if(user?.Adjacent(source))
 		source.audible_message("[source] explodes on [user]'s face!")
-		user.take_bodypart_damage(15)
+		user.damage_random_bodypart(15)
 	else
 		source.audible_message("[source] explodes into tiny pieces!")
 	explosion(source, light_impact_range = 1, explosion_cause = source)

@@ -26,7 +26,7 @@
 	UnregisterSignal(owner, COMSIG_CARBON_UPDATING_HEALTH_HUD)
 	owner.update_health_hud()
 
-/datum/status_effect/grouped/screwy_hud/proc/on_health_hud_updated(mob/living/carbon/source, shown_health_amount)
+/datum/status_effect/grouped/screwy_hud/proc/on_health_hud_updated(mob/living/carbon/source)
 	SIGNAL_HANDLER
 
 	// Shouldn't even be running if we're dead, but just in case...
@@ -56,3 +56,11 @@
 	id = "fake_hud_healthy"
 	priority = 10 // fully healthy is the opposite of death, which is absolute
 	override_icon = "health0"
+
+/datum/status_effect/grouped/screwy_hud/fake_healthy/on_apply()
+	. = ..()
+	owner.set_pain_mod(TRAIT_STATUS_EFFECT(id), 0.1)
+
+/datum/status_effect/grouped/screwy_hud/fake_healthy/on_remove()
+	. = ..()
+	owner.unset_pain_mod(TRAIT_STATUS_EFFECT(id))

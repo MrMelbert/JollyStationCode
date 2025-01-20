@@ -43,7 +43,12 @@
 		span_notice("[user] begins to make an incision in [target]."),
 		span_notice("[user] begins to make an incision in [target]."),
 	)
-	display_pain(target, "You feel a horrible stab in your gut!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "You feel a horrible stab in your gut!",
+		pain_amount = SURGERY_PAIN_MEDIUM,
+	)
 
 /datum/surgery_step/gastrectomy/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	var/mob/living/carbon/human/target_human = target
@@ -58,7 +63,12 @@
 		span_notice("[user] successfully removes the damaged part of [target]'s stomach."),
 		span_notice("[user] successfully removes the damaged part of [target]'s stomach."),
 	)
-	display_pain(target, "The pain in your gut ebbs and fades somewhat.", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "The pain in your gut ebbs and fades somewhat.",
+		pain_amount = -0.5 * SURGERY_PAIN_MEDIUM,
+	)
 	return ..()
 
 /datum/surgery_step/gastrectomy/failure(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery)
@@ -71,4 +81,9 @@
 		span_warning("[user] cuts the wrong part of [target]'s stomach!"),
 		span_warning("[user] cuts the wrong part of [target]'s stomach!"),
 	)
-	display_pain(target, "Your stomach throbs with pain; it's not getting any better!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "Your stomach throbs with pain; it's not getting any better!",
+		pain_amount = SURGERY_PAIN_HIGH,
+	)

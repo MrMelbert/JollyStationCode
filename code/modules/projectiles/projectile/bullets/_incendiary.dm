@@ -30,7 +30,7 @@
 	pass_flags = PASSTABLE | PASSMOB
 	sharpness = NONE
 	shrapnel_type = null
-	embedding = null
+	embed_type = null
 	impact_effect_type = null
 	suppressed = SUPPRESSED_VERY
 	damage_type = BURN
@@ -84,7 +84,7 @@
 			LAZYADD(launched_items, iter_item)
 		else if(isliving(iter))
 			var/mob/living/incineratee = iter
-			incineratee.take_bodypart_damage(0, damage, check_armor = TRUE, wound_bonus=wound_bonus, bare_wound_bonus=bare_wound_bonus)
+			incineratee.damage_random_bodypart(damage, BURN, check_armor = TRUE, wound_bonus = wound_bonus, bare_wound_bonus = bare_wound_bonus)
 			incineratee.adjust_fire_stacks(fire_stacks)
 
 #undef BACKBLAST_MAX_ITEM_KNOCKBACK

@@ -13,8 +13,6 @@
 
 	///Defines how fast the basic mob can move. This is not a multiplier
 	var/speed = 1
-	///How much stamina the mob recovers per second
-	var/stamina_recovery = 5
 
 	///how much damage this basic mob does to objects, if any.
 	var/obj_damage = 0
@@ -154,11 +152,6 @@
 	if(!.)
 		clear_alert(ALERT_TEMPERATURE)
 
-/mob/living/basic/Life(seconds_per_tick = SSMOBS_DT, times_fired)
-	. = ..()
-	if(staminaloss > 0)
-		adjustStaminaLoss(-stamina_recovery * seconds_per_tick, forced = TRUE)
-
 /mob/living/basic/get_default_say_verb()
 	return length(speak_emote) ? pick(speak_emote) : ..()
 
@@ -281,7 +274,9 @@
 
 /// Updates movement speed based on stamina loss
 /mob/living/basic/update_stamina()
-	set_varspeed(initial(speed) + (staminaloss * 0.06))
+	if(damage_coeff[STAMINA] <= 0) //we shouldn't reset our speed to its initial value if we don't need to, as that can mess with things like mulebot motor wires
+		return
+	set_varspeed(initial(speed) + (getStaminaLoss() * 0.06))
 
 /mob/living/basic/get_fire_overlay(stacks, on_fire)
 	var/fire_icon = "generic_fire"

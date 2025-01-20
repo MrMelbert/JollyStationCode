@@ -86,6 +86,25 @@
 			damage_dealt = -1 * adjustOxyLoss(damage_amount, forced = forced)
 		if(STAMINA)
 			damage_dealt = -1 * adjustStaminaLoss(damage_amount, forced = forced)
+		if(PAIN)
+			if(pain_controller)
+				var/pre_pain = pain_controller.get_total_pain()
+				var/pain_amount = damage_amount
+				var/chosen_zone
+				if(spread_damage || isnull(def_zone))
+					chosen_zone = BODY_ZONES_ALL
+					pain_amount /= 6
+				else if(isbodypart(def_zone))
+					var/obj/item/bodypart/actual_hit = def_zone
+					chosen_zone = actual_hit.body_zone
+				else
+					chosen_zone = check_zone(def_zone)
+
+				sharp_pain(chosen_zone, pain_amount, STAMINA, 12.5 SECONDS, 0.8)
+				damage_dealt += pre_pain - pain_controller.get_total_pain()
+				damage_dealt += adjustStaminaLoss(damage_amount * 0.25, forced = forced)
+			else
+				damage_dealt = -1 * adjustStaminaLoss(damage_amount, forced = forced)
 		if(BRAIN)
 			damage_dealt = -1 * adjustOrganLoss(ORGAN_SLOT_BRAIN, damage_amount)
 
@@ -276,7 +295,7 @@
 	if (!can_adjust_brute_loss(amount, forced, required_bodytype))
 		return 0
 	. = bruteloss
-	bruteloss = clamp((bruteloss + (amount * CONFIG_GET(number/damage_multiplier))), 0, maxHealth * 2)
+	bruteloss = clamp(bruteloss + amount, 0, maxHealth * 2)
 	. -= bruteloss
 	if(!.) // no change, no need to update
 		return 0
@@ -319,7 +338,7 @@
 	if(!can_adjust_oxy_loss(amount, forced, required_biotype, required_respiration_type))
 		return 0
 	. = oxyloss
-	oxyloss = clamp((oxyloss + (amount * CONFIG_GET(number/damage_multiplier))), 0, maxHealth * 2)
+	oxyloss = clamp(oxyloss + amount, 0, MAX_OXYLOSS(maxHealth))
 	. -= oxyloss
 	if(!.) // no change, no need to update
 		return FALSE
@@ -360,7 +379,7 @@
 	if(!can_adjust_tox_loss(amount, forced, required_biotype))
 		return 0
 	. = toxloss
-	toxloss = clamp((toxloss + (amount * CONFIG_GET(number/damage_multiplier))), 0, maxHealth * 2)
+	toxloss = clamp(toxloss + amount, 0, maxHealth * 2)
 	. -= toxloss
 	if(!.) // no change, no need to update
 		return FALSE
@@ -394,7 +413,7 @@
 	if(!can_adjust_fire_loss(amount, forced, required_bodytype))
 		return 0
 	. = fireloss
-	fireloss = clamp((fireloss + (amount * CONFIG_GET(number/damage_multiplier))), 0, maxHealth * 2)
+	fireloss = clamp(fireloss + amount, 0, maxHealth * 2)
 	. -= fireloss
 	if(. == 0) // no change, no need to update
 		return
@@ -435,25 +454,28 @@
 	if(!can_adjust_stamina_loss(amount, forced, required_biotype))
 		return 0
 	. = staminaloss
-	staminaloss = clamp((staminaloss + (amount * CONFIG_GET(number/damage_multiplier))), 0, max_stamina)
+	staminaloss = clamp(staminaloss + amount, 0, max_stamina)
 	. -= staminaloss
-	if(. == 0) // no change, no need to update
+	if(!.) // no change, no need to update
 		return 0
 	if(updating_stamina)
-		updatehealth()
+		update_stamina()
+	return .
 
 /mob/living/proc/setStaminaLoss(amount, updating_stamina = TRUE, forced = FALSE, required_biotype = ALL)
 	if(!forced && (status_flags & GODMODE))
-		return FALSE
+		return 0
 	if(!forced && !(mob_biotypes & required_biotype))
-		return FALSE
+		return 0
 	. = staminaloss
 	staminaloss = amount
 	. -= staminaloss
 	if(!.) // no change, no need to update
-		return FALSE
+		return 0
 	if(updating_stamina)
 		updatehealth()
+	return .
+
 
 /**
  * heal ONE external organ, organ gets randomly selected from damaged ones.
@@ -467,13 +489,26 @@
 	if(updating_health)
 		updatehealth()
 
-/// damage ONE external organ, organ gets randomly selected from damaged ones.
-/mob/living/proc/take_bodypart_damage(brute = 0, burn = 0, updating_health = TRUE, required_bodytype, check_armor = FALSE, wound_bonus = 0, bare_wound_bonus = 0, sharpness = NONE)
-	. = (adjustBruteLoss(abs(brute), updating_health = FALSE) + adjustFireLoss(abs(burn), updating_health = FALSE))
-	if(!.) // no change, no need to update
-		return FALSE
-	if(updating_health)
-		updatehealth()
+/**
+ * Damages a random bodypart
+ */
+/mob/living/proc/damage_random_bodypart(
+	damage = 0,
+	damagetype = BRUTE,
+	damageflag = MELEE,
+	required_bodytype,
+	check_armor = FALSE,
+	wound_bonus = 0,
+	bare_wound_bonus = 0,
+	sharpness = NONE,
+)
+	return apply_damage(
+		damage = abs(damage),
+		damagetype = damagetype,
+		wound_bonus = wound_bonus,
+		bare_wound_bonus = bare_wound_bonus,
+		sharpness = sharpness,
+	)
 
 /// heal MANY bodyparts, in random order. note: stamina arg nonfunctional for carbon mobs
 /mob/living/proc/heal_overall_damage(brute = 0, burn = 0, stamina = 0, required_bodytype, updating_health = TRUE, forced = FALSE)
@@ -485,21 +520,19 @@
 	if(updating_health)
 		updatehealth()
 
-/// damage MANY bodyparts, in random order. note: stamina arg nonfunctional for carbon mobs
-/mob/living/proc/take_overall_damage(brute = 0, burn = 0, stamina = 0, updating_health = TRUE, forced = FALSE, required_bodytype)
-	. = (adjustBruteLoss(abs(brute), updating_health = FALSE, forced = forced) + \
-			adjustFireLoss(abs(burn), updating_health = FALSE, forced = forced) + \
-			adjustStaminaLoss(abs(stamina), updating_stamina = FALSE, forced = forced))
-	if(!.) // no change, no need to update
-		return FALSE
-	if(updating_health)
-		updatehealth()
+/**
+ * Attempts to damage all of the damageable bodyparts of the mob, spreading damage accordingly
+ */
+/mob/living/proc/take_overall_damage(brute = 0, burn = 0, forced = FALSE, required_bodytype)
+	. = 0
+	. += apply_damage(abs(brute), BRUTE, null, 0, forced)
+	. += apply_damage(abs(burn), BURN, null, 0, forced)
 
 ///heal up to amount damage, in a given order
 /mob/living/proc/heal_ordered_damage(amount, list/damage_types)
 	. = 0 //we'll return the amount of damage healed
 	for(var/damagetype in damage_types)
-		var/amount_to_heal = min(abs(amount), get_current_damage_of_type(damagetype)) //heal only up to the amount of damage we have
+		var/amount_to_heal = min(abs(amount), round(get_current_damage_of_type(damagetype), DAMAGE_PRECISION)) //heal only up to the amount of damage we have
 		if(amount_to_heal)
 			. += heal_damage_type(amount_to_heal, damagetype)
 			amount -= amount_to_heal //remove what we healed from our current amount

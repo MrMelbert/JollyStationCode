@@ -29,18 +29,29 @@
 		display_results(
 			user,
 			target,
-			span_notice("You begin to extract [implant] from [target]'s [target_zone]..."),
-			span_notice("[user] begins to extract [implant] from [target]'s [target_zone]."),
-			span_notice("[user] begins to extract something from [target]'s [target_zone]."),
+			span_notice("You begin to extract [implant] from [target]'s [parse_zone(target_zone)]..."),
+			span_notice("[user] begins to extract [implant] from [target]'s [parse_zone(target_zone)]."),
+			span_notice("[user] begins to extract something from [target]'s [parse_zone(target_zone)]."),
 		)
-		display_pain(target, "You feel a serious pain in your [target_zone]!", target_zone = target_zone) // NON-MODULE CHANGE
+		display_pain(
+			target = target,
+			target_zone = target_zone,
+			pain_message = "You feel a serious pain in your [parse_zone(target_zone)]!",
+			pain_amount = SURGERY_PAIN_HIGH,
+		)
 	else
 		display_results(
 			user,
 			target,
-			span_notice("You look for an implant in [target]'s [target_zone]..."),
-			span_notice("[user] looks for an implant in [target]'s [target_zone]."),
-			span_notice("[user] looks for something in [target]'s [target_zone]."),
+			span_notice("You look for an implant in [target]'s [parse_zone(target_zone)]..."),
+			span_notice("[user] looks for an implant in [target]'s [parse_zone(target_zone)]."),
+			span_notice("[user] looks for something in [target]'s [parse_zone(target_zone)]."),
+		)
+		display_pain(
+			target = target,
+			target_zone = target_zone,
+			pain_message = "You feel a pain in your [parse_zone(target_zone)]!",
+			pain_amount = SURGERY_PAIN_LOW,
 		)
 
 /datum/surgery_step/extract_implant/success(mob/user, mob/living/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
@@ -48,11 +59,16 @@
 		display_results(
 			user,
 			target,
-			span_notice("You successfully remove [implant] from [target]'s [target_zone]."),
-			span_notice("[user] successfully removes [implant] from [target]'s [target_zone]!"),
-			span_notice("[user] successfully removes something from [target]'s [target_zone]!"),
+			span_notice("You successfully remove [implant] from [target]'s [parse_zone(target_zone)]."),
+			span_notice("[user] successfully removes [implant] from [target]'s [parse_zone(target_zone)]!"),
+			span_notice("[user] successfully removes something from [target]'s [parse_zone(target_zone)]!"),
 		)
-		display_pain(target, "You can feel your [implant.name] pulled out of you!", target_zone = target_zone) // NON-MODULE CHANGE
+		display_pain(
+			target = target,
+			target_zone = target_zone,
+			pain_message = "You can feel your [implant.name] pulled out of you!",
+			pain_amount = SURGERY_PAIN_LOW,
+		)
 		implant.removed(target)
 
 		var/obj/item/implantcase/case
@@ -76,7 +92,7 @@
 			qdel(implant)
 
 	else
-		to_chat(user, span_warning("You can't find anything in [target]'s [target_zone]!"))
+		to_chat(user, span_warning("You can't find anything in [target]'s [parse_zone(target_zone)]!"))
 	return ..()
 
 /datum/surgery/implant_removal/mechanic

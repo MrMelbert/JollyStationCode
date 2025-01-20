@@ -39,7 +39,7 @@
 					span_userdanger("You're [atk_verb]ed by [attacker]!"), span_hear("You hear a sickening sound of flesh hitting flesh!"), COMBAT_MESSAGE_RANGE, attacker)
 	to_chat(attacker, span_danger("You [atk_verb]ed [defender]!"))
 
-	defender.apply_damage(damage, STAMINA, affecting, armor_block)
+	defender.apply_damage(damage, PAIN, affecting, armor_block)
 	log_combat(attacker, defender, "punched (boxing) ")
 	if(defender.getStaminaLoss() > 50 && istype(defender.mind?.martial_art, /datum/martial_art/boxing))
 		var/knockout_prob = defender.getStaminaLoss() + rand(-15,15)

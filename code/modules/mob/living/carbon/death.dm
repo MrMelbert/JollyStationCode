@@ -5,7 +5,8 @@
 	losebreath = 0
 
 	if(!gibbed)
-		INVOKE_ASYNC(src, PROC_REF(emote), "deathgasp")
+		if(!death_sound && !death_message)
+			INVOKE_ASYNC(src, PROC_REF(emote), "deathgasp")
 		add_memory_in_range(src, 7, /datum/memory/witnessed_death, protagonist = src)
 	reagents.end_metabolization(src)
 

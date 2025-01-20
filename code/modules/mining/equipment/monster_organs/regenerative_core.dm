@@ -27,7 +27,7 @@
 
 /obj/item/organ/internal/monster_core/regenerative_core/on_life(seconds_per_tick, times_fired)
 	. = ..()
-	if (owner.health <= owner.crit_threshold)
+	if (owner.health <= 0)
 		trigger_organ_action(TRIGGER_FORCE_AVAILABLE)
 
 /obj/item/organ/internal/monster_core/regenerative_core/on_triggered_internal()

@@ -522,7 +522,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	for(var/datum/antagonist/antag as anything in mind.antag_datums)
 		if(antag.get_team()) //No team antags
 			return FALSE
-	return FALSE // NON-MODULE CHANGE: Disables random hardcore // MELBERT MODULARIZE ME
+	return FALSE // NON-MODULE CHANGE: Disables random hardcore
 
 /// Inverts the key_bindings list such that it can be used for key_bindings_by_key
 /datum/preferences/proc/get_key_bindings_by_key(list/key_bindings)

@@ -9,7 +9,7 @@
 	icon = 'icons/obj/service/hydroponics/harvest.dmi'
 	icon_state = "banana"
 	range = 200
-	embedding = null
+	embed_type = null
 	shrapnel_type = null
 
 /obj/projectile/bullet/honker/Initialize(mapload)
@@ -44,6 +44,7 @@
 /// Marksman Shot
 /obj/projectile/bullet/marksman
 	name = "marksman nanoshot"
+	generic_name = "bullet"
 	hitscan = TRUE
 	damage = 30
 	tracer_type = /obj/effect/projectile/tracer/solar
@@ -79,6 +80,7 @@
 /obj/projectile/bullet/coin
 	name = "marksman coin"
 	icon_state = "coinshot"
+	generic_name = "coin"
 	pixel_speed_multiplier = 0.333
 	speed = 1
 	damage = 5

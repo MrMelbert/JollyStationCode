@@ -404,8 +404,7 @@
 	if(isnull(scrubber))
 		return
 
-	scrubber.widenet = (port == enable_extended_range)
-	scrubber.update_appearance(UPDATE_ICON)
+	scrubber.set_widenet(port == enable_extended_range)
 
 /obj/item/circuit_component/air_alarm_scrubbers/proc/toggle_siphon(datum/port/input/port)
 	CIRCUIT_TRIGGER

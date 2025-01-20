@@ -73,6 +73,7 @@
 	tool_behaviour = TOOL_CAUTERY
 	toolspeed = 1
 	heat = 500
+	usesound = 'sound/surgery/cautery1.ogg'
 	drop_sound = 'maplestation_modules/sound/items/pickup/metalweapon.ogg'
 	pickup_sound = 'maplestation_modules/sound/items/pickup/surgery_metal.ogg'
 

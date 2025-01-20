@@ -45,18 +45,18 @@
 	. += span_notice("Attack a wet or lubed floor to dry it off.")
 	. += span_notice("Attack a burning or soaked mob to either dampen the flames or dry them off.")
 
+/obj/item/towel/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/pat_out_fire)
+
 /obj/item/towel/pre_attack(atom/target, mob/living/user, params)
 	. = ..()
+	if(.)
+		return
 
 	if(isopenturf(target))
 		try_dry_floor(target, user)
 		return TRUE
-
-	if(isliving(target))
-		try_dry_mob(target, user)
-		return TRUE
-
-	return
 
 /obj/item/towel/equipped(mob/living/user, slot, initial)
 	. = ..()
@@ -131,23 +131,12 @@
 	if(resistance_flags & ON_FIRE)
 		return FALSE
 
-	if(target_mob.on_fire)
-		if(target_mob == user)
-			return FALSE
-		else
-			to_chat(user, span_danger("You try to extinguish the flames on [target_mob] with [src]!"))
-			if(!do_after(user, 0.75 SECONDS, target = target_mob, interaction_key = DOAFTER_SOURCE_TOWEL))
-				return FALSE
+	to_chat(user, span_notice("You begin drying off [target_mob == user ? "yourself" : "[target_mob]"] with [src]..."))
+	visible_message(span_notice("[user] begins drying off [target_mob == user ? "[user.p_them()]self" : "[target_mob]"] with [src]..."), ignored_mobs = list(user))
+	if(!do_after(user, 2 SECONDS, target = target_mob, interaction_key = DOAFTER_SOURCE_TOWEL))
+		return FALSE
 
-			try_extinguish_mob(target_mob, user)
-			return TRUE
-	else
-		to_chat(user, span_notice("You begin drying off [target_mob == user ? "yourself" : "[target_mob]"] with [src]..."))
-		visible_message(span_notice("[user] begins drying off [target_mob == user ? "[user.p_them()]self" : "[target_mob]"] with [src]..."), ignored_mobs = list(user))
-		if(!do_after(user, 2 SECONDS, target = target_mob, interaction_key = DOAFTER_SOURCE_TOWEL))
-			return FALSE
-
-		do_dry_mob(target_mob, user)
+	do_dry_mob(target_mob, user)
 	return TRUE
 
 /**
@@ -170,23 +159,6 @@
 		if(prob(66)) //66% chance to cool the towel after
 			cool_towel()
 
-/**
- * Has a chance to remove some firestacks from [target_mob], or set [src] on fire.
- *
- * target_mob - the mob we're extinguishing
- * user - the mob extinguishing the target_mob
- */
-/obj/item/towel/proc/try_extinguish_mob(mob/living/target_mob, mob/living/user)
-	var/success_chance = warm_towel ? 40 : 55
-	if(prob(success_chance))
-		target_mob.adjust_fire_stacks(round(rand(-1, -4))) // at best: about as good as stop, drop, & roll
-		to_chat(user, span_danger("You pat out some of the flames on [target_mob] with [src]!"))
-		visible_message(span_danger("[user] pats out some of the flames on [target_mob] with [src]!"), ignored_mobs = list(user))
-	else
-		fire_act(target_mob.body_temperature)
-		to_chat(user, span_warning("[src] bursts into flames!"))
-		visible_message(span_warning("[src] bursts into flames!"), ignored_mobs = list(user))
-
 /// Cool down the towel.
 /obj/item/towel/proc/cool_towel()
 	warm_towel = FALSE
@@ -207,12 +179,12 @@
 
 /obj/item/towel/beach/pre_attack_secondary(atom/target, mob/living/user, params)
 	. = ..()
+	if(. != SECONDARY_ATTACK_CALL_NORMAL)
+		return
 
-	if(isfloorturf(target))
+	if(isopenturf(target))
 		try_place_towel(target, user)
 		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
-
-	return
 
 /**
  * Check if our [target_turf] is valid to place our towel on.

@@ -40,10 +40,11 @@ can next move
 /datum/actionspeed_modifier/New(init_id)
 	. = ..()
 
-	id = init_id
+	if(init_id)
+		id = init_id
 
 	if(!id)
-		id = "[type]" //We turn the path into a string.
+		id = initial(id) || "[type]" //We turn the path into a string.
 
 GLOBAL_LIST_EMPTY(actionspeed_modification_cache)
 

@@ -6,7 +6,6 @@
 
 /datum/action/changeling/adrenaline/sting_action(mob/living/user)
 	user.adjustStaminaLoss(-75)
-	/// MELBERT TODO: Despite being "instant", does not get up instantly, due to stam crit.
 	user.set_resting(FALSE, instant = TRUE)
 	user.SetStun(0)
 	user.SetImmobilized(0)

@@ -21,7 +21,7 @@
 	/// How much disgust to heal per tick
 	var/disgust_healing_per_tick = 1.5
 	/// How much of stamina damage to heal per tick when we've been in nograv for a while
-	var/stamina_heal_per_tick = 3
+	var/stamina_heal_per_tick = 5
 	/// How many seconds of stuns to reduce per tick when we've been in nograv for a while
 	var/stun_heal_per_tick = 3 SECONDS
 	/// Tracks how long we've been in no gravity

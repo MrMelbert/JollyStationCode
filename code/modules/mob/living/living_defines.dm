@@ -16,10 +16,32 @@
 	/// The mob's current health.
 	var/health = MAX_LIVING_HEALTH
 
-	/// The max amount of stamina damage we can have at once (Does NOT effect stamcrit thresholds. See crit_threshold)
+	/// The max amount of stamina damage we can have at once
 	var/max_stamina = 120
-	///Stamina damage, or exhaustion. You recover it slowly naturally, and are knocked down if it gets too high. Holodeck and hallucinations deal this.
+	/// Basically, amount of fatigue
+	/// Having a lot of it slows down your movement speed
+	/// Also often used for "fake damage"
 	var/staminaloss = 0
+
+	/**
+	 * How conscious is the mob?
+	 *
+	 * This is, effectively, the mob's REAL health.
+	 * It is a cumulative value of many factors, including health, wounds, diseases, and so on.
+	 *
+	 * 0 is death. 100 is default. 150 is the maximum.
+	 */
+	var/consciousness = CONSCIOUSNESS_MAX
+	/// Assoc Lazylist of flat modifiers to consciousness.
+	var/list/consciousness_modifiers
+	/// Assoc Lazylist of multipliers to consciousness. Applied after modifiers.
+	var/list/consciousness_multipliers
+	/// Assoc Lazylist of max consciousness values. Smallest one is used, but not beyond 10.
+	/// Don't increase max consciousness (over 150), that makes no sense.
+	var/list/max_consciousness_values
+
+	/// Modified applied to attacks with items or fists
+	var/outgoing_damage_mod = 1
 
 	//Damage related vars, NOTE: THESE SHOULD ONLY BE MODIFIED BY PROCS
 	///Brutal damage caused by brute force (punching, being clubbed by a toolbox ect... this also accounts for pressure damage)
@@ -36,11 +58,6 @@
 
 	/// Rate at which fire stacks should decay from this mob
 	var/fire_stack_decay_rate = -0.05
-
-	/// when the mob goes from "normal" to crit
-	var/crit_threshold = HEALTH_THRESHOLD_CRIT
-	///When the mob enters hard critical state and is fully incapacitated.
-	var/hardcrit_threshold = HEALTH_THRESHOLD_FULLCRIT
 
 	//Damage dealing vars! These are meaningless outside of specific instances where it's checked and defined.
 	/// Lower bound of damage done by unarmed melee attacks. Mob code is a mess, only works where this is checked for.
@@ -84,11 +101,11 @@
 	  */
 	var/incorporeal_move = FALSE
 
-	var/list/quirks = list()
+	var/list/quirks
 	///a list of surgery datums. generally empty, they're added when the player wants them.
 	var/list/surgeries = list()
-	///Mob specific surgery speed modifier
-	var/mob_surgery_speed_mod = 1
+	/// Lazylist of surgery speed modifiers
+	var/list/mob_surgery_speed_mods
 
 	/// Used by [living/Bump()][/mob/living/proc/Bump] and [living/PushAM()][/mob/living/proc/PushAM] to prevent potential infinite loop.
 	var/now_pushing = null

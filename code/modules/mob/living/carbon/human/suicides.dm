@@ -2,5 +2,5 @@
 	suicide_log()
 	adjustBruteLoss(max(200 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 	investigate_log("has died from committing suicide.", INVESTIGATE_DEATHS)
-	death(FALSE)
+	death(FALSE, "suicide")
 	ghostize(FALSE) // Disallows reentering body and disassociates mind

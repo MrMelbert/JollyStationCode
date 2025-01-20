@@ -36,7 +36,12 @@
 		span_notice("[user] begins to fix [target]'s ears."),
 		span_notice("[user] begins to perform surgery on [target]'s ears."),
 	)
-	display_pain(target, "You feel a dizzying pain in your head!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "You feel a dizzying pain in your [parse_zone(target_zone)]!",
+		pain_amount = SURGERY_PAIN_TRIVIAL,
+	)
 
 /datum/surgery_step/fix_ears/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results = FALSE)
 	var/obj/item/organ/internal/ears/target_ears = target.get_organ_slot(ORGAN_SLOT_EARS)
@@ -47,9 +52,13 @@
 		span_notice("[user] successfully fixes [target]'s ears!"),
 		span_notice("[user] completes the surgery on [target]'s ears."),
 	)
-	display_pain(target, "Your head swims, but it seems like you can feel your hearing coming back!", target_zone = target_zone) // NON-MODULE CHANGE
-	target_ears.deaf = (20) //deafness works off ticks, so this should work out to about 30-40s
-	target_ears.set_organ_damage(0)
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "Your [parse_zone(target_zone)] swims, but it seems like you can feel your hearing coming back!",
+		pain_amount = SURGERY_PAIN_TRIVIAL,
+	)
+	target_ears.adjustEarDamage(-INFINITY, rand(16, 24))
 	return ..()
 
 /datum/surgery_step/fix_ears/failure(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
@@ -61,7 +70,12 @@
 			span_warning("[user] accidentally stabs [target] right in the brain!"),
 			span_warning("[user] accidentally stabs [target] right in the brain!"),
 		)
-		display_pain(target, "You feel a visceral stabbing pain right through your head, into your brain!", target_zone = target_zone) // NON-MODULE CHANGE
+		display_pain(
+			target = target,
+			target_zone = target_zone,
+			pain_message = "You feel a visceral stabbing pain right through your head, [parse_zone(target_zone)] into your brain!",
+			pain_amount = SURGERY_PAIN_TRIVIAL,
+		)
 		target.adjustOrganLoss(ORGAN_SLOT_BRAIN, 70)
 	else
 		display_results(
@@ -71,5 +85,10 @@
 			span_warning("[user] accidentally stabs [target] right in the brain! Or would have, if [target] had a brain."),
 			span_warning("[user] accidentally stabs [target] right in the brain!"),
 		)
-		display_pain(target, "You feel a visceral stabbing pain right through your head!", target_zone = target_zone) // NON-MODULE CHANGE // dunno who can feel pain w/o a brain but may as well be consistent.
+		display_pain(
+			target = target,
+			target_zone = target_zone,
+			pain_message = "You feel a visceral stabbing pain right through your head [parse_zone(target_zone)]!",
+			pain_amount = SURGERY_PAIN_TRIVIAL,
+		)
 	return FALSE

@@ -24,7 +24,7 @@
 	bodytemp_heat_damage_limit = INFINITY
 
 	attack_sound = 'sound/weapons/bladeslice.ogg'
-	attack_vis_effect = ATTACK_EFFECT_SLASH
+	attack_vis_effect = ATTACK_EFFECT_KICK
 	status_flags = NONE
 	lighting_cutoff_red = 5
 	lighting_cutoff_green = 20

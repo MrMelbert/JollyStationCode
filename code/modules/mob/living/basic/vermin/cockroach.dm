@@ -71,14 +71,15 @@
 		/datum/ai_planning_subtree/find_and_hunt_target/roach,
 	)
 
-/obj/projectile/glockroachbullet
+/obj/projectile/bullet/glockroachbullet
 	damage = 10 //same damage as a hivebot
 	damage_type = BRUTE
+	generic_name = "bullet"
 
 /obj/item/ammo_casing/glockroach
 	name = "0.9mm bullet casing"
 	desc = "A... 0.9mm bullet casing? What?"
-	projectile_type = /obj/projectile/glockroachbullet
+	projectile_type = /obj/projectile/bullet/glockroachbullet
 
 
 /mob/living/basic/cockroach/glockroach
@@ -136,6 +137,8 @@
 	gold_core_spawnable = HOSTILE_SPAWN
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 	attack_vis_effect = ATTACK_EFFECT_SLASH
+	sharpness = SHARP_EDGED
+	wound_bonus = -50
 	faction = list(FACTION_HOSTILE, FACTION_MAINT_CREATURES)
 	sharpness = SHARP_POINTY
 	ai_controller = /datum/ai_controller/basic_controller/cockroach/hauberoach

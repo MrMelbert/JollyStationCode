@@ -87,7 +87,7 @@
 	to_chat(user, "<span class='warning'>You irradiate yourself with pure negative energy! \
 	[pick("Do not pass go. Do not collect 200 zorkmids.","You feel more confident in your spell casting skills.","You die...","Do you want your possessions identified?")]\
 	</span>")
-	user.death(FALSE)
+	user.death(FALSE, "magic")
 
 /obj/item/gun/magic/wand/death/debug
 	desc = "In some obscure circles, this is known as the 'cloning tester's friend'."
@@ -124,7 +124,7 @@
 			[pick("Do not pass go. Do not collect 200 zorkmids.","You feel more confident in your spell casting skills.","You die...","Do you want your possessions identified?")]\
 			</span>")
 			user.investigate_log("has been killed by a bolt of resurrection.", INVESTIGATE_DEATHS)
-			user.death(FALSE)
+			user.death(FALSE, "magic")
 			return
 	user.revive(ADMIN_HEAL_ALL, force_grab_ghost = TRUE) // This heals suicides
 	to_chat(user, span_notice("You feel great!"))

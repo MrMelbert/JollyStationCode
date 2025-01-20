@@ -13,20 +13,47 @@
 	. = ..()
 	handle_emp_damage(seconds_per_tick, times_fired)
 
+/mob/living/brain/fully_heal(heal_flags)
+	. = ..()
+	var/obj/item/organ/internal/brain/brain_real = container?.brain || loc
+	if(!istype(brain_real))
+		return
+	if(heal_flags & (HEAL_BODY|HEAL_DAMAGE|HEAL_ADMIN))
+		brain_real.set_organ_damage(0)
+	if(heal_flags & HEAL_ADMIN)
+		brain_real.suicided = FALSE
+
+/mob/living/brain/revive(full_heal_flags, excess_healing, force_grab_ghost)
+	if(QDELETED(src))
+		return FALSE
+	var/obj/item/organ/internal/brain/brain_real = container?.brain || loc
+	if(!istype(brain_real))
+		return FALSE
+	if(full_heal_flags)
+		fully_heal(full_heal_flags)
+	if(!can_be_revived())
+		return FALSE
+
+	set_stat(CONSCIOUS)
+	return TRUE
+
 /mob/living/brain/update_stat()
 	if(status_flags & GODMODE)
 		return
-	if(health > HEALTH_THRESHOLD_DEAD)
+	if(stat == DEAD)
 		return
-	if(stat != DEAD)
-		death()
-	var/obj/item/organ/internal/brain/BR
-	if(container?.brain)
-		BR = container.brain
-	else if(istype(loc, /obj/item/organ/internal/brain))
-		BR = loc
-	if(BR)
-		BR.set_organ_damage(BRAIN_DAMAGE_DEATH) //beaten to a pulp
+
+	var/obj/item/organ/internal/brain/brain_real = container?.brain || loc
+	if(!istype(brain_real))
+		return
+
+	if(health <= -maxHealth || (brain_real.organ_flags & ORGAN_FAILING))
+		if(stat != DEAD)
+			death()
+		return
+
+	if(stat != CONSCIOUS)
+		set_stat(CONSCIOUS)
 
 /mob/living/brain/proc/handle_emp_damage(seconds_per_tick, times_fired)
 	if(!emp_damage)

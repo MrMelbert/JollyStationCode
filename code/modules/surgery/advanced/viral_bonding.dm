@@ -42,7 +42,14 @@
 		span_notice("[user] starts heating [target]'s bone marrow with [tool]..."),
 		span_notice("[user] starts heating something in [target]'s chest with [tool]..."),
 	)
-	display_pain(target, "You feel a searing heat spread through your chest!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "You feel a searing heat spread through your chest!",
+		pain_amount = SURGERY_PAIN_HIGH,
+		pain_type = BURN,
+		pain_overlay_severity = 1,
+	)
 
 /datum/surgery_step/viral_bond/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery, default_display_results)
 	display_results(
@@ -52,7 +59,12 @@
 		span_notice("[target]'s bone marrow begins pulsing slowly."),
 		span_notice("[user] finishes the operation."),
 	)
-	display_pain(target, "You feel a faint throbbing in your chest.", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "You feel a faint throbbing in your chest.",
+		pain_amount = SURGERY_PAIN_TRIVIAL,
+	)
 	for(var/datum/disease/infected_disease as anything in target.diseases)
 		if(infected_disease.severity != DISEASE_SEVERITY_UNCURABLE) //no curing quirks, sweaty
 			infected_disease.carrier = TRUE

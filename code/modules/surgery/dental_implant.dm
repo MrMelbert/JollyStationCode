@@ -19,7 +19,12 @@
 		span_notice("[user] begins to wedge \the [tool] in [target]'s [parse_zone(target_zone)]."),
 		span_notice("[user] begins to wedge something in [target]'s [parse_zone(target_zone)]."),
 	)
-	display_pain(target, "Something's being jammed into your [parse_zone(target_zone)]!", target_zone = target_zone) // NON-MODULE CHANGE
+	display_pain(
+		target = target,
+		target_zone = target_zone,
+		pain_message = "Something's being jammed into your [parse_zone(target_zone)]!",
+		pain_amount = SURGERY_PAIN_TRIVIAL,
+	)
 
 /datum/surgery_step/insert_pill/success(mob/user, mob/living/carbon/target, target_zone, obj/item/reagent_containers/pill/tool, datum/surgery/surgery, default_display_results = FALSE)
 	if(!istype(tool))

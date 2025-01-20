@@ -125,7 +125,7 @@
 
 			if(SPT_PROB(3, seconds_per_tick))
 				to_chat(owner, span_danger("Your muscles ache."))
-				owner.take_bodypart_damage(3)
+				owner.damage_random_bodypart(3)
 
 	if (stage == 5)
 		if (SPT_PROB(10, seconds_per_tick))
